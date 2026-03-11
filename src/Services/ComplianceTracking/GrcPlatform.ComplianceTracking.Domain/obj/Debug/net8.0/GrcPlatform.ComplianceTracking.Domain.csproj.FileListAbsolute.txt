@@ -1,0 +1,15 @@
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\bin\Debug\net8.0\GrcPlatform.ComplianceTracking.Domain.deps.json
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\bin\Debug\net8.0\GrcPlatform.ComplianceTracking.Domain.dll
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\bin\Debug\net8.0\GrcPlatform.ComplianceTracking.Domain.pdb
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\obj\Debug\net8.0\GrcPlatform.ComplianceTracking.Domain.csproj.AssemblyReference.cache
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\obj\Debug\net8.0\GrcPlatform.ComplianceTracking.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\obj\Debug\net8.0\GrcPlatform.ComplianceTracking.Domain.AssemblyInfoInputs.cache
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\obj\Debug\net8.0\GrcPlatform.ComplianceTracking.Domain.AssemblyInfo.cs
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\obj\Debug\net8.0\GrcPlatform.ComplianceTracking.Domain.csproj.CoreCompileInputs.cache
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\obj\Debug\net8.0\GrcPlatform.ComplianceTracking.Domain.dll
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\obj\Debug\net8.0\refint\GrcPlatform.ComplianceTracking.Domain.dll
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\obj\Debug\net8.0\GrcPlatform.ComplianceTracking.Domain.pdb
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\obj\Debug\net8.0\ref\GrcPlatform.ComplianceTracking.Domain.dll
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\bin\Debug\net8.0\GrcPlatform.Shared.dll
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\bin\Debug\net8.0\GrcPlatform.Shared.pdb
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Domain\obj\Debug\net8.0\GrcPlatf.C2991457.Up2Date

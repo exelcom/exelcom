@@ -1,0 +1,181 @@
+# =============================================================================
+# GRC Platform - Azure DevOps Pipeline
+# Validates and deploys Bicep IaC across environments
+# =============================================================================
+
+trigger:
+  branches:
+    include:
+      - main
+      - release/*
+  paths:
+    include:
+      - infra/bicep/**
+
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - infra/bicep/**
+
+variables:
+  bicepDirectory: '$(Build.SourcesDirectory)/infra/bicep'
+  azureSubscriptionDev: 'sc-grc-dev'
+  azureSubscriptionProd: 'sc-grc-prod'
+
+stages:
+
+  # ---------------------------------------------------------------------------
+  # Stage 1: Validate & Lint
+  # ---------------------------------------------------------------------------
+  - stage: Validate
+    displayName: '🔍 Validate Bicep'
+    jobs:
+      - job: Lint
+        displayName: 'Bicep Lint & Build'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - task: AzureCLI@2
+            displayName: 'Install Bicep CLI'
+            inputs:
+              azureSubscription: $(azureSubscriptionDev)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az bicep install
+                az bicep version
+
+          - task: AzureCLI@2
+            displayName: 'Bicep Lint'
+            inputs:
+              azureSubscription: $(azureSubscriptionDev)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                echo "Running bicep lint on all modules..."
+                find $(bicepDirectory) -name "*.bicep" -exec az bicep lint --file {} \;
+                echo "✅ All Bicep files passed linting"
+
+          - task: AzureCLI@2
+            displayName: 'Bicep Build (ARM template generation)'
+            inputs:
+              azureSubscription: $(azureSubscriptionDev)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az bicep build --file $(bicepDirectory)/main.bicep --outfile $(Build.ArtifactStagingDirectory)/main.json
+                echo "✅ ARM template generated successfully"
+
+          - publish: $(Build.ArtifactStagingDirectory)
+            artifact: bicep-arm-templates
+
+  # ---------------------------------------------------------------------------
+  # Stage 2: What-If Dev
+  # ---------------------------------------------------------------------------
+  - stage: WhatIfDev
+    displayName: '🔮 What-If DEV'
+    dependsOn: Validate
+    condition: succeeded()
+    jobs:
+      - job: WhatIfDev
+        displayName: 'What-If Analysis (DEV)'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - download: current
+            artifact: bicep-arm-templates
+
+          - task: AzureCLI@2
+            displayName: 'Run What-If DEV'
+            inputs:
+              azureSubscription: $(azureSubscriptionDev)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az deployment sub what-if \
+                  --location australiaeast \
+                  --template-file $(bicepDirectory)/main.bicep \
+                  --parameters $(bicepDirectory)/environments/dev.parameters.json \
+                  --name "grc-whatif-dev-$(Build.BuildId)"
+
+  # ---------------------------------------------------------------------------
+  # Stage 3: Deploy DEV
+  # ---------------------------------------------------------------------------
+  - stage: DeployDev
+    displayName: '🚀 Deploy DEV'
+    dependsOn: WhatIfDev
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: DeployInfrastructureDev
+        displayName: 'Deploy GRC Infrastructure (DEV)'
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: 'grc-dev'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'Deploy Bicep to DEV'
+                  inputs:
+                    azureSubscription: $(azureSubscriptionDev)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az deployment sub create \
+                        --location australiaeast \
+                        --template-file $(bicepDirectory)/main.bicep \
+                        --parameters $(bicepDirectory)/environments/dev.parameters.json \
+                        --name "grc-deploy-dev-$(Build.BuildId)" \
+                        --verbose
+
+                      echo "✅ DEV deployment completed"
+
+  # ---------------------------------------------------------------------------
+  # Stage 4: Deploy PROD (manual approval gate)
+  # ---------------------------------------------------------------------------
+  - stage: DeployProd
+    displayName: '🏭 Deploy PROD'
+    dependsOn: DeployDev
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
+    jobs:
+      - deployment: DeployInfrastructureProd
+        displayName: 'Deploy GRC Infrastructure (PROD)'
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: 'grc-prod'   # Configure manual approval in Azure DevOps Environments
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: 'What-If PROD (final check)'
+                  inputs:
+                    azureSubscription: $(azureSubscriptionProd)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az deployment sub what-if \
+                        --location australiaeast \
+                        --template-file $(bicepDirectory)/main.bicep \
+                        --parameters $(bicepDirectory)/environments/prod.parameters.json \
+                        --name "grc-whatif-prod-$(Build.BuildId)"
+
+                - task: AzureCLI@2
+                  displayName: 'Deploy Bicep to PROD'
+                  inputs:
+                    azureSubscription: $(azureSubscriptionProd)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az deployment sub create \
+                        --location australiaeast \
+                        --template-file $(bicepDirectory)/main.bicep \
+                        --parameters $(bicepDirectory)/environments/prod.parameters.json \
+                        --name "grc-deploy-prod-$(Build.BuildId)" \
+                        --verbose
+
+                      echo "✅ PROD deployment completed"

@@ -1,0 +1,17 @@
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\bin\Release\net8.0\GrcPlatform.RiskManagement.Application.deps.json
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\bin\Release\net8.0\GrcPlatform.RiskManagement.Application.dll
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\bin\Release\net8.0\GrcPlatform.RiskManagement.Application.pdb
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\bin\Release\net8.0\GrcPlatform.RiskManagement.Domain.dll
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\bin\Release\net8.0\GrcPlatform.Shared.dll
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\bin\Release\net8.0\GrcPlatform.RiskManagement.Domain.pdb
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\bin\Release\net8.0\GrcPlatform.Shared.pdb
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\obj\Release\net8.0\GrcPlatform.RiskManagement.Application.csproj.AssemblyReference.cache
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\obj\Release\net8.0\GrcPlatform.RiskManagement.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\obj\Release\net8.0\GrcPlatform.RiskManagement.Application.AssemblyInfoInputs.cache
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\obj\Release\net8.0\GrcPlatform.RiskManagement.Application.AssemblyInfo.cs
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\obj\Release\net8.0\GrcPlatform.RiskManagement.Application.csproj.CoreCompileInputs.cache
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\obj\Release\net8.0\GrcPlatf.A810F167.Up2Date
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\obj\Release\net8.0\GrcPlatform.RiskManagement.Application.dll
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\obj\Release\net8.0\refint\GrcPlatform.RiskManagement.Application.dll
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\obj\Release\net8.0\GrcPlatform.RiskManagement.Application.pdb
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Application\obj\Release\net8.0\ref\GrcPlatform.RiskManagement.Application.dll

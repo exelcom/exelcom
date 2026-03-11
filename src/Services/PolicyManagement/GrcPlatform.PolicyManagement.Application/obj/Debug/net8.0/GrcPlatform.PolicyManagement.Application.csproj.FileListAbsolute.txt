@@ -1,0 +1,17 @@
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\bin\Debug\net8.0\GrcPlatform.PolicyManagement.Application.deps.json
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\bin\Debug\net8.0\GrcPlatform.PolicyManagement.Application.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\bin\Debug\net8.0\GrcPlatform.PolicyManagement.Application.pdb
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\bin\Debug\net8.0\GrcPlatform.PolicyManagement.Domain.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\bin\Debug\net8.0\GrcPlatform.Shared.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\bin\Debug\net8.0\GrcPlatform.PolicyManagement.Domain.pdb
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\bin\Debug\net8.0\GrcPlatform.Shared.pdb
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\obj\Debug\net8.0\GrcPlatform.PolicyManagement.Application.csproj.AssemblyReference.cache
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\obj\Debug\net8.0\GrcPlatform.PolicyManagement.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\obj\Debug\net8.0\GrcPlatform.PolicyManagement.Application.AssemblyInfoInputs.cache
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\obj\Debug\net8.0\GrcPlatform.PolicyManagement.Application.AssemblyInfo.cs
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\obj\Debug\net8.0\GrcPlatform.PolicyManagement.Application.csproj.CoreCompileInputs.cache
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\obj\Debug\net8.0\GrcPlatf.3A3ABF9F.Up2Date
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\obj\Debug\net8.0\GrcPlatform.PolicyManagement.Application.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\obj\Debug\net8.0\refint\GrcPlatform.PolicyManagement.Application.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\obj\Debug\net8.0\GrcPlatform.PolicyManagement.Application.pdb
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Application\obj\Debug\net8.0\ref\GrcPlatform.PolicyManagement.Application.dll

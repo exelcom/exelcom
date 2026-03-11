@@ -1,0 +1,82 @@
+using GrcPlatform.RiskManagement.Domain.Enums;
+using GrcPlatform.Shared;
+using MediatR;
+
+namespace GrcPlatform.RiskManagement.Application.Risks.Commands;
+
+// --- Create Risk ---
+public record CreateRiskCommand(
+    string Title,
+    string Description,
+    RiskCategory Category,
+    RiskLikelihood Likelihood,
+    RiskImpact Impact,
+    string? Owner,
+    string? Department,
+    DateTime? ReviewDueDate,
+    string? RegulatoryReference
+) : IRequest<RiskDto>;
+
+// --- Update Assessment ---
+public record UpdateRiskAssessmentCommand(
+    Guid RiskId,
+    RiskLikelihood Likelihood,
+    RiskImpact Impact,
+    RiskLikelihood? ResidualLikelihood,
+    RiskImpact? ResidualImpact
+) : IRequest<RiskDto>;
+
+// --- Add Treatment ---
+public record AddRiskTreatmentCommand(
+    Guid RiskId,
+    string Description,
+    TreatmentType Type,
+    string Owner,
+    DateTime DueDate
+) : IRequest<RiskTreatmentDto>;
+
+// --- Close Risk ---
+public record CloseRiskCommand(Guid RiskId, string Reason) : IRequest<RiskDto>;
+
+// --- Accept Risk ---
+public record AcceptRiskCommand(Guid RiskId, string Reason) : IRequest<RiskDto>;
+
+// --- DTOs ---
+public record RiskDto(
+    Guid Id,
+    string Title,
+    string Description,
+    string Category,
+    string Status,
+    int InherentScore,
+    string RiskRating,
+    int? ResidualScore,
+    string? Owner,
+    string? Department,
+    DateTime? ReviewDueDate,
+    string? RegulatoryReference,
+    DateTime CreatedAt,
+    string CreatedBy,
+    List<RiskTreatmentDto> Treatments
+);
+
+public record RiskTreatmentDto(
+    Guid Id,
+    string Description,
+    string Type,
+    string Owner,
+    DateTime DueDate,
+    bool IsCompleted,
+    DateTime? CompletedAt
+);
+
+public record RiskSummaryDto(
+    Guid Id,
+    string Title,
+    string Category,
+    string Status,
+    string RiskRating,
+    int InherentScore,
+    string? Owner,
+    DateTime? ReviewDueDate
+);

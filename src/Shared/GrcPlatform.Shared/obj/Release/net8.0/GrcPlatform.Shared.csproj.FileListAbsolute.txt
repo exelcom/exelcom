@@ -1,0 +1,11 @@
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\bin\Release\net8.0\GrcPlatform.Shared.deps.json
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\bin\Release\net8.0\GrcPlatform.Shared.dll
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\bin\Release\net8.0\GrcPlatform.Shared.pdb
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\GrcPlatform.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\GrcPlatform.Shared.AssemblyInfoInputs.cache
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\GrcPlatform.Shared.AssemblyInfo.cs
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\GrcPlatform.Shared.csproj.CoreCompileInputs.cache
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\GrcPlatform.Shared.dll
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\refint\GrcPlatform.Shared.dll
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\GrcPlatform.Shared.pdb
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\ref\GrcPlatform.Shared.dll

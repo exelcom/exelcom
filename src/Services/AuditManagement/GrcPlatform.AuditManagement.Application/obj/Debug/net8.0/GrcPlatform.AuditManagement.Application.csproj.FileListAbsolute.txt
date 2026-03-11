@@ -1,0 +1,17 @@
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\bin\Debug\net8.0\GrcPlatform.AuditManagement.Application.deps.json
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\bin\Debug\net8.0\GrcPlatform.AuditManagement.Application.dll
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\bin\Debug\net8.0\GrcPlatform.AuditManagement.Application.pdb
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\bin\Debug\net8.0\GrcPlatform.AuditManagement.Domain.dll
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\bin\Debug\net8.0\GrcPlatform.Shared.dll
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\bin\Debug\net8.0\GrcPlatform.AuditManagement.Domain.pdb
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\bin\Debug\net8.0\GrcPlatform.Shared.pdb
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\obj\Debug\net8.0\GrcPlatform.AuditManagement.Application.csproj.AssemblyReference.cache
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\obj\Debug\net8.0\GrcPlatform.AuditManagement.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\obj\Debug\net8.0\GrcPlatform.AuditManagement.Application.AssemblyInfoInputs.cache
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\obj\Debug\net8.0\GrcPlatform.AuditManagement.Application.AssemblyInfo.cs
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\obj\Debug\net8.0\GrcPlatform.AuditManagement.Application.csproj.CoreCompileInputs.cache
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\obj\Debug\net8.0\GrcPlatf.9B3A1CC8.Up2Date
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\obj\Debug\net8.0\GrcPlatform.AuditManagement.Application.dll
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\obj\Debug\net8.0\refint\GrcPlatform.AuditManagement.Application.dll
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\obj\Debug\net8.0\GrcPlatform.AuditManagement.Application.pdb
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Application\obj\Debug\net8.0\ref\GrcPlatform.AuditManagement.Application.dll

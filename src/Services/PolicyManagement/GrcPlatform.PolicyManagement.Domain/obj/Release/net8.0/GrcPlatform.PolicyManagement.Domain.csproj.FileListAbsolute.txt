@@ -1,0 +1,15 @@
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\bin\Release\net8.0\GrcPlatform.PolicyManagement.Domain.deps.json
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\bin\Release\net8.0\GrcPlatform.PolicyManagement.Domain.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\bin\Release\net8.0\GrcPlatform.PolicyManagement.Domain.pdb
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\bin\Release\net8.0\GrcPlatform.Shared.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\bin\Release\net8.0\GrcPlatform.Shared.pdb
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\GrcPlatform.PolicyManagement.Domain.csproj.AssemblyReference.cache
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\GrcPlatform.PolicyManagement.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\GrcPlatform.PolicyManagement.Domain.AssemblyInfoInputs.cache
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\GrcPlatform.PolicyManagement.Domain.AssemblyInfo.cs
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\GrcPlatform.PolicyManagement.Domain.csproj.CoreCompileInputs.cache
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\GrcPlatf.2536D98E.Up2Date
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\GrcPlatform.PolicyManagement.Domain.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\refint\GrcPlatform.PolicyManagement.Domain.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\GrcPlatform.PolicyManagement.Domain.pdb
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\ref\GrcPlatform.PolicyManagement.Domain.dll

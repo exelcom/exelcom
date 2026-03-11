@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": { "value": "prod" },
+    "location": { "value": "australiaeast" },
+    "locationSecondary": { "value": "australiasoutheast" },
+    "projectName": { "value": "grc" },
+    "tenantId": { "value": "<YOUR-TENANT-ID>" },
+    "keyVaultAdminGroupObjectId": { "value": "<YOUR-PROD-AAD-GROUP-OBJECT-ID>" },
+    "alertEmailAddress": { "value": "grc-prod-alerts@yourdomain.com" },
+    "tags": {
+      "value": {
+        "project": "GRC-Platform",
+        "environment": "prod",
+        "managedBy": "Bicep",
+        "costCenter": "GRC-IT",
+        "dataClassification": "Confidential"
+      }
+    }
+  }
+}

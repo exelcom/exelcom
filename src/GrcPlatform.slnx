@@ -1,0 +1,30 @@
+<Solution>
+  <Folder Name="/Services/" />
+  <Folder Name="/Services/AuditManagement/">
+    <Project Path="Services/AuditManagement/GrcPlatform.AuditManagement.API/GrcPlatform.AuditManagement.API.csproj" />
+    <Project Path="Services/AuditManagement/GrcPlatform.AuditManagement.Application/GrcPlatform.AuditManagement.Application.csproj" />
+    <Project Path="Services/AuditManagement/GrcPlatform.AuditManagement.Domain/GrcPlatform.AuditManagement.Domain.csproj" />
+    <Project Path="Services/AuditManagement/GrcPlatform.AuditManagement.Infrastructure/GrcPlatform.AuditManagement.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/ComplianceTracking/">
+    <Project Path="Services/ComplianceTracking/GrcPlatform.ComplianceTracking.API/GrcPlatform.ComplianceTracking.API.csproj" />
+    <Project Path="Services/ComplianceTracking/GrcPlatform.ComplianceTracking.Application/GrcPlatform.ComplianceTracking.Application.csproj" />
+    <Project Path="Services/ComplianceTracking/GrcPlatform.ComplianceTracking.Domain/GrcPlatform.ComplianceTracking.Domain.csproj" />
+    <Project Path="Services/ComplianceTracking/GrcPlatform.ComplianceTracking.Infrastructure/GrcPlatform.ComplianceTracking.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/PolicyManagement/">
+    <Project Path="Services/PolicyManagement/GrcPlatform.PolicyManagement.API/GrcPlatform.PolicyManagement.API.csproj" />
+    <Project Path="Services/PolicyManagement/GrcPlatform.PolicyManagement.Application/GrcPlatform.PolicyManagement.Application.csproj" />
+    <Project Path="Services/PolicyManagement/GrcPlatform.PolicyManagement.Domain/GrcPlatform.PolicyManagement.Domain.csproj" />
+    <Project Path="Services/PolicyManagement/GrcPlatform.PolicyManagement.Infrastructure/GrcPlatform.PolicyManagement.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Services/RiskManagement/">
+    <Project Path="Services/RiskManagement/GrcPlatform.RiskManagement.API/GrcPlatform.RiskManagement.API.csproj" />
+    <Project Path="Services/RiskManagement/GrcPlatform.RiskManagement.Application/GrcPlatform.RiskManagement.Application.csproj" />
+    <Project Path="Services/RiskManagement/GrcPlatform.RiskManagement.Domain/GrcPlatform.RiskManagement.Domain.csproj" />
+    <Project Path="Services/RiskManagement/GrcPlatform.RiskManagement.Infrastructure/GrcPlatform.RiskManagement.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="Shared/GrcPlatform.Shared/GrcPlatform.Shared.csproj" />
+  </Folder>
+</Solution>

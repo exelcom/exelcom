@@ -1,0 +1,484 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.API\\GrcPlatform.AuditManagement.API.csproj": {}
+  },
+  "projects": {
+    "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.API\\GrcPlatform.AuditManagement.API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.API\\GrcPlatform.AuditManagement.API.csproj",
+        "projectName": "GrcPlatform.AuditManagement.API",
+        "projectPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.API\\GrcPlatform.AuditManagement.API.csproj",
+        "packagesPath": "C:\\Users\\SamKawtharani\\.nuget\\packages\\",
+        "outputPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.API\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\SamKawtharani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Application\\GrcPlatform.AuditManagement.Application.csproj": {
+                "projectPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Application\\GrcPlatform.AuditManagement.Application.csproj"
+              },
+              "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Infrastructure\\GrcPlatform.AuditManagement.Infrastructure.csproj": {
+                "projectPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Infrastructure\\GrcPlatform.AuditManagement.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Azure.Extensions.AspNetCore.Configuration.Secrets": {
+              "target": "Package",
+              "version": "[1.4.0, )"
+            },
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.18.0, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[14.0.0, )"
+            },
+            "Microsoft.ApplicationInsights.AspNetCore": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.24, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.11, )"
+            },
+            "Microsoft.Identity.Web": {
+              "target": "Package",
+              "version": "[4.4.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.6.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Host.linux-x64",
+              "version": "[8.0.23, 8.0.23]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
+        }
+      }
+    },
+    "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Application\\GrcPlatform.AuditManagement.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Application\\GrcPlatform.AuditManagement.Application.csproj",
+        "projectName": "GrcPlatform.AuditManagement.Application",
+        "projectPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Application\\GrcPlatform.AuditManagement.Application.csproj",
+        "packagesPath": "C:\\Users\\SamKawtharani\\.nuget\\packages\\",
+        "outputPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\SamKawtharani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Domain\\GrcPlatform.AuditManagement.Domain.csproj": {
+                "projectPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Domain\\GrcPlatform.AuditManagement.Domain.csproj"
+              },
+              "C:\\Projects\\grc-platform\\src\\Shared\\GrcPlatform.Shared\\GrcPlatform.Shared.csproj": {
+                "projectPath": "C:\\Projects\\grc-platform\\src\\Shared\\GrcPlatform.Shared\\GrcPlatform.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[16.0.0, )"
+            },
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[12.1.1, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[14.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
+        }
+      }
+    },
+    "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Domain\\GrcPlatform.AuditManagement.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Domain\\GrcPlatform.AuditManagement.Domain.csproj",
+        "projectName": "GrcPlatform.AuditManagement.Domain",
+        "projectPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Domain\\GrcPlatform.AuditManagement.Domain.csproj",
+        "packagesPath": "C:\\Users\\SamKawtharani\\.nuget\\packages\\",
+        "outputPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\SamKawtharani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Projects\\grc-platform\\src\\Shared\\GrcPlatform.Shared\\GrcPlatform.Shared.csproj": {
+                "projectPath": "C:\\Projects\\grc-platform\\src\\Shared\\GrcPlatform.Shared\\GrcPlatform.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[14.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
+        }
+      }
+    },
+    "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Infrastructure\\GrcPlatform.AuditManagement.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Infrastructure\\GrcPlatform.AuditManagement.Infrastructure.csproj",
+        "projectName": "GrcPlatform.AuditManagement.Infrastructure",
+        "projectPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Infrastructure\\GrcPlatform.AuditManagement.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\SamKawtharani\\.nuget\\packages\\",
+        "outputPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\SamKawtharani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Application\\GrcPlatform.AuditManagement.Application.csproj": {
+                "projectPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Application\\GrcPlatform.AuditManagement.Application.csproj"
+              },
+              "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Domain\\GrcPlatform.AuditManagement.Domain.csproj": {
+                "projectPath": "C:\\Projects\\grc-platform\\src\\Services\\AuditManagement\\GrcPlatform.AuditManagement.Domain\\GrcPlatform.AuditManagement.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Azure.Identity": {
+              "target": "Package",
+              "version": "[1.18.0, )"
+            },
+            "Azure.Messaging.ServiceBus": {
+              "target": "Package",
+              "version": "[7.20.1, )"
+            },
+            "Azure.Security.KeyVault.Secrets": {
+              "target": "Package",
+              "version": "[4.9.0, )"
+            },
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[5.2.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.11, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
+        }
+      }
+    },
+    "C:\\Projects\\grc-platform\\src\\Shared\\GrcPlatform.Shared\\GrcPlatform.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Projects\\grc-platform\\src\\Shared\\GrcPlatform.Shared\\GrcPlatform.Shared.csproj",
+        "projectName": "GrcPlatform.Shared",
+        "projectPath": "C:\\Projects\\grc-platform\\src\\Shared\\GrcPlatform.Shared\\GrcPlatform.Shared.csproj",
+        "packagesPath": "C:\\Users\\SamKawtharani\\.nuget\\packages\\",
+        "outputPath": "C:\\Projects\\grc-platform\\src\\Shared\\GrcPlatform.Shared\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\SamKawtharani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
+        }
+      }
+    }
+  }
+}

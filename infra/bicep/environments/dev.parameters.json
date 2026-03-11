@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": { "value": "dev" },
+    "location": { "value": "australiaeast" },
+    "locationSecondary": { "value": "australiasoutheast" },
+    "projectName": { "value": "grc-exelcom" },
+    "tenantId": { "value": "97fdd37b-3579-4f71-9370-c7683719594f" },
+    "keyVaultAdminGroupObjectId": { "value": "d50c6fcb-5f10-468e-8e8f-a35191fbc323" },
+    "alertEmailAddress": { "value": "grc-dev-alerts@exelcom.au" },
+    "tags": {
+      "value": {
+        "project": "GRC-Platform",
+        "environment": "dev",
+        "managedBy": "Bicep",
+        "costCenter": "GRC-IT"
+      }
+    }
+  }
+}
