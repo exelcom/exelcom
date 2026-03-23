@@ -8,6 +8,10 @@ const nav = [
   { to: '/compliance', label: 'Compliance', icon: '◎', roles: [AppRoles.Admin, AppRoles.ComplianceOfficer] },
   { to: '/policies', label: 'Policies', icon: '◇', roles: [AppRoles.Admin, AppRoles.PolicyManager] },
   { to: '/audits', label: 'Audit', icon: '◉', roles: [AppRoles.Admin, AppRoles.Auditor] },
+  { to: '/soa', label: 'Statement of Applicability', icon: '◎', roles: [AppRoles.Admin, AppRoles.ComplianceOfficer] },
+  { to: '/nonconformities', label: 'Nonconformities', icon: '◆', roles: [AppRoles.Admin, AppRoles.ComplianceOfficer] },
+  { to: '/assets', label: 'Asset Inventory', icon: '◉', roles: [AppRoles.Admin, AppRoles.ComplianceOfficer] },
+  { to: '/incidents', label: 'Incidents', icon: '🚨', roles: [AppRoles.Admin, AppRoles.ComplianceOfficer] },
 ];
 
 export function Sidebar() {
@@ -95,3 +99,4 @@ export function Sidebar() {
     </aside>
   );
 }
+

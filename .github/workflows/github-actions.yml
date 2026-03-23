@@ -1,0 +1,178 @@
+name: GRC Platform CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  AZURE_RESOURCE_GROUP: rg-grc-exelcom-dev
+  DOTNET_VERSION: '8.0.x'
+  NODE_VERSION: '20.x'
+
+jobs:
+  # ── Build & Test ─────────────────────────────────────────────────────────────
+  build-backend:
+    name: Build & Test Backend
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - name: RiskManagement
+            path: src/Services/RiskManagement
+            project: GrcPlatform.RiskManagement.API/GrcPlatform.RiskManagement.API.csproj
+          - name: ComplianceTracking
+            path: src/Services/ComplianceTracking
+            project: GrcPlatform.ComplianceTracking.API/GrcPlatform.ComplianceTracking.API.csproj
+          - name: PolicyManagement
+            path: src/Services/PolicyManagement
+            project: GrcPlatform.PolicyManagement.API/GrcPlatform.PolicyManagement.API.csproj
+          - name: AuditManagement
+            path: src/Services/AuditManagement
+            project: GrcPlatform.AuditManagement.API/GrcPlatform.AuditManagement.API.csproj
+          - name: StatementOfApplicability
+            path: src/Services/StatementOfApplicability
+            project: GrcPlatform.StatementOfApplicability.API/GrcPlatform.StatementOfApplicability.API.csproj
+          - name: NonconformityAndCorrectiveActions
+            path: src/Services/NonconformityAndCorrectiveActions
+            project: GrcPlatform.NonconformityAndCorrectiveActions.API/GrcPlatform.NonconformityAndCorrectiveActions.API.csproj
+          - name: AssetInventory
+            path: src/Services/AssetInventory
+            project: GrcPlatform.AssetInventory.API/GrcPlatform.AssetInventory.API.csproj
+          - name: IncidentManagement
+            path: src/Services/IncidentManagement
+            project: GrcPlatform.IncidentManagement.API/GrcPlatform.IncidentManagement.API.csproj
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore ${{ matrix.service.path }}/${{ matrix.service.project }}
+
+      - name: Build
+        run: dotnet build ${{ matrix.service.path }}/${{ matrix.service.project }} --no-restore --configuration Release
+
+      - name: Publish artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          dotnet publish ${{ matrix.service.path }}/${{ matrix.service.project }} \
+            --no-build \
+            --configuration Release \
+            --output publish/${{ matrix.service.name }} \
+            --runtime linux-x64 \
+            --self-contained false
+
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.service.name }}
+          path: publish/${{ matrix.service.name }}
+          retention-days: 1
+
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: src/Frontend/grc-portal/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: src/Frontend/grc-portal
+
+      - name: Build
+        run: npm run build
+        working-directory: src/Frontend/grc-portal
+
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend
+          path: src/Frontend/grc-portal/dist
+          retention-days: 1
+
+  # ── Deploy (main branch only) ─────────────────────────────────────────────────
+  deploy-backend:
+    name: Deploy Backend
+    needs: [build-backend, build-frontend]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: production
+    strategy:
+      matrix:
+        service:
+          - name: RiskManagement
+            appName: app-risk-grc-exelcom-dev
+          - name: ComplianceTracking
+            appName: app-compliance-grc-exelcom-dev
+          - name: PolicyManagement
+            appName: app-policy-grc-exelcom-dev
+          - name: AuditManagement
+            appName: app-audit-grc-exelcom-dev
+          - name: StatementOfApplicability
+            appName: app-soa-grc-exelcom-dev
+          - name: NonconformityAndCorrectiveActions
+            appName: app-nonconformity-grc-exelcom-dev
+          - name: AssetInventory
+            appName: app-asset-grc-exelcom-dev
+          - name: IncidentManagement
+            appName: app-incident-grc-exelcom-dev
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.service.name }}
+          path: publish/${{ matrix.service.name }}
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Zip artifact
+        run: zip -r publish/${{ matrix.service.name }}.zip publish/${{ matrix.service.name }}
+
+      - name: Deploy to App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ matrix.service.appName }}
+          package: publish/${{ matrix.service.name }}.zip
+
+  deploy-frontend:
+    name: Deploy Frontend
+    needs: [build-backend, build-frontend]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend
+          path: dist
+
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: upload
+          app_location: dist
+          skip_app_build: true

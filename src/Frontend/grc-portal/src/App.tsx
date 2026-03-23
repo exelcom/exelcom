@@ -1,3 +1,4 @@
+import { NcCaPage } from './pages/NcCaPage';
 import { MsalProvider, AuthenticatedTemplate, UnauthenticatedTemplate, useMsalAuthentication } from '@azure/msal-react';
 import { PublicClientApplication, InteractionType } from '@azure/msal-browser';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -12,7 +13,10 @@ import { RisksPage } from './pages/RisksPage';
 import { CompliancePage } from './pages/CompliancePage';
 import { PoliciesPage } from './pages/PoliciesPage';
 import { AuditsPage } from './pages/AuditsPage';
+import { SoaPage } from './pages/SoaPage';
 import { LoginPage } from './pages/LoginPage';
+import { AssetInventoryPage } from './pages/AssetInventoryPage';
+import { IncidentManagementPage } from './pages/IncidentManagementPage';
 
 const msalInstance = new PublicClientApplication(msalConfig);
 const queryClient = new QueryClient();
@@ -46,6 +50,10 @@ function AppContent() {
                 <Route path="/compliance" element={<CompliancePage />} />
                 <Route path="/policies" element={<PoliciesPage />} />
                 <Route path="/audits" element={<AuditsPage />} />
+                <Route path="/soa" element={<SoaPage />} />
+                <Route path="/nonconformities" element={<NcCaPage />} />
+                <Route path="/assets" element={<AssetInventoryPage />} />
+                <Route path="/incidents" element={<IncidentManagementPage />} />
               </Routes>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', color: 'var(--text-muted)' }}>
@@ -73,4 +81,6 @@ export default function App() {
     </MsalProvider>
   );
 }
+
+
 

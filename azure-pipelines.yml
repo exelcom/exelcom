@@ -1,0 +1,206 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+variables:
+  dotnetVersion: '8.0.x'
+  nodeVersion: '20.x'
+  resourceGroup: 'rg-grc-exelcom-dev'
+  azureSubscription: 'GRC-Platform-ServiceConnection'
+
+stages:
+  # ── Build & Test ─────────────────────────────────────────────────────────────
+  - stage: Build
+    displayName: Build & Test
+    jobs:
+      - job: BuildBackend
+        displayName: Build Backend Services
+        pool:
+          vmImage: ubuntu-latest
+        strategy:
+          matrix:
+            RiskManagement:
+              serviceName: RiskManagement
+              projectPath: src/Services/RiskManagement/GrcPlatform.RiskManagement.API/GrcPlatform.RiskManagement.API.csproj
+              appName: app-risk-grc-exelcom-dev
+            ComplianceTracking:
+              serviceName: ComplianceTracking
+              projectPath: src/Services/ComplianceTracking/GrcPlatform.ComplianceTracking.API/GrcPlatform.ComplianceTracking.API.csproj
+              appName: app-compliance-grc-exelcom-dev
+            PolicyManagement:
+              serviceName: PolicyManagement
+              projectPath: src/Services/PolicyManagement/GrcPlatform.PolicyManagement.API/GrcPlatform.PolicyManagement.API.csproj
+              appName: app-policy-grc-exelcom-dev
+            AuditManagement:
+              serviceName: AuditManagement
+              projectPath: src/Services/AuditManagement/GrcPlatform.AuditManagement.API/GrcPlatform.AuditManagement.API.csproj
+              appName: app-audit-grc-exelcom-dev
+            StatementOfApplicability:
+              serviceName: StatementOfApplicability
+              projectPath: src/Services/StatementOfApplicability/GrcPlatform.StatementOfApplicability.API/GrcPlatform.StatementOfApplicability.API.csproj
+              appName: app-soa-grc-exelcom-dev
+            NonconformityAndCorrectiveActions:
+              serviceName: NonconformityAndCorrectiveActions
+              projectPath: src/Services/NonconformityAndCorrectiveActions/GrcPlatform.NonconformityAndCorrectiveActions.API/GrcPlatform.NonconformityAndCorrectiveActions.API.csproj
+              appName: app-nonconformity-grc-exelcom-dev
+            AssetInventory:
+              serviceName: AssetInventory
+              projectPath: src/Services/AssetInventory/GrcPlatform.AssetInventory.API/GrcPlatform.AssetInventory.API.csproj
+              appName: app-asset-grc-exelcom-dev
+            IncidentManagement:
+              serviceName: IncidentManagement
+              projectPath: src/Services/IncidentManagement/GrcPlatform.IncidentManagement.API/GrcPlatform.IncidentManagement.API.csproj
+              appName: app-incident-grc-exelcom-dev
+        steps:
+          - task: UseDotNet@2
+            displayName: Setup .NET
+            inputs:
+              version: $(dotnetVersion)
+
+          - task: DotNetCoreCLI@2
+            displayName: Restore
+            inputs:
+              command: restore
+              projects: $(projectPath)
+
+          - task: DotNetCoreCLI@2
+            displayName: Build
+            inputs:
+              command: build
+              projects: $(projectPath)
+              arguments: --no-restore --configuration Release
+
+          - task: DotNetCoreCLI@2
+            displayName: Publish
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+            inputs:
+              command: publish
+              publishWebProjects: false
+              projects: $(projectPath)
+              arguments: >
+                --no-build
+                --configuration Release
+                --output $(Build.ArtifactStagingDirectory)/$(serviceName)
+                --runtime linux-x64
+                --self-contained false
+              zipAfterPublish: true
+
+          - task: PublishPipelineArtifact@1
+            displayName: Publish artifact
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+            inputs:
+              targetPath: $(Build.ArtifactStagingDirectory)/$(serviceName)
+              artifact: $(serviceName)
+
+      - job: BuildFrontend
+        displayName: Build Frontend
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: NodeTool@0
+            displayName: Setup Node
+            inputs:
+              versionSpec: $(nodeVersion)
+
+          - task: Npm@1
+            displayName: Install dependencies
+            inputs:
+              command: ci
+              workingDir: src/Frontend/grc-portal
+
+          - task: Npm@1
+            displayName: Build
+            inputs:
+              command: custom
+              workingDir: src/Frontend/grc-portal
+              customCommand: run build
+
+          - task: PublishPipelineArtifact@1
+            displayName: Publish frontend artifact
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+            inputs:
+              targetPath: src/Frontend/grc-portal/dist
+              artifact: frontend
+
+  # ── Deploy (main only) ────────────────────────────────────────────────────────
+  - stage: Deploy
+    displayName: Deploy to Azure
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: DeployBackend
+        displayName: Deploy Backend Services
+        pool:
+          vmImage: ubuntu-latest
+        environment: production
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureCLI@2
+                  displayName: Deploy all backend services
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      declare -A SERVICES=(
+                        ["RiskManagement"]="app-risk-grc-exelcom-dev"
+                        ["ComplianceTracking"]="app-compliance-grc-exelcom-dev"
+                        ["PolicyManagement"]="app-policy-grc-exelcom-dev"
+                        ["AuditManagement"]="app-audit-grc-exelcom-dev"
+                        ["StatementOfApplicability"]="app-soa-grc-exelcom-dev"
+                        ["NonconformityAndCorrectiveActions"]="app-nonconformity-grc-exelcom-dev"
+                        ["AssetInventory"]="app-asset-grc-exelcom-dev"
+                        ["IncidentManagement"]="app-incident-grc-exelcom-dev"
+                      )
+
+                      for SERVICE in "${!SERVICES[@]}"; do
+                        APP_NAME="${SERVICES[$SERVICE]}"
+                        ARTIFACT_PATH="$(Pipeline.Workspace)/$SERVICE"
+
+                        if [ -d "$ARTIFACT_PATH" ]; then
+                          echo "Deploying $SERVICE to $APP_NAME..."
+                          ZIP_FILE="$ARTIFACT_PATH/$SERVICE.zip"
+
+                          # Find the zip (DotNetCoreCLI publishes as .zip already)
+                          ZIP=$(find "$ARTIFACT_PATH" -name "*.zip" | head -1)
+                          if [ -z "$ZIP" ]; then
+                            cd "$ARTIFACT_PATH" && zip -r "$ZIP_FILE" . && cd -
+                            ZIP="$ZIP_FILE"
+                          fi
+
+                          az webapp deploy \
+                            --resource-group $(resourceGroup) \
+                            --name "$APP_NAME" \
+                            --src-path "$ZIP" \
+                            --type zip \
+                            --async false
+                          echo "✅ $SERVICE deployed"
+                        else
+                          echo "⚠️  Artifact not found for $SERVICE, skipping"
+                        fi
+                      done
+
+      - deployment: DeployFrontend
+        displayName: Deploy Frontend
+        pool:
+          vmImage: ubuntu-latest
+        environment: production
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureStaticWebApp@0
+                  displayName: Deploy to Azure Static Web Apps
+                  inputs:
+                    azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN)
+                    app_location: $(Pipeline.Workspace)/frontend
+                    skip_app_build: true
+                    output_location: ''
