@@ -14,35 +14,28 @@ env:
 jobs:
   # ── Build & Test ─────────────────────────────────────────────────────────────
   build-backend:
-    name: Build & Test Backend
+    name: Build Backend (${{ matrix.service.name }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         service:
           - name: RiskManagement
-            path: src/Services/RiskManagement
-            project: GrcPlatform.RiskManagement.API/GrcPlatform.RiskManagement.API.csproj
+            project: src/Services/RiskManagement/GrcPlatform.RiskManagement.API/GrcPlatform.RiskManagement.API.csproj
           - name: ComplianceTracking
-            path: src/Services/ComplianceTracking
-            project: GrcPlatform.ComplianceTracking.API/GrcPlatform.ComplianceTracking.API.csproj
+            project: src/Services/ComplianceTracking/GrcPlatform.ComplianceTracking.API/GrcPlatform.ComplianceTracking.API.csproj
           - name: PolicyManagement
-            path: src/Services/PolicyManagement
-            project: GrcPlatform.PolicyManagement.API/GrcPlatform.PolicyManagement.API.csproj
+            project: src/Services/PolicyManagement/GrcPlatform.PolicyManagement.API/GrcPlatform.PolicyManagement.API.csproj
           - name: AuditManagement
-            path: src/Services/AuditManagement
-            project: GrcPlatform.AuditManagement.API/GrcPlatform.AuditManagement.API.csproj
+            project: src/Services/AuditManagement/GrcPlatform.AuditManagement.API/GrcPlatform.AuditManagement.API.csproj
           - name: StatementOfApplicability
-            path: src/Services/StatementOfApplicability
-            project: GrcPlatform.StatementOfApplicability.API/GrcPlatform.StatementOfApplicability.API.csproj
+            project: src/Services/StatementOfApplicability/GrcPlatform.StatementOfApplicability.API/GrcPlatform.StatementOfApplicability.API.csproj
           - name: NonconformityAndCorrectiveActions
-            path: src/Services/NonconformityAndCorrectiveActions
-            project: GrcPlatform.NonconformityAndCorrectiveActions.API/GrcPlatform.NonconformityAndCorrectiveActions.API.csproj
+            project: src/Services/NonconformityAndCorrectiveActions/GrcPlatform.NonconformityAndCorrectiveActions.API/GrcPlatform.NonconformityAndCorrectiveActions.API.csproj
           - name: AssetInventory
-            path: src/Services/AssetInventory
-            project: GrcPlatform.AssetInventory.API/GrcPlatform.AssetInventory.API.csproj
+            project: src/Services/AssetInventory/GrcPlatform.AssetInventory.API/GrcPlatform.AssetInventory.API.csproj
           - name: IncidentManagement
-            path: src/Services/IncidentManagement
-            project: GrcPlatform.IncidentManagement.API/GrcPlatform.IncidentManagement.API.csproj
+            project: src/Services/IncidentManagement/GrcPlatform.IncidentManagement.API/GrcPlatform.IncidentManagement.API.csproj
 
     steps:
       - uses: actions/checkout@v4
@@ -53,27 +46,30 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore
-        run: dotnet restore ${{ matrix.service.path }}/${{ matrix.service.project }}
+        run: dotnet restore ${{ matrix.service.project }} --runtime linux-x64
 
       - name: Build
-        run: dotnet build ${{ matrix.service.path }}/${{ matrix.service.project }} --no-restore --configuration Release
+        run: dotnet build ${{ matrix.service.project }} --no-restore --configuration Release
 
-      - name: Publish artifact
+      - name: Publish
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          dotnet publish ${{ matrix.service.path }}/${{ matrix.service.project }} \
-            --no-build \
+          dotnet publish ${{ matrix.service.project }} \
             --configuration Release \
             --output publish/${{ matrix.service.name }} \
             --runtime linux-x64 \
             --self-contained false
+
+      - name: Zip artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: zip -r publish/${{ matrix.service.name }}.zip publish/${{ matrix.service.name }}
 
       - name: Upload artifact
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.service.name }}
-          path: publish/${{ matrix.service.name }}
+          path: publish/${{ matrix.service.name }}.zip
           retention-days: 1
 
   build-frontend:
@@ -107,12 +103,13 @@ jobs:
 
   # ── Deploy (main branch only) ─────────────────────────────────────────────────
   deploy-backend:
-    name: Deploy Backend
+    name: Deploy ${{ matrix.service.name }}
     needs: [build-backend, build-frontend]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: production
     strategy:
+      fail-fast: false
       matrix:
         service:
           - name: RiskManagement
@@ -137,15 +134,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.service.name }}
-          path: publish/${{ matrix.service.name }}
+          path: publish/
 
       - name: Azure Login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Zip artifact
-        run: zip -r publish/${{ matrix.service.name }}.zip publish/${{ matrix.service.name }}
 
       - name: Deploy to App Service
         uses: azure/webapps-deploy@v3
