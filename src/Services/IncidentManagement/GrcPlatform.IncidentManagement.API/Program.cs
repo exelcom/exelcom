@@ -27,11 +27,11 @@ builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
 // Register Graph email service if config is present
 var graphOpts = new GraphEmailOptions
 {
-    TenantId     = builder.Configuration["Graph__TenantId"] ?? "",
-    ClientId     = builder.Configuration["Graph__ClientId"] ?? "",
-    ClientSecret = builder.Configuration["Graph__ClientSecret"] ?? "",
-    SenderEmail  = builder.Configuration["Graph__SenderEmail"] ?? "",
-    PortalUrl    = builder.Configuration["Graph__PortalUrl"] ?? "",
+    TenantId     = builder.Configuration["Graph:TenantId"] ?? builder.Configuration["Graph__TenantId"] ?? "",
+    ClientId     = builder.Configuration["Graph:ClientId"] ?? builder.Configuration["Graph__ClientId"] ?? "",
+    ClientSecret = builder.Configuration["Graph:ClientSecret"] ?? builder.Configuration["Graph__ClientSecret"] ?? "",
+    SenderEmail  = builder.Configuration["Graph:SenderEmail"] ?? builder.Configuration["Graph__SenderEmail"] ?? "",
+    PortalUrl    = builder.Configuration["Graph:PortalUrl"] ?? builder.Configuration["Graph__PortalUrl"] ?? "",
 };
 
 if (!string.IsNullOrWhiteSpace(graphOpts.TenantId) && !string.IsNullOrWhiteSpace(graphOpts.ClientSecret))
