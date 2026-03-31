@@ -17,6 +17,7 @@ import { SoaPage } from './pages/SoaPage';
 import { LoginPage } from './pages/LoginPage';
 import { AssetInventoryPage } from './pages/AssetInventoryPage';
 import { IncidentManagementPage } from './pages/IncidentManagementPage';
+import CustomerPortalPage from './pages/CustomerPortalPage';
 
 const msalInstance = new PublicClientApplication(msalConfig);
 const queryClient = new QueryClient();
@@ -75,7 +76,10 @@ export default function App() {
     <MsalProvider instance={msalInstance}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <AppContent />
+          <Routes>
+            <Route path="/customer-portal" element={<CustomerPortalPage />} />
+            <Route path="/*" element={<AppContent />} />
+          </Routes>
         </BrowserRouter>
       </QueryClientProvider>
     </MsalProvider>

@@ -68,6 +68,7 @@ stages:
             inputs:
               command: restore
               projects: $(projectPath)
+              arguments: --runtime linux-x64
 
           - task: DotNetCoreCLI@2
             displayName: Build

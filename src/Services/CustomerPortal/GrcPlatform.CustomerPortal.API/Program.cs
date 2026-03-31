@@ -52,18 +52,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
-    p.WithOrigins(
-        "https://red-pond-02956c400.4.azurestaticapps.net",
-        "http://localhost:5173",
-        "http://localhost:3000")
+    p.SetIsOriginAllowed(_ => true)
      .AllowAnyHeader()
-     .AllowAnyMethod()));
+     .AllowAnyMethod()
+     .AllowCredentials()));
 
 var app = builder.Build();
 
+app.UseCors();
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
