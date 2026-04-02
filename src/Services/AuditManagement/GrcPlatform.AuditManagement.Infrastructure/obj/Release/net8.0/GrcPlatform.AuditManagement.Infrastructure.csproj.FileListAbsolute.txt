@@ -19,3 +19,4 @@ C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagemen
 C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Infrastructure\obj\Release\net8.0\GrcPlatform.AuditManagement.Infrastructure.pdb
 C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Infrastructure\obj\Release\net8.0\GrcPlatform.AuditManagement.Infrastructure.genruntimeconfig.cache
 C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Infrastructure\obj\Release\net8.0\ref\GrcPlatform.AuditManagement.Infrastructure.dll
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Infrastructure\obj\Release\net8.0\GrcPlatform.AuditManagement.Infrastructure.sourcelink.json

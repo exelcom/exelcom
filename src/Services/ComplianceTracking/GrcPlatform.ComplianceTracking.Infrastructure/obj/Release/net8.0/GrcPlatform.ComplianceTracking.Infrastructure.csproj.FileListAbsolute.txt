@@ -19,3 +19,4 @@ C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceT
 C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Infrastructure\obj\Release\net8.0\GrcPlatform.ComplianceTracking.Infrastructure.pdb
 C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Infrastructure\obj\Release\net8.0\GrcPlatform.ComplianceTracking.Infrastructure.genruntimeconfig.cache
 C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Infrastructure\obj\Release\net8.0\ref\GrcPlatform.ComplianceTracking.Infrastructure.dll
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Infrastructure\obj\Release\net8.0\GrcPlatform.ComplianceTracking.Infrastructure.sourcelink.json

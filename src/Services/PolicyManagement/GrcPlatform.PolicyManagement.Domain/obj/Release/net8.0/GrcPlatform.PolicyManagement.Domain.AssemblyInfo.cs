@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GrcPlatform.PolicyManagement.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+421cc78157b6c8988e618a95581b8aad9ecba2d6")]
 [assembly: System.Reflection.AssemblyProductAttribute("GrcPlatform.PolicyManagement.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GrcPlatform.PolicyManagement.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

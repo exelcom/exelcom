@@ -15,3 +15,4 @@ C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceT
 C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Application\obj\Release\net8.0\refint\GrcPlatform.ComplianceTracking.Application.dll
 C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Application\obj\Release\net8.0\GrcPlatform.ComplianceTracking.Application.pdb
 C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Application\obj\Release\net8.0\ref\GrcPlatform.ComplianceTracking.Application.dll
+C:\Projects\grc-platform\src\Services\ComplianceTracking\GrcPlatform.ComplianceTracking.Application\obj\Release\net8.0\GrcPlatform.ComplianceTracking.Application.sourcelink.json

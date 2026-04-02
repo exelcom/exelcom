@@ -9,3 +9,4 @@ C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\GrcPla
 C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\refint\GrcPlatform.Shared.dll
 C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\GrcPlatform.Shared.pdb
 C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\ref\GrcPlatform.Shared.dll
+C:\Projects\grc-platform\src\Shared\GrcPlatform.Shared\obj\Release\net8.0\GrcPlatform.Shared.sourcelink.json

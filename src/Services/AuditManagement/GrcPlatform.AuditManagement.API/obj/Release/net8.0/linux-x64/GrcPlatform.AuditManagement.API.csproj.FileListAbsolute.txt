@@ -193,3 +193,4 @@ C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagemen
 C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.API\bin\Release\net8.0\linux-x64\ru\Microsoft.Data.SqlClient.resources.dll
 C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.API\bin\Release\net8.0\linux-x64\zh-Hans\Microsoft.Data.SqlClient.resources.dll
 C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.API\bin\Release\net8.0\linux-x64\zh-Hant\Microsoft.Data.SqlClient.resources.dll
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.API\obj\Release\net8.0\linux-x64\GrcPlatform.AuditManagement.API.sourcelink.json

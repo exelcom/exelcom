@@ -19,3 +19,4 @@ C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.
 C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Infrastructure\obj\Release\net8.0\GrcPlatform.RiskManagement.Infrastructure.pdb
 C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Infrastructure\obj\Release\net8.0\GrcPlatform.RiskManagement.Infrastructure.genruntimeconfig.cache
 C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Infrastructure\obj\Release\net8.0\ref\GrcPlatform.RiskManagement.Infrastructure.dll
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Infrastructure\obj\Release\net8.0\GrcPlatform.RiskManagement.Infrastructure.sourcelink.json

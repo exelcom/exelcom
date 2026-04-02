@@ -13,3 +13,4 @@ C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagemen
 C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Domain\obj\Release\net8.0\refint\GrcPlatform.AuditManagement.Domain.dll
 C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Domain\obj\Release\net8.0\GrcPlatform.AuditManagement.Domain.pdb
 C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Domain\obj\Release\net8.0\ref\GrcPlatform.AuditManagement.Domain.dll
+C:\Projects\grc-platform\src\Services\AuditManagement\GrcPlatform.AuditManagement.Domain\obj\Release\net8.0\GrcPlatform.AuditManagement.Domain.sourcelink.json

@@ -13,3 +13,4 @@ C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.
 C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Domain\obj\Release\net8.0\refint\GrcPlatform.RiskManagement.Domain.dll
 C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Domain\obj\Release\net8.0\GrcPlatform.RiskManagement.Domain.pdb
 C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Domain\obj\Release\net8.0\ref\GrcPlatform.RiskManagement.Domain.dll
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.Domain\obj\Release\net8.0\GrcPlatform.RiskManagement.Domain.sourcelink.json

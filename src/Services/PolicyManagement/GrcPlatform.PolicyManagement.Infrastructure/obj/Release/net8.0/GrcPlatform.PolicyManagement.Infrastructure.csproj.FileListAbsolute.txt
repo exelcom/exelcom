@@ -19,3 +19,4 @@ C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagem
 C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Infrastructure\obj\Release\net8.0\GrcPlatform.PolicyManagement.Infrastructure.pdb
 C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Infrastructure\obj\Release\net8.0\GrcPlatform.PolicyManagement.Infrastructure.genruntimeconfig.cache
 C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Infrastructure\obj\Release\net8.0\ref\GrcPlatform.PolicyManagement.Infrastructure.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Infrastructure\obj\Release\net8.0\GrcPlatform.PolicyManagement.Infrastructure.sourcelink.json

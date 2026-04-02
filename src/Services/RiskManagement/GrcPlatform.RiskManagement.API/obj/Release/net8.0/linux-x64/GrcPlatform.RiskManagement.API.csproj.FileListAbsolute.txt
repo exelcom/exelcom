@@ -190,3 +190,4 @@ C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.
 C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.API\obj\Release\net8.0\linux-x64\GrcPlatform.RiskManagement.API.pdb
 C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.API\obj\Release\net8.0\linux-x64\GrcPlatform.RiskManagement.API.genruntimeconfig.cache
 C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.API\obj\Release\net8.0\linux-x64\ref\GrcPlatform.RiskManagement.API.dll
+C:\Projects\grc-platform\src\Services\RiskManagement\GrcPlatform.RiskManagement.API\obj\Release\net8.0\linux-x64\GrcPlatform.RiskManagement.API.sourcelink.json

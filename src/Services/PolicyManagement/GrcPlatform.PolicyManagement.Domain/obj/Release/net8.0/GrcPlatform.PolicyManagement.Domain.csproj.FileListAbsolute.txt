@@ -13,3 +13,4 @@ C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagem
 C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\refint\GrcPlatform.PolicyManagement.Domain.dll
 C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\GrcPlatform.PolicyManagement.Domain.pdb
 C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\ref\GrcPlatform.PolicyManagement.Domain.dll
+C:\Projects\grc-platform\src\Services\PolicyManagement\GrcPlatform.PolicyManagement.Domain\obj\Release\net8.0\GrcPlatform.PolicyManagement.Domain.sourcelink.json
