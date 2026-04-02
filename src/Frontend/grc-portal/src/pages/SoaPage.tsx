@@ -101,6 +101,8 @@ function ProgressBar({ value, max, color }: { value: number; max: number; color:
 }
 
 export function SoaPage() {
+  const { hasRole } = useAuth();
+  const canEdit = hasRole('GRC.Admin') || hasRole('GRC.ComplianceOfficer');
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -360,10 +362,10 @@ export function SoaPage() {
             <div style={{ marginBottom: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                 <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Applicability</span>
-                <button
+                {canEdit && (<button
                   onClick={() => { setEditMode('applicability'); setForm({ applicability: detail?.applicability ?? selectedControl.applicability, justification: detail?.justificationForExclusion ?? '' }); }}
                   style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
-                >Edit</button>
+                >Edit</button>)}
               </div>
 
               {editMode === 'applicability' ? (
@@ -409,7 +411,7 @@ export function SoaPage() {
               <div style={{ marginBottom: 20 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                   <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Implementation</span>
-                  <button
+                  {canEdit && (<button
                     onClick={() => {
                       setEditMode('implementation');
                       setForm({
@@ -421,7 +423,7 @@ export function SoaPage() {
                       });
                     }}
                     style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
-                  >Edit</button>
+                  >Edit</button>)}
                 </div>
 
                 {editMode === 'implementation' ? (
@@ -543,3 +545,7 @@ export function SoaPage() {
     </div>
   );
 }
+
+
+
+

@@ -26,4 +26,6 @@ export const AppRoles = {
   ComplianceOfficer: 'GRC.ComplianceOfficer',
   PolicyManager: 'GRC.PolicyManager',
   Auditor: 'GRC.Auditor',
+  Viewer: 'GRC.Viewer',
 } as const;
+

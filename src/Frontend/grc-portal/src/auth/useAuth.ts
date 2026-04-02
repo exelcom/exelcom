@@ -8,6 +8,8 @@ export function useAuth() {
   const roles: string[] = (account?.idTokenClaims as Record<string, string[]>)?.roles ?? [];
 
   const hasRole = (role: string) => roles.includes(role) || roles.includes(AppRoles.Admin);
+  const isViewer = roles.includes(AppRoles.Viewer) && !roles.includes(AppRoles.Admin);
+  const isReadOnly = isViewer;
 
   const getToken = async () => {
     if (!account) throw new Error('No account');
@@ -22,6 +24,8 @@ export function useAuth() {
   const logout = () => instance.logoutRedirect({ account: account ?? undefined });
 
   return {
+    isViewer,
+    isReadOnly,
     account,
     roles,
     hasRole,
@@ -31,3 +35,4 @@ export function useAuth() {
     isAuthenticated: accounts.length > 0,
   };
 }
+

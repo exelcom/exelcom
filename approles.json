@@ -1,0 +1,73 @@
+[
+  {
+    "allowedMemberTypes": [
+      "User",
+      "Application"
+    ],
+    "description": "Read-only access to Audit Management module",
+    "displayName": "Auditor",
+    "id": "c99f662f-6c51-43f6-8013-2baf4eafcb12",
+    "isEnabled": true,
+    "origin": "Application",
+    "value": "GRC.Auditor"
+  },
+  {
+    "allowedMemberTypes": [
+      "User",
+      "Application"
+    ],
+    "description": "Access to Policy Management module",
+    "displayName": "Policy Manager",
+    "id": "aafc66bc-22fb-49a7-89bb-a94a52dce996",
+    "isEnabled": true,
+    "origin": "Application",
+    "value": "GRC.PolicyManager"
+  },
+  {
+    "allowedMemberTypes": [
+      "User",
+      "Application"
+    ],
+    "description": "Access to Compliance Tracking module",
+    "displayName": "Compliance Officer",
+    "id": "3cc5845c-edc4-4024-a900-4644d50ea3f7",
+    "isEnabled": true,
+    "origin": "Application",
+    "value": "GRC.ComplianceOfficer"
+  },
+  {
+    "allowedMemberTypes": [
+      "User",
+      "Application"
+    ],
+    "description": "Access to Risk Management module",
+    "displayName": "Risk Manager",
+    "id": "d9925a21-6f7d-421d-a8b0-5de312e7f7a6",
+    "isEnabled": true,
+    "origin": "Application",
+    "value": "GRC.RiskManager"
+  },
+  {
+    "allowedMemberTypes": [
+      "User",
+      "Application"
+    ],
+    "description": "Full access to all GRC modules",
+    "displayName": "GRC Administrator",
+    "id": "a4ec5f7b-2efd-438d-9a43-4f105efb18ef",
+    "isEnabled": true,
+    "origin": "Application",
+    "value": "GRC.Admin"
+  },
+  {
+    "displayName": "GRC Viewer",
+    "description": "Read-only access to all GRC modules",
+    "allowedMemberTypes": [
+      "User",
+      "Application"
+    ],
+    "value": "GRC.Viewer",
+    "isEnabled": true,
+    "id": "436a3ea4-a470-43a6-bb37-18b9c31c6336"
+  }
+]
