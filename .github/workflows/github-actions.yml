@@ -36,6 +36,8 @@ jobs:
             project: src/Services/AssetInventory/GrcPlatform.AssetInventory.API/GrcPlatform.AssetInventory.API.csproj
           - name: IncidentManagement
             project: src/Services/IncidentManagement/GrcPlatform.IncidentManagement.API/GrcPlatform.IncidentManagement.API.csproj
+          - name: CustomerPortal
+            project: src/Services/CustomerPortal/GrcPlatform.CustomerPortal.API/GrcPlatform.CustomerPortal.API.csproj
 
     steps:
       - uses: actions/checkout@v4
@@ -128,6 +130,8 @@ jobs:
             appName: app-asset-grc-exelcom-dev
           - name: IncidentManagement
             appName: app-incident-grc-exelcom-dev
+          - name: CustomerPortal
+            appName: app-portal-grc-exelcom-dev
 
     steps:
       - name: Download artifact
@@ -170,3 +174,4 @@ jobs:
           action: upload
           app_location: dist
           skip_app_build: true
+
