@@ -152,6 +152,10 @@ jobs:
           package: publish/${{ matrix.service.name }}.zip
         timeout-minutes: 10
 
+      - name: Wait before retry
+        if: failure()
+        run: sleep 30
+
       - name: Retry Deploy if failed
         if: failure()
         uses: azure/webapps-deploy@v3
@@ -183,5 +187,6 @@ jobs:
           action: upload
           app_location: dist
           skip_app_build: true
+
 
 
