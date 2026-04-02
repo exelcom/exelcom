@@ -2,7 +2,6 @@ import { useAuth } from '../auth/useAuth';
 
 export function LoginPage() {
   const { login } = useAuth();
-
   return (
     <div style={{
       minHeight: '100vh',
@@ -13,7 +12,6 @@ export function LoginPage() {
       position: 'relative',
       overflow: 'hidden',
     }}>
-      {/* Background decoration */}
       <div style={{
         position: 'absolute',
         width: 600, height: 600,
@@ -27,11 +25,10 @@ export function LoginPage() {
         position: 'absolute',
         width: 400, height: 400,
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)',
         top: '30%', left: '60%',
         pointerEvents: 'none',
       }} />
-
       <div className="animate-fade-up" style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
@@ -41,24 +38,16 @@ export function LoginPage() {
         textAlign: 'center',
         position: 'relative',
       }}>
-        {/* Logo */}
-        <div style={{
-          width: 64, height: 64,
-          background: 'linear-gradient(135deg, var(--accent), var(--accent2))',
-          borderRadius: 16,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 28, margin: '0 auto 24px',
-          boxShadow: '0 0 32px rgba(14,165,233,0.3)',
-        }}>⬡</div>
-
-        <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>GRC Platform</h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: 14, marginBottom: 8 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}>
+          <img src="/exelcom-logo.png" alt="Exelcom" style={{ height: 48, objectFit: 'contain' }} />
+        </div>
+        <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 6 }}>GRC Platform</h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: 14, marginBottom: 6 }}>
           Governance, Risk & Compliance
         </p>
         <p style={{ color: 'var(--text-muted)', fontSize: 12, marginBottom: 36, opacity: 0.7 }}>
-          EXELCOM Solutions
+          Exelcom
         </p>
-
         <button
           onClick={login}
           className="btn-primary"
@@ -72,9 +61,8 @@ export function LoginPage() {
           </svg>
           Sign in with Microsoft
         </button>
-
         <p style={{ marginTop: 24, fontSize: 11, color: 'var(--text-muted)', opacity: 0.5 }}>
-          Access restricted to authorised EXELCOM personnel
+          Access restricted to authorised Exelcom personnel
         </p>
       </div>
     </div>
