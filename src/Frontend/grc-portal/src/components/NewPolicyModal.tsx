@@ -4,6 +4,7 @@ import type { CSSProperties } from 'react';
 interface NewPolicyModalProps {
   onClose: () => void;
   onSave: (data: PolicyFormData) => void;
+  initialData?: PolicyFormData;
 }
 
 export interface PolicyFormData {
@@ -32,8 +33,8 @@ const lbl: CSSProperties = { fontSize: 11, fontWeight: 600, color: '#94a3b8', le
 
 const INITIAL: PolicyFormData = { title: '', description: '', category: 0, content: '', owner: '', department: '', requiresAttestation: false, reviewDueDate: '' };
 
-export function NewPolicyModal({ onClose, onSave }: NewPolicyModalProps) {
-  const [form, setForm] = useState<PolicyFormData>(INITIAL);
+export function NewPolicyModal({ onClose, onSave, initialData }: NewPolicyModalProps) {
+  const [form, setForm] = useState<PolicyFormData>(initialData ?? INITIAL);
   const [step, setStep] = useState(1);
   const set = (field: keyof PolicyFormData, value: string | number | boolean) => setForm(f => ({ ...f, [field]: value }));
   const step1Valid = !!(form.title && form.category);
@@ -127,6 +128,7 @@ export function NewPolicyModal({ onClose, onSave }: NewPolicyModalProps) {
     </div>
   );
 }
+
 
 
 

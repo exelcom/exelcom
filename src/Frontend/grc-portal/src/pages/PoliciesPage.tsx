@@ -7,6 +7,7 @@ import { DetailModal } from '../components/DetailModal';
 import { EditPolicyModal } from '../components/EditPolicyModal';
 import type { PolicyFormData } from '../components/NewPolicyModal';
 import { useAuth } from '../auth/useAuth';
+import { PolicyTemplateModal } from '../components/PolicyTemplateModal';
 import { useEffect, useState } from 'react';
 
 const statusColors: Record<string, string> = { Draft: '#64748b', UnderReview: '#f59e0b', Approved: '#0ea5e9', Published: '#10b981', Retired: '#ef4444' };
@@ -16,6 +17,8 @@ export function PoliciesPage() {
   const canEdit = hasRole('GRC.Admin') || hasRole('GRC.PolicyManager');
   const [ready, setReady] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [templateData, setTemplateData] = useState<PolicyFormData | null>(null);
   const [selected, setSelected] = useState<Record<string, unknown> | null>(null);
   const [editing, setEditing] = useState(false);
   const queryClient = useQueryClient();
@@ -79,10 +82,16 @@ export function PoliciesPage() {
     )},
   ];
 
+  const handleTemplateSelect = (data: PolicyFormData) => {
+    setTemplateData(data);
+    setShowTemplates(false);
+    setShowModal(true);
+  };
+
   return (
     <div>
       <PageHeader title="Policy Management" subtitle="ISO 27001:2022 — Policy Lifecycle Management" icon="◇" color="#6366f1"
-        action={canEdit ? <button className="btn-primary" onClick={() => setShowModal(true)}>+ New Policy</button> : undefined} />
+        action={canEdit ? (<div style={{ display: "flex", gap: 8 }}><button style={{ padding: "8px 16px", borderRadius: 8, border: "1px solid #2a2a3a", background: "none", color: "#94a3b8", cursor: "pointer", fontSize: 13, fontWeight: 600 }} onClick={() => setShowTemplates(true)}>📋 Templates</button><button className="btn-primary" onClick={() => { setTemplateData(null); setShowModal(true); }}>+ New Policy</button></div>) : undefined} />
       <div style={{ padding: '24px 40px' }}>
         <div className="card animate-fade-up">
           <DataTable columns={columns} data={policies as Record<string, unknown>[]} loading={isLoading}
@@ -119,7 +128,8 @@ export function PoliciesPage() {
             reviewDueDate: form.reviewDueDate ? new Date(form.reviewDueDate).toISOString() : null,
           }})} />
       )}
-      {showModal && <NewPolicyModal onClose={() => setShowModal(false)} onSave={(form: PolicyFormData) => createPolicy.mutate({
+      {showTemplates && <PolicyTemplateModal onClose={() => setShowTemplates(false)} onSelect={handleTemplateSelect} />}
+      {showModal && <NewPolicyModal initialData={templateData ?? undefined} onClose={() => setShowModal(false)} onSave={(form: PolicyFormData) => createPolicy.mutate({
         title: form.title, description: form.description, category: form.category, content: form.content,
         owner: form.owner || null, department: form.department || null,
         requiresAttestation: form.requiresAttestation,
@@ -128,3 +138,5 @@ export function PoliciesPage() {
     </div>
   );
 }
+
+
