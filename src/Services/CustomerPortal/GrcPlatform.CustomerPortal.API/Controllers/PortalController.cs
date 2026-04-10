@@ -37,12 +37,12 @@ public class PortalController : ControllerBase
 
     // ── Accounts (admin) ──────────────────────────────────────────────────────
     [HttpGet("accounts")]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<IActionResult> List(CancellationToken ct)
         => Ok(await handlers.ListAccountsAsync(ct));
 
     [HttpGet("accounts/{id:guid}")]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<IActionResult> Get(Guid id, CancellationToken ct)
     {
         var account = await handlers.GetAccountAsync(id, ct);
@@ -50,7 +50,7 @@ public class PortalController : ControllerBase
     }
 
     [HttpPost("accounts")]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<IActionResult> Create([FromBody] CreateAccountRequest req, CancellationToken ct)
     {
         try
@@ -65,7 +65,7 @@ public class PortalController : ControllerBase
     }
 
     [HttpPut("accounts/{id:guid}")]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateAccountRequest req, CancellationToken ct)
     {
         await handlers.UpdateAccountAsync(id, req, ct);
@@ -73,10 +73,26 @@ public class PortalController : ControllerBase
     }
 
     [HttpPost("accounts/{id:guid}/password")]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<IActionResult> ChangePassword(Guid id, [FromBody] ChangePasswordRequest req, CancellationToken ct)
     {
         await handlers.ChangePasswordAsync(id, req, ct);
+        return NoContent();
+    }
+
+    [HttpPatch("accounts/{id:guid}/active")]
+    [Authorize]
+    public async Task<IActionResult> SetActive(Guid id, [FromBody] SetActiveRequest req, CancellationToken ct)
+    {
+        await handlers.SetActiveAsync(id, req.IsActive, ct);
+        return NoContent();
+    }
+
+    [HttpDelete("accounts/{id:guid}")]
+    [Authorize]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    {
+        await handlers.DeleteAccountAsync(id, ct);
         return NoContent();
     }
 

@@ -30,6 +30,7 @@ public sealed record UpdateAccountRequest(
     string CustomerName, string CrmCustomerId, string? ParentGrcCustomerId);
 
 public sealed record ChangePasswordRequest(string NewPassword);
+public sealed record SetActiveRequest(bool IsActive);
 
 // ── Auth options ──────────────────────────────────────────────────────────────
 
@@ -176,3 +177,4 @@ file static class PortalMappingExtensions
         a.Id, a.Username, a.CrmCustomerId, a.GrcCustomerId, a.CustomerName,
         a.ParentGrcCustomerId, a.IsActive, a.CreatedAt, a.LastLoginAt);
 }
+

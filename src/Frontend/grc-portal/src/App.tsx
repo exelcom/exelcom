@@ -18,6 +18,7 @@ import { LoginPage } from './pages/LoginPage';
 import { AssetInventoryPage } from './pages/AssetInventoryPage';
 import { IncidentManagementPage } from './pages/IncidentManagementPage';
 import CustomerPortalPage from './pages/CustomerPortalPage';
+import { AdminPage } from './pages/AdminPage';
 
 const msalInstance = new PublicClientApplication(msalConfig);
 const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ function AppContent() {
                 <Route path="/nonconformities" element={<NcCaPage />} />
                 <Route path="/assets" element={<AssetInventoryPage />} />
                 <Route path="/incidents" element={<IncidentManagementPage />} />
+                <Route path="/admin" element={<AdminPage />} />
               </Routes>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', color: 'var(--text-muted)' }}>
@@ -85,6 +87,7 @@ export default function App() {
     </MsalProvider>
   );
 }
+
 
 
 
