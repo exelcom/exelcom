@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../services/api';
 import { PageHeader } from '../components/PageHeader';
 import { useAuth } from '../auth/useAuth';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AppRoles } from '../auth/authConfig';
 
 interface PortalAccount {
@@ -38,7 +38,7 @@ const inp: React.CSSProperties = {
 };
 const lbl: React.CSSProperties = {
   fontSize: 11, fontWeight: 600, color: 'var(--text-muted)',
-  letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 6, display: 'block',
+  letterSpacing: '0.07em', textTransform: 'uppercase' as const, marginBottom: 6, display: 'block',
 };
 
 const portalApi = {
@@ -62,8 +62,7 @@ function AccountModal({ account, onClose, onSave }: {
   const isEdit = !!account;
   const [form, setForm] = useState<AccountForm>(
     account ? {
-      username: account.username,
-      password: '',
+      username: account.username, password: '',
       customerName: account.customerName,
       crmCustomerId: account.crmCustomerId,
       grcCustomerId: account.grcCustomerId,
@@ -71,7 +70,7 @@ function AccountModal({ account, onClose, onSave }: {
     } : EMPTY_FORM
   );
   const set = (k: keyof AccountForm, v: string) => setForm(f => ({ ...f, [k]: v }));
-  const isValid = form.username && form.customerName && form.grcCustomerId && (!isEdit || true) && (isEdit || form.password);
+  const isValid = !!(form.username && form.customerName && form.grcCustomerId && (isEdit || form.password));
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -87,8 +86,8 @@ function AccountModal({ account, onClose, onSave }: {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div>
               <label style={lbl}>Username *</label>
-              <input style={inp} placeholder="e.g. client.company" value={form.username}
-                onChange={e => set('username', e.target.value)} disabled={isEdit} />
+              <input style={{ ...inp, opacity: isEdit ? 0.6 : 1 }} placeholder="e.g. client.company"
+                value={form.username} onChange={e => set('username', e.target.value)} disabled={isEdit} />
             </div>
             <div>
               <label style={lbl}>{isEdit ? 'New Password (leave blank to keep)' : 'Password *'}</label>
@@ -98,25 +97,25 @@ function AccountModal({ account, onClose, onSave }: {
           </div>
           <div>
             <label style={lbl}>Customer Name *</label>
-            <input style={inp} placeholder="e.g. Acme Corporation" value={form.customerName}
-              onChange={e => set('customerName', e.target.value)} />
+            <input style={inp} placeholder="e.g. Acme Corporation"
+              value={form.customerName} onChange={e => set('customerName', e.target.value)} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div>
               <label style={lbl}>GRC Customer ID *</label>
-              <input style={inp} placeholder="e.g. ACME001" value={form.grcCustomerId}
-                onChange={e => set('grcCustomerId', e.target.value)} />
+              <input style={inp} placeholder="e.g. ACME001"
+                value={form.grcCustomerId} onChange={e => set('grcCustomerId', e.target.value)} />
             </div>
             <div>
               <label style={lbl}>CRM Customer ID</label>
-              <input style={inp} placeholder="e.g. CRM-12345" value={form.crmCustomerId}
-                onChange={e => set('crmCustomerId', e.target.value)} />
+              <input style={inp} placeholder="e.g. CRM-12345"
+                value={form.crmCustomerId} onChange={e => set('crmCustomerId', e.target.value)} />
             </div>
           </div>
           <div>
             <label style={lbl}>Parent GRC Customer ID (optional)</label>
-            <input style={inp} placeholder="Leave blank if top-level customer" value={form.parentGrcCustomerId}
-              onChange={e => set('parentGrcCustomerId', e.target.value)} />
+            <input style={inp} placeholder="Leave blank if top-level customer"
+              value={form.parentGrcCustomerId} onChange={e => set('parentGrcCustomerId', e.target.value)} />
             <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
               Set this if the account belongs to a parent organisation
             </div>
@@ -125,8 +124,7 @@ function AccountModal({ account, onClose, onSave }: {
         <div style={{ padding: '16px 28px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
           <button onClick={onClose} style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid var(--border)', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 14 }}>Cancel</button>
           <button onClick={() => onSave(form)} className="btn-primary"
-            style={{ padding: '10px 24px', opacity: !isValid ? 0.4 : 1 }}
-            disabled={!isValid}>
+            style={{ padding: '10px 24px', opacity: !isValid ? 0.4 : 1 }} disabled={!isValid}>
             {isEdit ? 'Save Changes' : 'Create Account'}
           </button>
         </div>
@@ -182,26 +180,15 @@ function ResetPasswordModal({ account, onClose, onSave }: {
 }
 
 export function AdminPage() {
-  const { getToken, account, hasRole } = useAuth();
-  const [ready, setReady] = useState(false);
+  const { hasRole } = useAuth();
+  const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const [editAccount, setEditAccount] = useState<PortalAccount | null>(null);
   const [resetAccount, setResetAccount] = useState<PortalAccount | null>(null);
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    if (account && !ready) {
-      getToken().then(token => {
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        setReady(true);
-      }).catch(console.error);
-    }
-  }, [account]);
 
   const { data, isLoading } = useQuery<PortalAccount[]>({
     queryKey: ['portal-accounts'],
     queryFn: portalApi.listAccounts,
-    enabled: ready,
   });
 
   const accounts = Array.isArray(data) ? data : [];
@@ -218,6 +205,7 @@ export function AdminPage() {
         : portalApi.updateAccount(id, form),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['portal-accounts'] }); setEditAccount(null); },
   });
+
   const toggleActiveMutation = useMutation({
     mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) => portalApi.setActive(id, isActive),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['portal-accounts'] }),
@@ -257,8 +245,6 @@ export function AdminPage() {
         }
       />
       <div style={{ padding: '24px 40px' }}>
-
-        {/* Stats row */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
           {[
             { label: 'Total Accounts', value: accounts.length, color: '#6366f1' },
@@ -274,7 +260,6 @@ export function AdminPage() {
           ))}
         </div>
 
-        {/* Accounts table */}
         <div className="card animate-fade-up">
           {isLoading ? (
             <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-muted)' }}>Loading accounts...</div>
@@ -282,67 +267,65 @@ export function AdminPage() {
             <div style={{ padding: 48, textAlign: 'center' }}>
               <div style={{ fontSize: 40, marginBottom: 12 }}>👥</div>
               <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 6 }}>No customer accounts yet</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Create an account to give a customer access to the Customer Portal.</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: 13, marginBottom: 20 }}>Create an account to give a customer access to the Customer Portal.</p>
+              <button className="btn-primary" onClick={() => setShowModal(true)}>+ Create First Account</button>
             </div>
           ) : (
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['Customer', 'Username', 'GRC ID', 'CRM ID', 'Status', 'Last Login', 'Actions'].map(h => (
-                    <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {accounts.map(a => (
-                  <tr key={a.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '14px 16px' }}>
-                      <div style={{ fontWeight: 700, fontSize: 14 }}>{a.customerName}</div>
-                      {a.parentGrcCustomerId && <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Child of {a.parentGrcCustomerId}</div>}
-                    </td>
-                    <td style={{ padding: '14px 16px', fontSize: 13, fontFamily: 'monospace' }}>{a.username}</td>
-                    <td style={{ padding: '14px 16px' }}>
-                      <span style={{ fontSize: 12, padding: '3px 8px', borderRadius: 4, background: '#6366f120', color: '#6366f1', fontWeight: 600 }}>{a.grcCustomerId}</span>
-                    </td>
-                    <td style={{ padding: '14px 16px', fontSize: 12, color: 'var(--text-muted)' }}>{a.crmCustomerId || '—'}</td>
-                    <td style={{ padding: '14px 16px' }}>
-                      <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 20, fontWeight: 600, background: a.isActive ? '#10b98120' : '#ef444420', color: a.isActive ? '#10b981' : '#ef4444' }}>
-                        {a.isActive ? 'Active' : 'Inactive'}
-                      </span>
-                    </td>
-                    <td style={{ padding: '14px 16px', fontSize: 12, color: 'var(--text-muted)' }}>
-                      {a.lastLoginAt ? new Date(a.lastLoginAt).toLocaleDateString() : 'Never'}
-                    </td>
-                    <td style={{ padding: '14px 16px' }}>
-                      <div style={{ display: 'flex', gap: 6 }}>
-                        <button
-                          onClick={() => setEditAccount(a)}
-                          style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 12 }}
-                          title="Edit">✏️</button>
-                        <button
-                          onClick={() => setResetAccount(a)}
-                          style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 12 }}
-                          title="Reset Password">🔑</button>
-                        <button
-                          onClick={() => toggleActiveMutation.mutate({ id: a.id, isActive: !a.isActive })}
-                          style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: a.isActive ? '#ef4444' : '#10b981', cursor: 'pointer', fontSize: 12 }}
-                          title={a.isActive ? 'Disable' : 'Enable'}>
-                          {a.isActive ? '🚫' : '✅'}
-                        </button>
-                        <button
-                          onClick={() => { if (window.confirm(`Delete account "${a.username}"? This cannot be undone.`)) deleteMutation.mutate(a.id); }}
-                          style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: '#ef4444', cursor: 'pointer', fontSize: 12 }}
-                          title="Delete">🗑️</button>
-                      </div>
-                    </td>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                    {['Customer', 'Username', 'GRC ID', 'CRM ID', 'Status', 'Last Login', 'Actions'].map(h => (
+                      <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap' }}>{h}</th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {accounts.map(a => (
+                    <tr key={a.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ fontWeight: 700, fontSize: 14 }}>{a.customerName}</div>
+                        {a.parentGrcCustomerId && <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Child of {a.parentGrcCustomerId}</div>}
+                      </td>
+                      <td style={{ padding: '14px 16px', fontSize: 13, fontFamily: 'monospace' }}>{a.username}</td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <span style={{ fontSize: 12, padding: '3px 8px', borderRadius: 4, background: '#6366f120', color: '#6366f1', fontWeight: 600 }}>{a.grcCustomerId}</span>
+                      </td>
+                      <td style={{ padding: '14px 16px', fontSize: 12, color: 'var(--text-muted)' }}>{a.crmCustomerId || '—'}</td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 20, fontWeight: 600, background: a.isActive ? '#10b98120' : '#ef444420', color: a.isActive ? '#10b981' : '#ef4444' }}>
+                          {a.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+                      <td style={{ padding: '14px 16px', fontSize: 12, color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
+                        {a.lastLoginAt ? new Date(a.lastLoginAt).toLocaleDateString() : 'Never'}
+                      </td>
+                      <td style={{ padding: '14px 16px' }}>
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          <button onClick={() => setEditAccount(a)}
+                            style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 12 }}
+                            title="Edit">✏️</button>
+                          <button onClick={() => setResetAccount(a)}
+                            style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 12 }}
+                            title="Reset Password">🔑</button>
+                          <button onClick={() => toggleActiveMutation.mutate({ id: a.id, isActive: !a.isActive })}
+                            style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: a.isActive ? '#ef4444' : '#10b981', cursor: 'pointer', fontSize: 12 }}
+                            title={a.isActive ? 'Disable' : 'Enable'}>
+                            {a.isActive ? '🚫' : '✅'}
+                          </button>
+                          <button onClick={() => { if (window.confirm(`Delete account "${a.username}"? This cannot be undone.`)) deleteMutation.mutate(a.id); }}
+                            style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: '#ef4444', cursor: 'pointer', fontSize: 12 }}
+                            title="Delete">🗑️</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
 
-        {/* Portal URL info box */}
         <div style={{ marginTop: 20, padding: '16px 20px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface)', display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ fontSize: 20 }}>ℹ️</div>
           <div>
