@@ -9,6 +9,12 @@ const portalApi = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     }).then(r => r.ok ? r.json() : r.json().then(e => Promise.reject(e))),
+  mfaChallenge: (username, code) =>
+    fetch(`${PORTAL_API}/api/portal/mfa/challenge`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, code }),
+    }).then(r => r.ok ? r.json() : r.json().then(e => Promise.reject(e))),
 };
 
 const grcApi = (token) => ({
@@ -528,12 +534,72 @@ function LoginPage({ onLogin }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mfaRequired, setMfaRequired] = useState(false);
+  const [mfaCode, setMfaCode] = useState("");
+  const [pendingUsername, setPendingUsername] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault(); setError(""); setLoading(true);
-    try { onLogin(await portalApi.login(username, password)); }
+    try {
+      const result = await portalApi.login(username, password);
+      if (result.mfaRequired) {
+        setPendingUsername(username);
+        setMfaRequired(true);
+      } else {
+        onLogin(result);
+      }
+    }
     catch (err) { setError(err.message || "Invalid username or password."); }
     finally { setLoading(false); }
   };
+
+  const handleMfaSubmit = async (e) => {
+    e.preventDefault(); setError(""); setLoading(true);
+    try {
+      const result = await portalApi.mfaChallenge(pendingUsername, mfaCode);
+      onLogin(result);
+    }
+    catch (err) { setError("Invalid authentication code. Please try again."); }
+    finally { setLoading(false); }
+  };
+
+  if (mfaRequired) {
+    return (
+      <div style={S.loginWrap}>
+        <div style={S.loginCard}>
+          <div style={S.loginTitle}>GRC Platform</div>
+          <div style={S.loginSubtitle}>Two-Factor Authentication</div>
+          <div style={S.loginSub3}>Enter the code from your authenticator app</div>
+          {error && <div style={S.loginErr}>{error}</div>}
+          <div style={{ textAlign:"center", marginBottom:24 }}>
+            <div style={{ fontSize:48, marginBottom:8 }}>🔐</div>
+            <div style={{ fontSize:13, color:"#A9C4E0", lineHeight:1.6 }}>
+              Open your authenticator app and enter the 6-digit code for <strong style={{color:"#fff"}}>{pendingUsername}</strong>
+            </div>
+          </div>
+          <form onSubmit={handleMfaSubmit}>
+            <label style={S.loginLabel}>Authentication Code</label>
+            <input
+              style={{ ...S.loginInput, textAlign:"center", fontSize:24, letterSpacing:12, fontFamily:"monospace" }}
+              type="text" inputMode="numeric" maxLength={6} placeholder="000000"
+              value={mfaCode} onChange={e => setMfaCode(e.target.value.replace(/\D/g, ""))}
+              autoFocus autoComplete="one-time-code" required />
+            <button type="submit" style={{ ...S.loginBtn, background: mfaCode.length===6 ? "#1E8449" : "#2E86C1" }}
+              disabled={loading || mfaCode.length !== 6}>
+              {loading ? "Verifying..." : "✓ Verify"}
+            </button>
+          </form>
+          <div style={{ textAlign:"center", marginTop:16 }}>
+            <button style={{ background:"none", border:"none", color:"#4A6380", fontSize:12, cursor:"pointer" }}
+              onClick={() => { setMfaRequired(false); setMfaCode(""); setError(""); }}>
+              ← Back to login
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={S.loginWrap}>
       <div style={S.loginCard}>

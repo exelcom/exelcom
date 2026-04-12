@@ -96,6 +96,16 @@ public class PortalController : ControllerBase
         return NoContent();
     }
 
+    // ── MFA Login Challenge ───────────────────────────────────────────────────
+    [HttpPost("mfa/challenge")]
+    [AllowAnonymous]
+    public async Task<IActionResult> MfaChallenge([FromBody] MfaValidateRequest req, CancellationToken ct)
+    {
+        var result = await handlers.ValidateMfaLoginAsync(req.Username, req.Code, ct);
+        if (result is null) return Unauthorized(new { message = "Invalid authentication code." });
+        return Ok(result);
+    }
+
     // ── MFA ──────────────────────────────────────────────────────────────────
     [HttpPost("mfa/setup/{id:guid}")]
     [AllowAnonymous]
@@ -229,5 +239,6 @@ public class PortalController : ControllerBase
     }
 
 }
+
 
 

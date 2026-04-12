@@ -68,10 +68,18 @@ public sealed class PortalHandlers(IPortalAccountRepository repo, JwtOptions jwt
         account.RecordLogin();
         await repo.SaveChangesAsync(ct);
 
+        // If MFA is enabled, return challenge response without token
+        if (account.TotpEnabled)
+        {
+            return new LoginResponse(account.Id, string.Empty, account.Username, account.CustomerName,
+                account.GrcCustomerId, scope.AsReadOnly(),
+                MfaRequired: true, MfaEnabled: true);
+        }
+
         var token = GenerateToken(account, scope);
         return new LoginResponse(account.Id, token, account.Username, account.CustomerName,
             account.GrcCustomerId, scope.AsReadOnly(),
-            MfaRequired: false, MfaEnabled: account.TotpEnabled);
+            MfaRequired: false, MfaEnabled: false);
     }
 
     // ── Account management (admin only) ──────────────────────────────────────
@@ -129,6 +137,28 @@ public sealed class PortalHandlers(IPortalAccountRepository repo, JwtOptions jwt
     {
         var account = await repo.GetByIdAsync(id, ct);
         return account?.ToDto();
+    }
+
+    public async Task<LoginResponse?> ValidateMfaLoginAsync(string username, string code, CancellationToken ct = default)
+    {
+        var account = await repo.GetByUsernameAsync(username.ToLowerInvariant().Trim(), ct);
+        if (account is null || !account.IsActive || !account.TotpEnabled) return null;
+        if (string.IsNullOrEmpty(account.TotpSecret)) return null;
+
+        var secretBytes = Base32Encoding.ToBytes(account.TotpSecret);
+        var totp = new Totp(secretBytes);
+        if (!totp.VerifyTotp(code.Trim(), out _, new VerificationWindow(1, 1))) return null;
+
+        var childAccounts = await repo.GetChildAccountsAsync(account.GrcCustomerId, ct);
+        var scope = new List<string> { account.GrcCustomerId };
+        scope.AddRange(childAccounts.Select(c => c.GrcCustomerId));
+        account.RecordLogin();
+        await repo.SaveChangesAsync(ct);
+
+        var token = GenerateToken(account, scope);
+        return new LoginResponse(account.Id, token, account.Username, account.CustomerName,
+            account.GrcCustomerId, scope.AsReadOnly(),
+            MfaRequired: false, MfaEnabled: true);
     }
 
     // ── MFA ──────────────────────────────────────────────────────────────────
@@ -233,6 +263,8 @@ file static class PortalMappingExtensions
         a.Id, a.Username, a.CrmCustomerId, a.GrcCustomerId, a.CustomerName,
         a.ParentGrcCustomerId, a.IsActive, a.CreatedAt, a.LastLoginAt);
 }
+
+
 
 
 
