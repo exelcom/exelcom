@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using OtpNet;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,8 +19,9 @@ public sealed record PortalAccountDto(
 public sealed record LoginRequest(string Username, string Password);
 
 public sealed record LoginResponse(
-    string Token, string Username, string CustomerName,
-    string GrcCustomerId, IReadOnlyList<string> CustomerScope);
+    Guid AccountId, string Token, string Username, string CustomerName,
+    string GrcCustomerId, IReadOnlyList<string> CustomerScope,
+    bool MfaRequired, bool MfaEnabled);
 
 public sealed record CreateAccountRequest(
     string Username, string Password,
@@ -31,6 +33,10 @@ public sealed record UpdateAccountRequest(
 
 public sealed record ChangePasswordRequest(string NewPassword);
 public sealed record SetActiveRequest(bool IsActive);
+public sealed record MfaSetupResponse(string Secret, string QrCodeUrl, string ManualEntryKey);
+public sealed record MfaVerifyRequest(string Code);
+public sealed record MfaValidateRequest(string Username, string Code);
+public sealed record MfaStatusResponse(bool Enabled, DateTimeOffset? EnabledAt);
 
 // ── Auth options ──────────────────────────────────────────────────────────────
 
@@ -63,8 +69,9 @@ public sealed class PortalHandlers(IPortalAccountRepository repo, JwtOptions jwt
         await repo.SaveChangesAsync(ct);
 
         var token = GenerateToken(account, scope);
-        return new LoginResponse(token, account.Username, account.CustomerName,
-            account.GrcCustomerId, scope.AsReadOnly());
+        return new LoginResponse(account.Id, token, account.Username, account.CustomerName,
+            account.GrcCustomerId, scope.AsReadOnly(),
+            MfaRequired: false, MfaEnabled: account.TotpEnabled);
     }
 
     // ── Account management (admin only) ──────────────────────────────────────
@@ -124,6 +131,55 @@ public sealed class PortalHandlers(IPortalAccountRepository repo, JwtOptions jwt
         return account?.ToDto();
     }
 
+    // ── MFA ──────────────────────────────────────────────────────────────────
+    public async Task<MfaSetupResponse> SetupMfaAsync(Guid accountId, CancellationToken ct = default)
+    {
+        var account = await RequireAsync(accountId, ct);
+        var secretBytes = KeyGeneration.GenerateRandomKey(20);
+        var secret = Base32Encoding.ToString(secretBytes);
+        account.SetupTotp(secret);
+        await repo.SaveChangesAsync(ct);
+        var issuer = Uri.EscapeDataString("Exelcom GRC Portal");
+        var label = Uri.EscapeDataString(account.Username);
+        var otpUri = $"otpauth://totp/{issuer}:{label}?secret={secret}&issuer={issuer}&algorithm=SHA1&digits=6&period=30";
+        var qrCodeUrl = $"https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={Uri.EscapeDataString(otpUri)}";
+        return new MfaSetupResponse(secret, qrCodeUrl, secret);
+    }
+
+    public async Task<bool> VerifyAndEnableMfaAsync(Guid accountId, string code, CancellationToken ct = default)
+    {
+        var account = await RequireAsync(accountId, ct);
+        if (string.IsNullOrEmpty(account.TotpSecret)) return false;
+        var secretBytes = Base32Encoding.ToBytes(account.TotpSecret);
+        var totp = new Totp(secretBytes);
+        if (!totp.VerifyTotp(code.Trim(), out _, new VerificationWindow(1, 1))) return false;
+        account.EnableTotp();
+        await repo.SaveChangesAsync(ct);
+        return true;
+    }
+
+    public async Task DisableMfaAsync(Guid accountId, CancellationToken ct = default)
+    {
+        var account = await RequireAsync(accountId, ct);
+        account.DisableTotp();
+        await repo.SaveChangesAsync(ct);
+    }
+
+    public async Task<MfaStatusResponse> GetMfaStatusAsync(Guid accountId, CancellationToken ct = default)
+    {
+        var account = await RequireAsync(accountId, ct);
+        return new MfaStatusResponse(account.TotpEnabled, account.TotpEnabledAt);
+    }
+
+    public bool ValidateTotp(string username, string code)
+    {
+        var account = repo.GetByUsernameAsync(username.ToLowerInvariant().Trim()).GetAwaiter().GetResult();
+        if (account is null || !account.TotpEnabled || string.IsNullOrEmpty(account.TotpSecret)) return false;
+        var secretBytes = Base32Encoding.ToBytes(account.TotpSecret);
+        var totp = new Totp(secretBytes);
+        return totp.VerifyTotp(code.Trim(), out _, new VerificationWindow(1, 1));
+    }
+
     // ── Private helpers ───────────────────────────────────────────────────────
 
     private async Task<PortalAccount> RequireAsync(Guid id, CancellationToken ct)
@@ -177,4 +233,6 @@ file static class PortalMappingExtensions
         a.Id, a.Username, a.CrmCustomerId, a.GrcCustomerId, a.CustomerName,
         a.ParentGrcCustomerId, a.IsActive, a.CreatedAt, a.LastLoginAt);
 }
+
+
 

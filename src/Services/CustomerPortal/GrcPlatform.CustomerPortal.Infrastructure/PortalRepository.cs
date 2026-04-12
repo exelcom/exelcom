@@ -20,6 +20,7 @@ public sealed class PortalDbContext(DbContextOptions<PortalDbContext> options) :
             e.Property(x => x.GrcCustomerId).HasMaxLength(100).IsRequired();
             e.Property(x => x.CustomerName).HasMaxLength(200).IsRequired();
             e.Property(x => x.ParentGrcCustomerId).HasMaxLength(100);
+            e.Property(x => x.TotpSecret).HasMaxLength(200);
             e.HasIndex(x => x.Username).IsUnique();
             e.HasIndex(x => x.GrcCustomerId);
             e.HasIndex(x => x.ParentGrcCustomerId);
@@ -53,3 +54,4 @@ public sealed class PortalRepository(PortalDbContext db) : IPortalAccountReposit
         return Task.CompletedTask;
     }
 }
+

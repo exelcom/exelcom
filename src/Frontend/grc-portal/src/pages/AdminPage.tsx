@@ -73,60 +73,111 @@ function AccountModal({ account, onClose, onSave }: {
   const isValid = !!(form.username && form.customerName && form.grcCustomerId && (isEdit || form.password));
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ background: 'var(--surface)', borderRadius: 16, width: '100%', maxWidth: 560, border: '1px solid var(--border)', boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
-        <div style={{ padding: '24px 28px 16px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h2 style={{ fontSize: 18, fontWeight: 800, marginBottom: 2 }}>{isEdit ? 'Edit Account' : 'New Customer Account'}</h2>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Customer Portal access — no Microsoft account required</p>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+      <div style={{ background: '#1e1e2e', borderRadius: 20, width: '100%', maxWidth: 600, border: '1px solid #2e2e42', boxShadow: '0 32px 100px rgba(0,0,0,0.4)', overflow: 'hidden' }}>
+
+        {/* Header */}
+        <div style={{ padding: '28px 32px 20px', background: 'linear-gradient(135deg, #6366f115, #818cf810)', borderBottom: '1px solid #2e2e42', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: '#6366f120', border: '1px solid #6366f140', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
+              {isEdit ? '✏️' : '👤'}
+            </div>
+            <div>
+              <h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 3, color: '#f1f5f9' }}>{isEdit ? 'Edit Customer Account' : 'New Customer Account'}</h2>
+              <p style={{ fontSize: 12, color: '#94a3b8' }}>Customer Portal access — no Microsoft account required</p>
+            </div>
           </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: 22, cursor: 'pointer' }}>✕</button>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: 20, cursor: 'pointer', padding: 4, borderRadius: 6, lineHeight: 1 }}>✕</button>
         </div>
-        <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            <div>
-              <label style={lbl}>Username *</label>
-              <input style={{ ...inp, opacity: isEdit ? 0.6 : 1 }} placeholder="e.g. client.company"
-                value={form.username} onChange={e => set('username', e.target.value)} disabled={isEdit} />
-            </div>
-            <div>
-              <label style={lbl}>{isEdit ? 'New Password (leave blank to keep)' : 'Password *'}</label>
-              <input style={inp} type="password" placeholder={isEdit ? 'Enter to change...' : 'Min 8 characters'}
-                value={form.password} onChange={e => set('password', e.target.value)} />
-            </div>
-          </div>
+
+        {/* Body */}
+        <div style={{ padding: '24px 32px', display: 'flex', flexDirection: 'column', gap: 24 }}>
+
+          {/* Section: Login Credentials */}
           <div>
-            <label style={lbl}>Customer Name *</label>
-            <input style={inp} placeholder="e.g. Acme Corporation"
-              value={form.customerName} onChange={e => set('customerName', e.target.value)} />
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            <div>
-              <label style={lbl}>GRC Customer ID *</label>
-              <input style={inp} placeholder="e.g. ACME001"
-                value={form.grcCustomerId} onChange={e => set('grcCustomerId', e.target.value)} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+              <div style={{ width: 24, height: 24, borderRadius: 6, background: '#6366f120', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>🔐</div>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#6366f1', textTransform: 'uppercase' as const, letterSpacing: '0.08em' }}>Login Credentials</span>
             </div>
-            <div>
-              <label style={lbl}>CRM Customer ID</label>
-              <input style={inp} placeholder="e.g. CRM-12345"
-                value={form.crmCustomerId} onChange={e => set('crmCustomerId', e.target.value)} />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, padding: '16px 18px', borderRadius: 10, background: '#16162a', border: '1px solid #2e2e42' }}>
+              <div>
+                <label style={lbl}>Username *</label>
+                <input style={{ ...inp, opacity: isEdit ? 0.6 : 1, background: isEdit ? '#2a2a3a' : '#252535' }}
+                  placeholder="e.g. acme.client"
+                  value={form.username} onChange={e => set('username', e.target.value)} disabled={isEdit} />
+                {!isEdit && <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 4 }}>Used to log into the Customer Portal</div>}
+                {isEdit && <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 4 }}>Username cannot be changed</div>}
+              </div>
+              <div>
+                <label style={lbl}>{isEdit ? 'New Password' : 'Password *'}</label>
+                <input style={inp} type="password"
+                  placeholder={isEdit ? 'Leave blank to keep current' : 'Min 8 characters'}
+                  value={form.password} onChange={e => set('password', e.target.value)} />
+                {!isEdit && <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 4 }}>Customer will use this to sign in</div>}
+              </div>
             </div>
           </div>
+
+          {/* Section: Customer Details */}
           <div>
-            <label style={lbl}>Parent GRC Customer ID (optional)</label>
-            <input style={inp} placeholder="Leave blank if top-level customer"
-              value={form.parentGrcCustomerId} onChange={e => set('parentGrcCustomerId', e.target.value)} />
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
-              Set this if the account belongs to a parent organisation
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+              <div style={{ width: 24, height: 24, borderRadius: 6, background: '#0ea5e920', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>🏢</div>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#0ea5e9', textTransform: 'uppercase' as const, letterSpacing: '0.08em' }}>Customer Details</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '16px 18px', borderRadius: 10, background: '#16162a', border: '1px solid #2e2e42' }}>
+              <div>
+                <label style={lbl}>Customer / Company Name *</label>
+                <input style={inp} placeholder="e.g. Acme Corporation"
+                  value={form.customerName} onChange={e => set('customerName', e.target.value)} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div>
+                  <label style={lbl}>GRC Customer ID *</label>
+                  <input style={inp} placeholder="e.g. ACME001"
+                    value={form.grcCustomerId} onChange={e => set('grcCustomerId', e.target.value)} />
+                  <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 4 }}>Links customer to their data in the platform</div>
+                </div>
+                <div>
+                  <label style={lbl}>CRM Customer ID</label>
+                  <input style={inp} placeholder="e.g. CRM-12345"
+                    value={form.crmCustomerId} onChange={e => set('crmCustomerId', e.target.value)} />
+                  <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 4 }}>Your internal CRM reference (optional)</div>
+                </div>
+              </div>
+              <div>
+                <label style={lbl}>Parent GRC Customer ID <span style={{ fontWeight: 400, textTransform: 'none' as const, letterSpacing: 0 }}>(optional)</span></label>
+                <input style={inp} placeholder="Leave blank if this is a top-level customer"
+                  value={form.parentGrcCustomerId} onChange={e => set('parentGrcCustomerId', e.target.value)} />
+                <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 4 }}>Set if this account is a subsidiary or child of another customer</div>
+              </div>
             </div>
           </div>
+
+          {/* Info note */}
+          {!isEdit && (
+            <div style={{ display: 'flex', gap: 10, padding: '12px 16px', borderRadius: 10, background: '#0ea5e910', border: '1px solid #0ea5e930' }}>
+              <span style={{ fontSize: 16, flexShrink: 0 }}>ℹ️</span>
+              <div style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5 }}>
+                The customer will log in at{' '}
+                <strong style={{ color: '#0ea5e9' }}>portal.exelcom.au/customer-portal</strong>{' '}
+                using their username and password. They will only see their own incidents, assets and compliance data.
+              </div>
+            </div>
+          )}
         </div>
-        <div style={{ padding: '16px 28px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
-          <button onClick={onClose} style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid var(--border)', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 14 }}>Cancel</button>
-          <button onClick={() => onSave(form)} className="btn-primary"
-            style={{ padding: '10px 24px', opacity: !isValid ? 0.4 : 1 }} disabled={!isValid}>
-            {isEdit ? 'Save Changes' : 'Create Account'}
-          </button>
+
+        {/* Footer */}
+        <div style={{ padding: '16px 32px', borderTop: '1px solid #2e2e42', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#16162a' }}>
+          <div style={{ fontSize: 12, color: '#94a3b8' }}>
+            {isValid ? '✅ Ready to ' + (isEdit ? 'save' : 'create') : '⚠️ Fill in required fields (*)'}
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button onClick={onClose} style={{ padding: '10px 22px', borderRadius: 8, border: '1px solid #2e2e42', background: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: 14, fontWeight: 500 }}>Cancel</button>
+            <button onClick={() => onSave(form)} className="btn-primary"
+              style={{ padding: '10px 28px', opacity: !isValid ? 0.4 : 1, fontWeight: 700 }} disabled={!isValid}>
+              {isEdit ? '💾 Save Changes' : '✨ Create Account'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -143,36 +194,81 @@ function ResetPasswordModal({ account, onClose, onSave }: {
   const isValid = password.length >= 8 && password === confirm;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ background: 'var(--surface)', borderRadius: 16, width: '100%', maxWidth: 440, border: '1px solid var(--border)', boxShadow: '0 24px 80px rgba(0,0,0,0.3)' }}>
-        <div style={{ padding: '24px 28px 16px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h2 style={{ fontSize: 18, fontWeight: 800, marginBottom: 2 }}>Reset Password</h2>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{account.username} — {account.customerName}</p>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+      <div style={{ background: '#1e1e2e', borderRadius: 20, width: '100%', maxWidth: 460, border: '1px solid #2e2e42', boxShadow: '0 32px 100px rgba(0,0,0,0.4)', overflow: 'hidden' }}>
+
+        {/* Header */}
+        <div style={{ padding: '28px 32px 20px', background: 'linear-gradient(135deg, #ef444415, #dc262610)', borderBottom: '1px solid #2e2e42', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: '#ef444420', border: '1px solid #ef444440', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>
+              🔑
+            </div>
+            <div>
+              <h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 3, color: '#f1f5f9' }}>Reset Password</h2>
+              <p style={{ fontSize: 12, color: '#94a3b8' }}>{account.customerName} — <span style={{ fontFamily: 'monospace', color: '#818cf8' }}>{account.username}</span></p>
+            </div>
           </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: 22, cursor: 'pointer' }}>✕</button>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: 20, cursor: 'pointer', padding: 4, borderRadius: 6, lineHeight: 1 }}>✕</button>
         </div>
-        <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div>
-            <label style={lbl}>New Password *</label>
-            <input style={inp} type="password" placeholder="Min 8 characters"
-              value={password} onChange={e => setPassword(e.target.value)} />
+
+        {/* Body */}
+        <div style={{ padding: '24px 32px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+          <div style={{ padding: '16px 18px', borderRadius: 10, background: '#16162a', border: '1px solid #2e2e42', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', letterSpacing: '0.07em', textTransform: 'uppercase' as const, marginBottom: 6, display: 'block' }}>New Password *</label>
+              <input
+                style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #2e2e42', background: '#252535', color: '#f1f5f9', fontSize: 14, outline: 'none', boxSizing: 'border-box' as const }}
+                type="password" placeholder="Min 8 characters"
+                value={password} onChange={e => setPassword(e.target.value)} />
+            </div>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', letterSpacing: '0.07em', textTransform: 'uppercase' as const, marginBottom: 6, display: 'block' }}>Confirm Password *</label>
+              <input
+                style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: `1px solid ${confirm && password !== confirm ? '#ef4444' : '#2e2e42'}`, background: '#252535', color: '#f1f5f9', fontSize: 14, outline: 'none', boxSizing: 'border-box' as const }}
+                type="password" placeholder="Repeat new password"
+                value={confirm} onChange={e => setConfirm(e.target.value)} />
+              {confirm && password !== confirm && (
+                <div style={{ fontSize: 11, color: '#ef4444', marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  ⚠️ Passwords do not match
+                </div>
+              )}
+              {confirm && password === confirm && password.length >= 8 && (
+                <div style={{ fontSize: 11, color: '#10b981', marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  ✅ Passwords match
+                </div>
+              )}
+            </div>
           </div>
-          <div>
-            <label style={lbl}>Confirm Password *</label>
-            <input style={inp} type="password" placeholder="Repeat password"
-              value={confirm} onChange={e => setConfirm(e.target.value)} />
-            {confirm && password !== confirm && (
-              <div style={{ fontSize: 11, color: '#ef4444', marginTop: 4 }}>Passwords do not match</div>
-            )}
+
+          {/* Password requirements */}
+          <div style={{ padding: '12px 16px', borderRadius: 10, background: '#1a1a2e', border: '1px solid #2e2e42' }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', marginBottom: 8, textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>Password Requirements</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {[
+                { label: 'At least 8 characters', met: password.length >= 8 },
+                { label: 'Passwords match', met: password === confirm && confirm.length > 0 },
+              ].map(req => (
+                <div key={req.label} style={{ fontSize: 12, color: req.met ? '#10b981' : '#64748b', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span>{req.met ? '✅' : '○'}</span> {req.label}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-        <div style={{ padding: '16px 28px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
-          <button onClick={onClose} style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid var(--border)', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 14 }}>Cancel</button>
-          <button onClick={() => onSave(password)} className="btn-primary"
-            style={{ padding: '10px 24px', opacity: !isValid ? 0.4 : 1 }} disabled={!isValid}>
-            Reset Password
-          </button>
+
+        {/* Footer */}
+        <div style={{ padding: '16px 32px', borderTop: '1px solid #2e2e42', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#16162a' }}>
+          <div style={{ fontSize: 12, color: '#94a3b8' }}>
+            {isValid ? '✅ Ready to reset' : '⚠️ Fill in required fields'}
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button onClick={onClose} style={{ padding: '10px 22px', borderRadius: 8, border: '1px solid #2e2e42', background: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: 14, fontWeight: 500 }}>Cancel</button>
+            <button onClick={() => onSave(password)}
+              style={{ padding: '10px 28px', borderRadius: 8, background: isValid ? '#ef4444' : '#ef444440', border: 'none', color: '#fff', cursor: isValid ? 'pointer' : 'default', fontSize: 14, fontWeight: 700, opacity: !isValid ? 0.5 : 1 }}
+              disabled={!isValid}>
+              🔑 Reset Password
+            </button>
+          </div>
         </div>
       </div>
     </div>

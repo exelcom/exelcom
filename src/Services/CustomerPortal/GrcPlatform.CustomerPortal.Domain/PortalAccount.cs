@@ -20,6 +20,10 @@ public sealed class PortalAccount
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
     public DateTimeOffset? LastLoginAt { get; private set; }
+    // MFA
+    public string? TotpSecret { get; private set; }
+    public bool TotpEnabled { get; private set; }
+    public DateTimeOffset? TotpEnabledAt { get; private set; }
 
     private PortalAccount() { }
 
@@ -68,6 +72,25 @@ public sealed class PortalAccount
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
+    public void SetupTotp(string secret)
+    {
+        TotpSecret = secret;
+        TotpEnabled = false;
+        UpdatedAt = DateTimeOffset.UtcNow;
+    }
+    public void EnableTotp()
+    {
+        TotpEnabled = true;
+        TotpEnabledAt = DateTimeOffset.UtcNow;
+        UpdatedAt = DateTimeOffset.UtcNow;
+    }
+    public void DisableTotp()
+    {
+        TotpSecret = null;
+        TotpEnabled = false;
+        TotpEnabledAt = null;
+        UpdatedAt = DateTimeOffset.UtcNow;
+    }
     public void RecordLogin()
     {
         LastLoginAt = DateTimeOffset.UtcNow;
@@ -85,3 +108,4 @@ public interface IPortalAccountRepository
     Task SaveChangesAsync(CancellationToken ct = default);
     Task DeleteAsync(PortalAccount account, CancellationToken ct = default);
 }
+

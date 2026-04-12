@@ -98,10 +98,22 @@ _ = Task.Run(async () =>
             END
         ");
         logger.LogInformation("PortalAccounts schema ready.");
+
+        // MFA columns migration
+        await db.Database.ExecuteSqlRawAsync(@"
+            IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('PortalAccounts') AND name = 'TotpSecret')
+            BEGIN
+                ALTER TABLE PortalAccounts ADD TotpSecret NVARCHAR(200) NULL;
+                ALTER TABLE PortalAccounts ADD TotpEnabled BIT NOT NULL DEFAULT 0;
+                ALTER TABLE PortalAccounts ADD TotpEnabledAt DATETIMEOFFSET NULL;
+            END
+        ");
+        logger.LogInformation("MFA columns ready.");
     }
     catch (Exception ex) { logger.LogCritical(ex, "Schema init failed."); }
 });
 
 app.Run();
+
 
 

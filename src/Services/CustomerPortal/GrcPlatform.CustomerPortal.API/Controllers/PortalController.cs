@@ -96,6 +96,39 @@ public class PortalController : ControllerBase
         return NoContent();
     }
 
+    // ── MFA ──────────────────────────────────────────────────────────────────
+    [HttpPost("mfa/setup/{id:guid}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> MfaSetup(Guid id, CancellationToken ct)
+    {
+        var result = await handlers.SetupMfaAsync(id, ct);
+        return Ok(result);
+    }
+
+    [HttpPost("mfa/verify/{id:guid}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> MfaVerify(Guid id, [FromBody] MfaVerifyRequest req, CancellationToken ct)
+    {
+        var success = await handlers.VerifyAndEnableMfaAsync(id, req.Code, ct);
+        return success ? Ok(new { message = "MFA enabled successfully" }) : BadRequest(new { message = "Invalid code" });
+    }
+
+    [HttpDelete("mfa/{id:guid}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> MfaDisable(Guid id, CancellationToken ct)
+    {
+        await handlers.DisableMfaAsync(id, ct);
+        return NoContent();
+    }
+
+    [HttpGet("mfa/status/{id:guid}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> MfaStatus(Guid id, CancellationToken ct)
+    {
+        var status = await handlers.GetMfaStatusAsync(id, ct);
+        return Ok(status);
+    }
+
     // ── Data proxies ──────────────────────────────────────────────────────────
     [HttpGet("data/incidents")]
     [Authorize]
@@ -196,4 +229,5 @@ public class PortalController : ControllerBase
     }
 
 }
+
 

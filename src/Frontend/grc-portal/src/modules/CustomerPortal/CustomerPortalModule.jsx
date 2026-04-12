@@ -419,6 +419,109 @@ function SoaView({ token }) {
   );
 }
 
+// ── MFA Settings View ─────────────────────────────────────────────────────────
+function SettingsView({ token, accountId }) {
+  const [mfaStatus, setMfaStatus] = useState(null);
+  const [step, setStep] = useState("idle");
+  const [qrUrl, setQrUrl] = useState("");
+  const [secret, setSecret] = useState("");
+  const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const mfaApi = {
+    status: () => fetch(`${PORTAL_API}/api/portal/mfa/status/${accountId}`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+    setup: () => fetch(`${PORTAL_API}/api/portal/mfa/setup/${accountId}`, { method: "POST", headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
+    verify: (c) => fetch(`${PORTAL_API}/api/portal/mfa/verify/${accountId}`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify({ code: c }) }).then(r => r.ok ? r.json() : Promise.reject("Invalid code")),
+    disable: () => fetch(`${PORTAL_API}/api/portal/mfa/${accountId}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }).then(r => r.ok ? true : Promise.reject("Failed"))
+  };
+  useEffect(() => { if (accountId) mfaApi.status().then(setMfaStatus).catch(() => {}); }, [accountId]);
+  const handleSetup = async () => {
+    setLoading(true); setError("");
+    try { const r = await mfaApi.setup(); setQrUrl(r.qrCodeUrl); setSecret(r.manualEntryKey); setStep("setup"); }
+    catch { setError("Failed to start MFA setup."); } finally { setLoading(false); }
+  };
+  const handleVerify = async () => {
+    if (code.length !== 6) { setError("Enter the 6-digit code."); return; }
+    setLoading(true); setError("");
+    try { await mfaApi.verify(code); setMfaStatus({ enabled: true, enabledAt: new Date().toISOString() }); setStep("done"); setSuccess("2FA enabled! Your account is now protected."); setCode(""); }
+    catch { setError("Invalid code. Please try again."); } finally { setLoading(false); }
+  };
+  const handleDisable = async () => {
+    if (!window.confirm("Disable 2FA? This reduces your account security.")) return;
+    setLoading(true); setError("");
+    try { await mfaApi.disable(); setMfaStatus({ enabled: false }); setStep("idle"); setSuccess("2FA has been disabled."); }
+    catch { setError("Failed to disable 2FA."); } finally { setLoading(false); }
+  };
+  const card = { background: "#fff", borderRadius: 10, boxShadow: "0 1px 4px rgba(0,0,0,0.06)", padding: "28px 32px", marginBottom: 20 };
+  return (
+    <div>
+      {error && <div style={{ background:"#FDEDEC",border:"1px solid #F1948A",borderRadius:8,padding:"12px 16px",color:"#C0392B",fontSize:13,marginBottom:16 }}>⚠️ {error}</div>}
+      {success && <div style={{ background:"#EAFAF1",border:"1px solid #82E0AA",borderRadius:8,padding:"12px 16px",color:"#1E8449",fontSize:13,marginBottom:16 }}>✅ {success}</div>}
+      <div style={card}>
+        <div style={{ display:"flex",justifyContent:"space-between",alignItems:"flex-start" }}>
+          <div>
+            <div style={{ fontSize:16,fontWeight:700,color:"#1a1a1a",marginBottom:6 }}>🔐 Two-Factor Authentication (2FA)</div>
+            <div style={{ fontSize:13,color:"#717D7E",lineHeight:1.6,maxWidth:520 }}>Add an extra layer of security. When enabled, you'll need your authenticator app in addition to your password to sign in.</div>
+          </div>
+          <div style={{ textAlign:"right",flexShrink:0,marginLeft:24 }}>
+            {mfaStatus === null ? <span style={{ fontSize:12,color:"#A9C4E0" }}>Loading...</span>
+              : mfaStatus.enabled ? <span style={{ background:"#EAFAF1",color:"#1E8449",fontSize:12,fontWeight:700,padding:"4px 12px",borderRadius:20,border:"1px solid #82E0AA" }}>✅ Enabled</span>
+              : <span style={{ background:"#FEF9E7",color:"#935116",fontSize:12,fontWeight:700,padding:"4px 12px",borderRadius:20,border:"1px solid #F9E79F" }}>⚠️ Not Enabled</span>}
+            {mfaStatus?.enabledAt && <div style={{ fontSize:11,color:"#A9C4E0",marginTop:4 }}>Since {new Date(mfaStatus.enabledAt).toLocaleDateString()}</div>}
+          </div>
+        </div>
+        {mfaStatus !== null && (
+          <div style={{ marginTop:20,paddingTop:20,borderTop:"1px solid #E8EBF0" }}>
+            {!mfaStatus.enabled && step === "idle" && <button style={{ padding:"10px 24px",background:"#2E86C1",border:"none",borderRadius:8,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer" }} onClick={handleSetup} disabled={loading}>{loading ? "Setting up..." : "🔐 Enable 2FA"}</button>}
+            {mfaStatus.enabled && step !== "setup" && <button style={{ padding:"10px 24px",background:"transparent",border:"1px solid #E74C3C",borderRadius:8,color:"#E74C3C",fontSize:13,fontWeight:700,cursor:"pointer" }} onClick={handleDisable} disabled={loading}>{loading ? "Disabling..." : "🚫 Disable 2FA"}</button>}
+          </div>
+        )}
+      </div>
+      {(step === "setup" || step === "verify") && (
+        <div style={card}>
+          <div style={{ fontSize:15,fontWeight:700,color:"#1a1a1a",marginBottom:4 }}>Setup Authenticator App</div>
+          <div style={{ fontSize:13,color:"#717D7E",marginBottom:24 }}>Follow these steps to enable 2FA on your account.</div>
+          <div style={{ display:"flex",flexDirection:"column",gap:24 }}>
+            <div style={{ display:"flex",gap:16,alignItems:"flex-start" }}>
+              <div style={{ width:28,height:28,borderRadius:"50%",background:"#2E86C1",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0 }}>1</div>
+              <div><div style={{ fontSize:13,fontWeight:700,color:"#1a1a1a",marginBottom:4 }}>Install an Authenticator App</div><div style={{ fontSize:12,color:"#717D7E",lineHeight:1.6 }}>Download <strong>Google Authenticator</strong> or <strong>Microsoft Authenticator</strong> on your phone.</div></div>
+            </div>
+            <div style={{ display:"flex",gap:16,alignItems:"flex-start" }}>
+              <div style={{ width:28,height:28,borderRadius:"50%",background:"#2E86C1",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0 }}>2</div>
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:13,fontWeight:700,color:"#1a1a1a",marginBottom:8 }}>Scan the QR Code</div>
+                <div style={{ fontSize:12,color:"#717D7E",marginBottom:12 }}>Open your authenticator app and scan this QR code.</div>
+                {qrUrl && (
+                  <div style={{ display:"flex",gap:20,alignItems:"flex-start",flexWrap:"wrap" }}>
+                    <div style={{ background:"#f8f9fa",border:"1px solid #E8EBF0",borderRadius:8,padding:8,display:"inline-block" }}><img src={qrUrl} alt="QR Code" style={{ display:"block",width:160,height:160 }} /></div>
+                    <div style={{ flex:1 }}><div style={{ fontSize:11,color:"#717D7E",fontWeight:600,marginBottom:6,textTransform:"uppercase",letterSpacing:"0.06em" }}>Can't scan? Enter manually:</div><div style={{ background:"#F8F9FA",border:"1px solid #E8EBF0",borderRadius:8,padding:"10px 14px",fontFamily:"monospace",fontSize:13,color:"#1a1a1a",letterSpacing:2,wordBreak:"break-all" }}>{secret}</div></div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div style={{ display:"flex",gap:16,alignItems:"flex-start" }}>
+              <div style={{ width:28,height:28,borderRadius:"50%",background:"#2E86C1",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0 }}>3</div>
+              <div>
+                <div style={{ fontSize:13,fontWeight:700,color:"#1a1a1a",marginBottom:8 }}>Enter Verification Code</div>
+                <div style={{ fontSize:12,color:"#717D7E",marginBottom:12 }}>Enter the 6-digit code shown in your authenticator app.</div>
+                <div style={{ display:"flex",gap:12,alignItems:"center" }}>
+                  <input style={{ padding:"12px 14px",border:"1px solid #E8EBF0",borderRadius:8,fontSize:18,width:160,textAlign:"center",letterSpacing:8,fontFamily:"monospace",outline:"none" }} type="text" inputMode="numeric" maxLength={6} placeholder="000000" value={code} onChange={e=>setCode(e.target.value.replace(/\D/g,""))} onKeyDown={e=>e.key==="Enter"&&handleVerify()} />
+                  <button style={{ padding:"12px 24px",background:code.length===6?"#1E8449":"#A9C4E0",border:"none",borderRadius:8,color:"#fff",fontSize:13,fontWeight:700,cursor:code.length===6?"pointer":"default" }} onClick={handleVerify} disabled={loading||code.length!==6}>{loading?"Verifying...":"✓ Verify & Enable"}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop:20,paddingTop:16,borderTop:"1px solid #E8EBF0" }}><button style={{ background:"transparent",border:"none",color:"#A9C4E0",fontSize:13,cursor:"pointer" }} onClick={()=>setStep("idle")}>Cancel</button></div>
+        </div>
+      )}
+      <div style={{ ...card,background:"#EBF5FB",border:"1px solid #AED6F1" }}>
+        <div style={{ fontSize:13,fontWeight:700,color:"#1A5276",marginBottom:8 }}>ℹ️ About Two-Factor Authentication</div>
+        <div style={{ fontSize:12,color:"#2E86C1",lineHeight:1.7 }}>2FA adds a second layer of security. Even if someone has your password, they cannot sign in without your authenticator app. Exelcom recommends enabling 2FA on all accounts (ISO/IEC 27001:2022 Annex A 8.5).</div>
+      </div>
+    </div>
+  );
+}
 // ── Login Page ─────────────────────────────────────────────────────────────────
 function LoginPage({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -459,6 +562,7 @@ const TABS = [
   { id:"assets", label:"🖥 Assets" },
   { id:"nonconformities", label:"⚠️ Nonconformities" },
   { id:"soa", label:"📋 SoA" },
+  { id:"settings", label:"⚙️ Settings" },
 ];
 
 const tabTitles = {
@@ -466,6 +570,7 @@ const tabTitles = {
   assets: { title:"Asset Inventory", sub:"ISO/IEC 27001:2022 — Annex A.8 — Asset management" },
   nonconformities: { title:"Nonconformities & Corrective Actions", sub:"ISO/IEC 27001:2022 — Clause 10.2" },
   soa: { title:"Statement of Applicability", sub:"Annex A controls — applicability and implementation tracking" },
+  settings: { title:"Account Settings", sub:"Manage your security settings and two-factor authentication" },
 };
 
 export default function CustomerPortalModule() {
@@ -476,7 +581,7 @@ export default function CustomerPortalModule() {
   const [activeTab, setActiveTab] = useState("incidents");
 
   const handleLogin = useCallback((result) => {
-    const s = { token:result.token, customerName:result.customerName, scope:result.customerScope };
+    const s = { token:result.token, customerName:result.customerName, scope:result.customerScope, accountId:result.accountId };
     sessionStorage.setItem("grc_portal_session", JSON.stringify(s));
     setSession(s);
   }, []);
@@ -512,7 +617,10 @@ export default function CustomerPortalModule() {
         {activeTab==="assets" && <AssetsView token={session.token} />}
         {activeTab==="nonconformities" && <NcView token={session.token} />}
         {activeTab==="soa" && <SoaView token={session.token} />}
+        {activeTab==="settings" && <SettingsView token={session.token} accountId={session.accountId} />}
       </div>
     </div>
   );
 }
+
+
