@@ -14,7 +14,8 @@ public sealed record PortalAccountDto(
     Guid Id, string Username, string CrmCustomerId,
     string GrcCustomerId, string CustomerName,
     string? ParentGrcCustomerId, bool IsActive,
-    DateTimeOffset CreatedAt, DateTimeOffset? LastLoginAt);
+    DateTimeOffset CreatedAt, DateTimeOffset? LastLoginAt,
+    bool TotpEnabled);
 
 public sealed record LoginRequest(string Username, string Password);
 
@@ -261,8 +262,9 @@ file static class PortalMappingExtensions
 {
     internal static PortalAccountDto ToDto(this PortalAccount a) => new(
         a.Id, a.Username, a.CrmCustomerId, a.GrcCustomerId, a.CustomerName,
-        a.ParentGrcCustomerId, a.IsActive, a.CreatedAt, a.LastLoginAt);
+        a.ParentGrcCustomerId, a.IsActive, a.CreatedAt, a.LastLoginAt, a.TotpEnabled);
 }
+
 
 
 

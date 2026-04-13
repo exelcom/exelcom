@@ -567,9 +567,9 @@ function LoginPage({ onLogin }) {
     return (
       <div style={S.loginWrap}>
         <div style={S.loginCard}>
-          <div style={S.loginTitle}>GRC Platform</div>
-          <div style={S.loginSubtitle}>Two-Factor Authentication</div>
-          <div style={S.loginSub3}>Enter the code from your authenticator app</div>
+        <div style={{ textAlign:"center", marginBottom:8 }}><img src="/exelcom-logo.png" alt="Exelcom" style={{ height:48, objectFit:"contain" }} /></div>
+        <div style={S.loginTitle}>Two-Factor Authentication</div>
+        <div style={S.loginSub3}>Enter the code from your authenticator app</div>
           {error && <div style={S.loginErr}>{error}</div>}
           <div style={{ textAlign:"center", marginBottom:24 }}>
             <div style={{ fontSize:48, marginBottom:8 }}>🔐</div>
@@ -603,9 +603,9 @@ function LoginPage({ onLogin }) {
   return (
     <div style={S.loginWrap}>
       <div style={S.loginCard}>
-        <div style={S.loginTitle}>GRC Platform</div>
-        <div style={S.loginSubtitle}>Customer Portal</div>
-        <div style={S.loginSub3}>Exelcom Cybersecurity</div>
+        <div style={{ textAlign:"center", marginBottom:8 }}><img src="/exelcom-logo.png" alt="Exelcom" style={{ height:48, objectFit:"contain" }} /></div>
+        <div style={S.loginTitle}>Customer Portal</div>
+        <div style={S.loginSub3}>Secure access powered by Exelcom GRC Platform</div>
         {error && <div style={S.loginErr}>{error}</div>}
         <form onSubmit={handleSubmit}>
           <label style={S.loginLabel}>Username</label>
@@ -663,9 +663,10 @@ export default function CustomerPortalModule() {
     <div style={S.portalWrap}>
       <div style={S.header}>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+          <img src="/exelcom-logo.png" alt="Exelcom" style={{ height:28, objectFit:"contain", filter:"brightness(0) invert(1)" }} />
           <div>
-            <div style={S.headerLogo}>GRC PLATFORM</div>
-            <div style={S.headerSub}>CUSTOMER PORTAL</div>
+            <div style={S.headerLogo}>CUSTOMER PORTAL</div>
+            <div style={S.headerSub}>EXELCOM CYBERSECURITY</div>
           </div>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:16 }}>

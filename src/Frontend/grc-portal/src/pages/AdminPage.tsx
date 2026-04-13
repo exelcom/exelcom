@@ -15,6 +15,7 @@ interface PortalAccount {
   isActive: boolean;
   createdAt: string;
   lastLoginAt?: string;
+  totpEnabled?: boolean;
 }
 
 interface AccountForm {
@@ -52,6 +53,8 @@ const portalApi = {
     apiClient.post(`/portal/api/portal/accounts/${id}/password`, { newPassword }).then(r => r.data),
   deleteAccount: (id: string) =>
     apiClient.delete(`/portal/api/portal/accounts/${id}`).then(r => r.data),
+  disableMfa: (id: string) =>
+    apiClient.delete(`/portal/api/portal/mfa/${id}`).then(r => r.data),
 };
 
 function AccountModal({ account, onClose, onSave }: {
@@ -317,6 +320,11 @@ export function AdminPage() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['portal-accounts'] }),
   });
 
+  const disableMfaMutation = useMutation({
+    mutationFn: (id: string) => portalApi.disableMfa(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['portal-accounts'] }),
+  });
+
   if (!hasRole(AppRoles.Admin)) {
     return (
       <div style={{ padding: '48px 40px', textAlign: 'center' }}>
@@ -404,6 +412,11 @@ export function AdminPage() {
                           <button onClick={() => setResetAccount(a)}
                             style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 12 }}
                             title="Reset Password">🔑</button>
+                          {a.totpEnabled && (
+                            <button onClick={() => { if (window.confirm(`Disable 2FA for "${a.username}"? They will need to re-enroll their authenticator app.`)) disableMfaMutation.mutate(a.id); }}
+                              style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid #f59e0b', background: 'none', color: '#f59e0b', cursor: 'pointer', fontSize: 12 }}
+                              title="Disable 2FA">🔓</button>
+                          )}
                           <button onClick={() => toggleActiveMutation.mutate({ id: a.id, isActive: !a.isActive })}
                             style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: a.isActive ? '#ef4444' : '#10b981', cursor: 'pointer', fontSize: 12 }}
                             title={a.isActive ? 'Disable' : 'Enable'}>
