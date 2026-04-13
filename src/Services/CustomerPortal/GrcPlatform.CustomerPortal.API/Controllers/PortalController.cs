@@ -169,7 +169,8 @@ public class PortalController : ControllerBase
     public async Task<IActionResult> GetNonconformities(CancellationToken ct)
     {
         var client = httpClientFactory.CreateClient("internal");
-        var url = $"{config["Services:Nonconformity"]}/api/nonconformities";
+        var customerId = User.FindFirst("grc_customer_id")?.Value ?? "";
+        var url = $"{config["Services:Nonconformity"]}/api/nonconformities?customerId={customerId}";
         var response = await client.GetAsync(url, ct);
         var content = await response.Content.ReadAsStringAsync(ct);
         return Content(content, "application/json");
@@ -180,7 +181,8 @@ public class PortalController : ControllerBase
     public async Task<IActionResult> GetSoa(CancellationToken ct)
     {
         var client = httpClientFactory.CreateClient("internal");
-        var url = $"{config["Services:Soa"]}/api/soa";
+        var customerId = User.FindFirst("grc_customer_id")?.Value ?? "";
+        var url = $"{config["Services:Soa"]}/api/soa?customerId={customerId}";
         var response = await client.GetAsync(url, ct);
         var content = await response.Content.ReadAsStringAsync(ct);
         return Content(content, "application/json");
@@ -239,6 +241,7 @@ public class PortalController : ControllerBase
     }
 
 }
+
 
 
 
