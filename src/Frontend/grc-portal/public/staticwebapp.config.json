@@ -1,6 +1,19 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/*.css", "/*.js", "/*.png", "/*.ico", "/*.svg", "/*.woff", "/*.woff2", "/*.ttf", "/*.map"]
+    "exclude": [
+      "/*.css",
+      "/*.js",
+      "/*.png",
+      "/*.ico",
+      "/*.svg",
+      "/*.woff",
+      "/*.woff2",
+      "/*.ttf",
+      "/*.map"
+    ]
+  },
+  "globalHeaders": {
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com; connect-src 'self' https://login.microsoftonline.com https://*.microsoftonline.com https://*.windows.net https://apim-grc-exelcom-dev.azure-api.net https://app-portal-grc-exelcom-dev.azurewebsites.net https://api.qrserver.com; img-src 'self' data: https://api.qrserver.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:"
   }
 }

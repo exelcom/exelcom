@@ -5,6 +5,7 @@ import { ScoreGauge, OverallGauge } from '../components/ScoreGauge';
 import { useQuery } from '@tanstack/react-query';
 import { riskApi, complianceApi, policyApi, auditApi, soaApi, ncApi, assetApi, incidentApi, apiClient } from '../services/api';
 import { useEffect, useState } from 'react';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 const modulesMeta = [
   { to: '/risks',            label: 'Risk Management',     icon: '◈', color: '#ef4444', role: AppRoles.RiskManager },
@@ -60,6 +61,162 @@ function ScoreBadge({ score }: { score: number }) {
   const label = score >= 80 ? 'Good' : score >= 60 ? 'Fair' : score >= 40 ? 'At Risk' : 'Critical';
   return (
     <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 4, background: color + '20', color, marginLeft: 8 }}>{label}</span>
+  );
+}
+
+function AnalyticsSection({ incidents, assets, ncs, controls }: {
+  incidents: any[], assets: any[], ncs: any[], controls: any[]
+}) {
+  // Incidents by severity
+  const incBySeverity = ['Critical','High','Medium','Low'].map(s => ({
+    name: s,
+    value: incidents.filter(i => i.severity === s).length,
+    color: s === 'Critical' ? '#7f1d1d' : s === 'High' ? '#ef4444' : s === 'Medium' ? '#f59e0b' : '#10b981'
+  })).filter(d => d.value > 0);
+
+  // Incidents by status
+  const incByStatus = ['New','Investigating','Contained','Resolved','Closed'].map(s => ({
+    name: s,
+    value: incidents.filter(i => (i.status ?? i.statusName) === s).length,
+    color: s === 'New' ? '#3b82f6' : s === 'Investigating' ? '#f59e0b' : s === 'Contained' ? '#8b5cf6' : s === 'Resolved' ? '#10b981' : '#64748b'
+  })).filter(d => d.value > 0);
+
+  // SoA implementation
+  const implemented = controls.filter(c => c.implementationStatus === 'Implemented').length;
+  const inProgress  = controls.filter(c => c.implementationStatus === 'InProgress').length;
+  const notStarted  = controls.length - implemented - inProgress;
+  const soaData = [
+    { name: 'Implemented', value: implemented, color: '#10b981' },
+    { name: 'In Progress',  value: inProgress,  color: '#f59e0b' },
+    { name: 'Not Started',  value: notStarted,  color: '#64748b' },
+  ].filter(d => d.value > 0);
+
+  // Assets by type
+  const assetTypes = [...new Set(assets.map(a => a.type))];
+  const assetByType = assetTypes.map((t, i) => ({
+    name: t,
+    value: assets.filter(a => a.type === t).length,
+    color: ['#6366f1','#0ea5e9','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899'][i % 7]
+  }));
+
+  // NCs by severity
+  const ncBySeverity = ['Critical','Major','Minor','Observation'].map(s => ({
+    name: s,
+    value: ncs.filter(n => n.severity === s).length,
+    color: s === 'Critical' ? '#7f1d1d' : s === 'Major' ? '#ef4444' : s === 'Minor' ? '#f59e0b' : '#10b981'
+  })).filter(d => d.value > 0);
+
+  const hasData = incidents.length > 0 || assets.length > 0 || ncs.length > 0 || controls.length > 0;
+  if (!hasData) return null;
+
+  const cardStyle: React.CSSProperties = { background: 'var(--surface)', borderRadius: 12, border: '1px solid var(--border)', padding: '20px 24px' };
+  const titleStyle: React.CSSProperties = { fontSize: 13, fontWeight: 700, marginBottom: 16, color: 'var(--text)' };
+
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (!active || !payload?.length) return null;
+    return (
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 12px', fontSize: 12 }}>
+        <div style={{ fontWeight: 700 }}>{payload[0].name}</div>
+        <div style={{ color: payload[0].payload.color }}>{payload[0].value}</div>
+      </div>
+    );
+  };
+
+  return (
+    <div style={{ padding: '0 40px 40px' }}>
+      <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 20, color: 'var(--text)' }}>📊 Analytics</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
+
+        {/* Incidents by Severity */}
+        {incidents.length > 0 && incBySeverity.length > 0 && (
+          <div style={cardStyle}>
+            <div style={titleStyle}>🚨 Incidents by Severity</div>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie data={incBySeverity} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={3} dataKey="value">
+                  {incBySeverity.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+                <Legend iconType="circle" iconSize={8} formatter={(v: string) => <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{v}</span>} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
+        {/* Incidents by Status */}
+        {incidents.length > 0 && incByStatus.length > 0 && (
+          <div style={cardStyle}>
+            <div style={titleStyle}>📈 Incidents by Status</div>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={incByStatus} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'var(--text-muted)' }} />
+                <YAxis tick={{ fontSize: 10, fill: 'var(--text-muted)' }} allowDecimals={false} />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                  {incByStatus.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
+        {/* SoA Implementation Progress */}
+        {controls.length > 0 && soaData.length > 0 && (
+          <div style={cardStyle}>
+            <div style={titleStyle}>📋 SoA Implementation ({controls.length} controls)</div>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie data={soaData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={3} dataKey="value">
+                  {soaData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+                <Legend iconType="circle" iconSize={8} formatter={(v: string) => <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{v}</span>} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 8 }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 20, fontWeight: 800, color: '#10b981' }}>{controls.length > 0 ? Math.round(implemented/controls.length*100) : 0}%</div>
+                <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Implemented</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Assets by Type */}
+        {assets.length > 0 && assetByType.length > 0 && (
+          <div style={cardStyle}>
+            <div style={titleStyle}>🖥 Assets by Type</div>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie data={assetByType} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={3} dataKey="value">
+                  {assetByType.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+                <Legend iconType="circle" iconSize={8} formatter={(v: string) => <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{v}</span>} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
+        {/* NC&CA by Severity */}
+        {ncs.length > 0 && ncBySeverity.length > 0 && (
+          <div style={cardStyle}>
+            <div style={titleStyle}>⚠️ Nonconformities by Severity</div>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={ncBySeverity} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'var(--text-muted)' }} />
+                <YAxis tick={{ fontSize: 10, fill: 'var(--text-muted)' }} allowDecimals={false} />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                  {ncBySeverity.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+
+      </div>
+    </div>
   );
 }
 
@@ -280,7 +437,9 @@ export function Dashboard() {
         )}
 
       </div>
+      {isAdmin && <AnalyticsSection incidents={incidents} assets={assets} ncs={ncs} controls={controls} />}
     </div>
   );
 }
+
 
