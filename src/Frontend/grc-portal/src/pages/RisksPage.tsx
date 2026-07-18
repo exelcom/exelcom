@@ -132,9 +132,9 @@ export function RisksPage() {
               likelihood: ['Rare','Unlikely','Possible','Likely','AlmostCertain'][(formData.likelihood ?? 1) - 1],
               impact: ['Insignificant','Minor','Moderate','Major','Catastrophic'][(formData.impact ?? 1) - 1],
               owner: formData.owner ?? '',
-              department: null,
+              department: formData.department || null,
               reviewDueDate: formData.reviewDueDate ? new Date(formData.reviewDueDate).toISOString() : null,
-              regulatoryReference: null,
+              regulatoryReference: formData.regulatoryReference || null,
             });
         }} />
       )}
