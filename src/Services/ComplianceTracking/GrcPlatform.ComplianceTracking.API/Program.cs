@@ -19,8 +19,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Authority = $"https://login.microsoftonline.com/{builder.Configuration["AzureAd__TenantId"]}/v2.0";
-        options.Audience = builder.Configuration["AzureAd__Audience"];
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters { ValidateIssuer = false };
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidAudience = builder.Configuration["AzureAd__Audience"]
+        };
     });
 builder.Services.AddAuthorization();
 
