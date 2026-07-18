@@ -18,8 +18,8 @@ if (!string.IsNullOrWhiteSpace(kvName)) {
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = $"https://login.microsoftonline.com/{builder.Configuration["AzureAd__TenantId"]}/v2.0";
-        var audience = builder.Configuration["AzureAd__Audience"];
+        options.Authority = $"https://login.microsoftonline.com/{builder.Configuration["AzureAd:TenantId"]}/v2.0";
+        var audience = builder.Configuration["AzureAd:Audience"];
         options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
         {
             ValidateIssuer = false,
