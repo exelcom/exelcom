@@ -4,6 +4,7 @@ using GrcPlatform.CustomerPortal.Application;
 
 namespace GrcPlatform.CustomerPortal.API.Controllers;
 
+// CI/CD OIDC test trigger — safe to remove after pipeline is verified.
 [ApiController]
 [Route("api/portal")]
 public class PortalController : ControllerBase
