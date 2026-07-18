@@ -10,6 +10,7 @@ public interface IRiskRepository
     Task<List<Risk>> GetOverdueReviewsAsync(CancellationToken cancellationToken = default);
     Task AddAsync(Risk risk, CancellationToken cancellationToken = default);
     Task UpdateAsync(Risk risk, CancellationToken cancellationToken = default);
+    Task AddTreatmentAsync(RiskTreatment treatment, CancellationToken cancellationToken = default);
     Task DeleteAsync(Guid id, string deletedBy, CancellationToken cancellationToken = default);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

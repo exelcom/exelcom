@@ -30,9 +30,10 @@ public class AddRiskTreatmentCommandHandler(IRiskRepository repository, ICurrent
     public async Task<RiskTreatmentDto> Handle(AddRiskTreatmentCommand request, CancellationToken cancellationToken)
     {
         var risk = await repository.GetByIdWithDetailsAsync(request.RiskId, cancellationToken) ?? throw new KeyNotFoundException($"Risk {request.RiskId} not found");
-        risk.AddTreatment(request.Description, request.Type, request.Owner, request.DueDate, currentUser.UserId);
+        var treatment = risk.AddTreatment(request.Description, request.Type, request.Owner, request.DueDate, currentUser.UserId);
+        await repository.AddTreatmentAsync(treatment, cancellationToken);
         await repository.SaveChangesAsync(cancellationToken);
-        return risk.Treatments.Last().ToDto();
+        return treatment.ToDto();
     }
 }
 public class CloseRiskCommandHandler(IRiskRepository repository, ICurrentUserService currentUser) : IRequestHandler<CloseRiskCommand, RiskDto>

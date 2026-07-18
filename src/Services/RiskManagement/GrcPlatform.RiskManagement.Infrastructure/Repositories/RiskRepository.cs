@@ -22,6 +22,12 @@ public class RiskRepository(RiskDbContext context) : IRiskRepository
     public async Task<List<Risk>> GetOverdueReviewsAsync(CancellationToken ct = default) => await context.Risks.Where(r => r.ReviewDueDate.HasValue && r.ReviewDueDate.Value < DateTime.UtcNow && r.Status != RiskStatus.Closed).OrderBy(r => r.ReviewDueDate).ToListAsync(ct);
     public async Task AddAsync(Risk risk, CancellationToken ct = default) => await context.Risks.AddAsync(risk, ct);
     public Task UpdateAsync(Risk risk, CancellationToken ct = default) { context.Risks.Update(risk); return Task.CompletedTask; }
+    // Explicit Add is required here: RiskTreatment.Id is a client-generated GUID set before the
+    // entity is tracked. If it's only ever attached implicitly via the parent Risk's in-memory
+    // Treatments collection, EF Core's graph-fixup sees a non-default key and infers "Modified"
+    // rather than "Added", generating an UPDATE against a row that was never inserted (0 rows
+    // affected -> DbUpdateConcurrencyException). An explicit AddAsync guarantees Added state.
+    public async Task AddTreatmentAsync(RiskTreatment treatment, CancellationToken ct = default) => await context.RiskTreatments.AddAsync(treatment, ct);
     public async Task DeleteAsync(Guid id, string deletedBy, CancellationToken cancellationToken = default)
     {
         var risk = await context.Risks.FindAsync(new object[] { id }, cancellationToken);

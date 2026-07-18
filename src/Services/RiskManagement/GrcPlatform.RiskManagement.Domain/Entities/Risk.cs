@@ -35,8 +35,8 @@ public class Risk : BaseAuditableEntity
     public void UpdateDetails(string title, string description, RiskCategory category, string? owner, string? department, string? regulatoryReference, DateTime? reviewDueDate, string updatedBy) { Title=title; Description=description; Category=category; Owner=owner; Department=department; RegulatoryReference=regulatoryReference; ReviewDueDate=reviewDueDate; UpdatedAt=DateTime.UtcNow; UpdatedBy=updatedBy; }
     public void UpdateAssessment(RiskLikelihood likelihood, RiskImpact impact, RiskLikelihood? residualLikelihood, RiskImpact? residualImpact, string updatedBy)
     { InherentLikelihood = likelihood; InherentImpact = impact; ResidualLikelihood = residualLikelihood; ResidualImpact = residualImpact; Status = RiskStatus.Assessed; UpdatedBy = updatedBy; UpdatedAt = DateTime.UtcNow; }
-    public void AddTreatment(string description, TreatmentType type, string owner, DateTime dueDate, string createdBy)
-    { var t = RiskTreatment.Create(Id, description, type, owner, dueDate, createdBy); _treatments.Add(t); Status = RiskStatus.Mitigating; UpdatedAt = DateTime.UtcNow; UpdatedBy = createdBy; }
+    public RiskTreatment AddTreatment(string description, TreatmentType type, string owner, DateTime dueDate, string createdBy)
+    { var t = RiskTreatment.Create(Id, description, type, owner, dueDate, createdBy); _treatments.Add(t); Status = RiskStatus.Mitigating; UpdatedAt = DateTime.UtcNow; UpdatedBy = createdBy; return t; }
     public void Accept(string reason, string updatedBy) { Status = RiskStatus.Accepted; UpdatedBy = updatedBy; UpdatedAt = DateTime.UtcNow; _domainEvents.Add(new RiskStatusChangedEvent(Id, RiskStatus.Accepted, reason, updatedBy)); }
     public void Close(string reason, string updatedBy) { Status = RiskStatus.Closed; UpdatedBy = updatedBy; UpdatedAt = DateTime.UtcNow; _domainEvents.Add(new RiskStatusChangedEvent(Id, RiskStatus.Closed, reason, updatedBy)); }
     public void ClearDomainEvents() => _domainEvents.Clear();
