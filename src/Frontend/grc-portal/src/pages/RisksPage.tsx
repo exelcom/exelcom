@@ -123,7 +123,7 @@ export function RisksPage() {
           onClose={() => setSelected(null)}
           onEdit={() => setEditing(true)}
           onDelete={() => { if (window.confirm(`Delete "${selected.title}"?`)) deleteRisk.mutate(selected.id as string); }}
-          extraActions={canEdit && !['Accepted', 'Closed'].includes(String(selected.status ?? '')) ? (
+          extraActions={canEdit && String(selected.status ?? '') !== 'Closed' ? (
             <>
               <button onClick={() => setTreating(true)}
                 style={{ padding: '9px 16px', borderRadius: 8, border: '1px solid #e6e7de', background: 'none', color: '#5c8a00', cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>
