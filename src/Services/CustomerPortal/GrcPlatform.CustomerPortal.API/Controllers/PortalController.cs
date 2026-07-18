@@ -24,15 +24,10 @@ public class PortalController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginRequest req, CancellationToken ct)
     {
-        try
-        {
-            var result = await handlers.LoginAsync(req, ct);
-            return Ok(result);
-        }
-        catch (UnauthorizedAccessException)
-        {
+        var result = await handlers.LoginAsync(req, ct);
+        if (result is null)
             return Unauthorized(new { message = "Invalid username or password." });
-        }
+        return Ok(result);
     }
 
     // ── Accounts (admin) ──────────────────────────────────────────────────────
