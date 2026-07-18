@@ -54,14 +54,14 @@ export function RisksPage() {
 
   const columns = [
     { key: 'title', label: 'Risk Title' },
-    { key: 'categoryName', label: 'Category' },
+    { key: 'category', label: 'Category' },
     { key: 'riskLevel', label: 'Level', render: (row: Record<string, unknown>) => {
       const score = Number(row.riskScore ?? row.inherentScore ?? 0);
       const level = score >= 15 ? 'Critical' : score >= 8 ? 'High' : score >= 4 ? 'Medium' : 'Low';
       const color = riskLevelColors[level] ?? '#64748b';
       return <span className="badge" style={{ background: `${color}20`, color }}>{level}</span>;
     }},
-    { key: 'statusName', label: 'Status' },
+    { key: 'status', label: 'Status' },
     { key: 'owner', label: 'Owner' },
     { key: 'reviewDueDate', label: 'Review Date', render: (row: Record<string, unknown>) => {
       const d = row.reviewDueDate as string;
