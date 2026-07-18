@@ -5,6 +5,7 @@ import { PageHeader } from '../components/PageHeader';
 import { NewRiskModal } from '../components/NewRiskModal';
 import { DetailModal } from '../components/DetailModal';
 import { EditRiskModal } from '../components/EditRiskModal';
+import { TreatmentModal } from '../components/TreatmentModal';
 import { useAuth } from '../auth/useAuth';
 import { useEffect, useState } from 'react';
 
@@ -17,6 +18,7 @@ export function RisksPage() {
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState<Record<string, unknown> | null>(null);
   const [editing, setEditing] = useState(false);
+  const [treating, setTreating] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -48,6 +50,27 @@ export function RisksPage() {
       setSelected(fresh);
       setEditing(false);
     },
+  });
+
+  const refreshSelected = async () => {
+    await queryClient.invalidateQueries({ queryKey: ['risks'] });
+    const fresh = await riskApi.getById(selected?.id as string);
+    setSelected(fresh);
+  };
+
+  const addTreatment = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: unknown }) => riskApi.addTreatment(id, data),
+    onSuccess: async () => { await refreshSelected(); setTreating(false); },
+  });
+
+  const acceptRisk = useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason: string }) => riskApi.accept(id, reason),
+    onSuccess: refreshSelected,
+  });
+
+  const closeRisk = useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason: string }) => riskApi.close(id, reason),
+    onSuccess: refreshSelected,
   });
 
   const risks = Array.isArray(data) ? data : (data as any)?.items ?? (data as any)?.data ?? [];
@@ -92,7 +115,7 @@ export function RisksPage() {
             onRowClick={async (row) => { const full = await riskApi.getById(row.id as string); setSelected(full); }} />
         </div>
       </div>
-      {selected && !editing && (
+      {selected && !editing && !treating && (
         <DetailModal canEdit={canEdit}
           title={String(selected.title)}
           subtitle={`Risk ID: ${String(selected.id).substring(0, 8)}...`}
@@ -100,6 +123,28 @@ export function RisksPage() {
           onClose={() => setSelected(null)}
           onEdit={() => setEditing(true)}
           onDelete={() => { if (window.confirm(`Delete "${selected.title}"?`)) deleteRisk.mutate(selected.id as string); }}
+          extraActions={canEdit && !['Accepted', 'Closed'].includes(String(selected.status ?? '')) ? (
+            <>
+              <button onClick={() => setTreating(true)}
+                style={{ padding: '9px 16px', borderRadius: 8, border: '1px solid #e6e7de', background: 'none', color: '#5c8a00', cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>
+                + Add Treatment
+              </button>
+              <button onClick={() => {
+                const reason = window.prompt('Reason for accepting this risk (tolerating it as-is)?');
+                if (reason) acceptRisk.mutate({ id: selected.id as string, reason });
+              }}
+                style={{ padding: '9px 16px', borderRadius: 8, border: '1px solid #e6e7de', background: 'none', color: '#6b7060', cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>
+                Accept
+              </button>
+              <button onClick={() => {
+                const reason = window.prompt('Reason for closing this risk (treatment complete)?');
+                if (reason) closeRisk.mutate({ id: selected.id as string, reason });
+              }}
+                style={{ padding: '9px 16px', borderRadius: 8, border: '1px solid #10b98140', background: '#10b98110', color: '#10b981', cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>
+                Close Risk
+              </button>
+            </>
+          ) : undefined}
           fields={[
             { label: 'Category', value: String(selected.categoryName ?? selected.category ?? '') },
             { label: 'Risk Level', value: level, color: riskLevelColors[level] },
@@ -121,6 +166,13 @@ export function RisksPage() {
             impact: ['Insignificant','Minor','Moderate','Major','Catastrophic'][formData.impact - 1],
             residualLikelihood: ['Rare','Unlikely','Possible','Likely','AlmostCertain'][(formData.residualLikelihood ?? 1) - 1],
             residualImpact: ['Insignificant','Minor','Moderate','Major','Catastrophic'][(formData.residualImpact ?? 1) - 1],
+          }})} />
+      )}
+      {selected && treating && (
+        <TreatmentModal riskTitle={String(selected.title)} defaultOwner={selected.owner as string}
+          saving={addTreatment.isPending} onClose={() => setTreating(false)}
+          onSave={(data) => addTreatment.mutate({ id: selected.id as string, data: {
+            description: data.description, type: data.type, owner: data.owner, dueDate: data.dueDate,
           }})} />
       )}
       {showModal && (

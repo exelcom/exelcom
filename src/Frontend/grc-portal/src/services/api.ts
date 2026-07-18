@@ -17,6 +17,9 @@ export const riskApi = {
   update: (id: string, data: unknown) => apiClient.put('/risk/api/risks/' + id, data).then(r => r.data),
   updateAssessment: (id: string, data: unknown) => apiClient.put('/risk/api/risks/' + id + '/assessment', data).then(r => r.data),
   delete: (id: string) => apiClient.delete('/risk/api/risks/' + id).then(r => r.data),
+  addTreatment: (id: string, data: unknown) => apiClient.post('/risk/api/risks/' + id + '/treatments', data).then(r => r.data),
+  accept: (id: string, reason: string) => apiClient.post('/risk/api/risks/' + id + '/accept', { reason }).then(r => r.data),
+  close: (id: string, reason: string) => apiClient.post('/risk/api/risks/' + id + '/close', { reason }).then(r => r.data),
 };
 
 export const complianceApi = {
