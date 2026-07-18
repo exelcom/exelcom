@@ -57,7 +57,7 @@ const S = {
   loginSub3: { fontSize:12, color:"#A9C4E0", marginTop:4, textAlign:"center", marginBottom:32 },
   loginLabel: { display:"block", fontSize:11, fontWeight:600, letterSpacing:"0.1em", color:"#A9C4E0", textTransform:"uppercase", marginBottom:6 },
   loginInput: { width:"100%", padding:"12px 14px", background:"rgba(255,255,255,0.08)", border:"1px solid rgba(255,255,255,0.15)", borderRadius:8, color:"#fff", fontSize:14, outline:"none", boxSizing:"border-box", marginBottom:16 },
-  loginBtn: { width:"100%", padding:"13px", background:"#2E86C1", border:"none", borderRadius:8, color:"#fff", fontSize:14, fontWeight:700, cursor:"pointer", marginTop:8 },
+  loginBtn: { width:"100%", padding:"13px", background:"#5c8a00", border:"none", borderRadius:8, color:"#fff", fontSize:14, fontWeight:700, cursor:"pointer", marginTop:8 },
   loginErr: { background:"rgba(192,57,43,0.2)", border:"1px solid rgba(192,57,43,0.4)", borderRadius:8, padding:"10px 14px", color:"#E74C3C", fontSize:13, marginBottom:16 },
   portalWrap: { minHeight:"100vh", background:"#F4F6F9", fontFamily:"'Segoe UI',system-ui,sans-serif" },
   header: { background:"#1A3A5C", padding:"0 32px", height:56, display:"flex", alignItems:"center", justifyContent:"space-between", boxShadow:"0 2px 8px rgba(0,0,0,0.2)" },
@@ -66,7 +66,7 @@ const S = {
   customerBadge: { background:"rgba(255,255,255,0.1)", borderRadius:6, padding:"4px 12px", color:"#A9C4E0", fontSize:12, fontWeight:600 },
   logoutBtn: { background:"transparent", border:"1px solid rgba(255,255,255,0.2)", borderRadius:6, color:"#A9C4E0", fontSize:12, padding:"4px 12px", cursor:"pointer" },
   nav: { background:"#fff", borderBottom:"1px solid #E8EBF0", padding:"0 32px", display:"flex", gap:4 },
-  navBtn: (a) => ({ padding:"14px 16px", fontSize:13, fontWeight:a?600:400, color:a?"#2E86C1":"#717D7E", background:"none", border:"none", borderBottom:a?"2px solid #2E86C1":"2px solid transparent", cursor:"pointer" }),
+  navBtn: (a) => ({ padding:"14px 16px", fontSize:13, fontWeight:a?600:400, color:a?"#5c8a00":"#717D7E", background:"none", border:"none", borderBottom:a?"2px solid #5c8a00":"2px solid transparent", cursor:"pointer" }),
   content: { padding:32, maxWidth:1100, margin:"0 auto" },
   pageTitle: { fontSize:22, fontWeight:700, color:"#1a1a1a", margin:"0 0 4px" },
   pageSub: { fontSize:13, color:"#717D7E", margin:"0 0 24px" },
@@ -98,15 +98,15 @@ const S = {
   textarea: { width:"100%", padding:"10px 12px", border:"1px solid #E8EBF0", borderRadius:8, fontSize:13, resize:"vertical", minHeight:80, boxSizing:"border-box", fontFamily:"inherit" },
   input: { width:"100%", padding:"10px 12px", border:"1px solid #E8EBF0", borderRadius:8, fontSize:13, boxSizing:"border-box", fontFamily:"inherit" },
   select: { width:"100%", padding:"10px 12px", border:"1px solid #E8EBF0", borderRadius:8, fontSize:13, boxSizing:"border-box", background:"#fff" },
-  btn: (c) => ({ padding:"10px 20px", background:c||"#2E86C1", border:"none", borderRadius:8, color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer", marginRight:8 }),
+  btn: (c) => ({ padding:"10px 20px", background:c||"#5c8a00", border:"none", borderRadius:8, color:"#fff", fontSize:13, fontWeight:600, cursor:"pointer", marginRight:8 }),
   btnGhost: { padding:"10px 20px", background:"transparent", border:"1px solid #E8EBF0", borderRadius:8, color:"#717D7E", fontSize:13, fontWeight:600, cursor:"pointer" },
   actionItem: { background:"#F8F9FA", borderRadius:8, padding:"12px 16px", marginBottom:8, fontSize:13 },
   severityNote: { background:"#FEF9E7", border:"1px solid #F9E79F", borderRadius:8, padding:"10px 14px", fontSize:12, color:"#7D6608", marginBottom:16 },
 };
 
 const sevColor = { Critical:"#922B21", High:"#C0392B", Medium:"#935116", Low:"#1E8449" };
-const statusColor = { New:"#1A5276", Investigating:"#935116", Contained:"#6C3483", Resolved:"#1E8449", Closed:"#616A6B" };
-const statusBg = { New:"#EBF5FB", Investigating:"#FEF9E7", Contained:"#F5EEF8", Resolved:"#EAFAF1", Closed:"#F2F3F4" };
+const statusColor = { New:"#3f6300", Investigating:"#935116", Contained:"#6C3483", Resolved:"#1E8449", Closed:"#616A6B" };
+const statusBg = { New:"#F3F8E4", Investigating:"#FEF9E7", Contained:"#F5EEF8", Resolved:"#EAFAF1", Closed:"#F2F3F4" };
 
 // ── Incident Detail Modal ─────────────────────────────────────────────────────
 function IncidentModal({ incident, token, onClose, onUpdated }) {
@@ -163,7 +163,7 @@ function IncidentModal({ incident, token, onClose, onUpdated }) {
         {/* Tabs */}
         <div style={{ borderBottom:"1px solid #E8EBF0", display:"flex", gap:0 }}>
           {["details","actions"].map(t => (
-            <button key={t} onClick={() => setTab(t)} style={{ padding:"12px 20px", fontSize:13, fontWeight:tab===t?600:400, color:tab===t?"#2E86C1":"#717D7E", background:"none", border:"none", borderBottom:tab===t?"2px solid #2E86C1":"2px solid transparent", cursor:"pointer", textTransform:"capitalize" }}>{t}</button>
+            <button key={t} onClick={() => setTab(t)} style={{ padding:"12px 20px", fontSize:13, fontWeight:tab===t?600:400, color:tab===t?"#5c8a00":"#717D7E", background:"none", border:"none", borderBottom:tab===t?"2px solid #5c8a00":"2px solid transparent", cursor:"pointer", textTransform:"capitalize" }}>{t}</button>
           ))}
         </div>
 
@@ -290,7 +290,7 @@ function IncidentsView({ token }) {
   return (
     <div>
       <div style={S.statsGrid}>
-        <div style={S.statCard("#2E86C1")}><div style={S.statLabel}>Total</div><div style={S.statVal("#2E86C1")}>{stats.total}</div></div>
+        <div style={S.statCard("#5c8a00")}><div style={S.statLabel}>Total</div><div style={S.statVal("#5c8a00")}>{stats.total}</div></div>
         <div style={S.statCard("#E67E22")}><div style={S.statLabel}>Open</div><div style={S.statVal("#E67E22")}>{stats.open}</div></div>
         <div style={S.statCard("#922B21")}><div style={S.statLabel}>Critical</div><div style={S.statVal("#922B21")}>{stats.critical}</div></div>
         <div style={S.statCard("#C0392B")}><div style={S.statLabel}>High</div><div style={S.statVal("#C0392B")}>{stats.high}</div></div>
@@ -307,7 +307,7 @@ function IncidentsView({ token }) {
               <tr key={i.id} style={S.trHover} onClick={() => setSelected(i)}
                 onMouseEnter={e => e.currentTarget.style.background="#F8F9FA"}
                 onMouseLeave={e => e.currentTarget.style.background=""}>
-                <td style={{...S.td, fontWeight:600, color:"#2E86C1"}}>{i.referenceNumber}</td>
+                <td style={{...S.td, fontWeight:600, color:"#5c8a00"}}>{i.referenceNumber}</td>
                 <td style={S.td}>{i.title}</td>
                 <td style={S.td}>{i.type}</td>
                 <td style={S.td}><span style={S.badge(sevColor[i.severity]+"22",sevColor[i.severity]||"#888")}>{i.severity}</span></td>
@@ -333,7 +333,7 @@ function AssetsView({ token }) {
   return (
     <div>
       <div style={S.statsGrid}>
-        <div style={S.statCard("#2E86C1")}><div style={S.statLabel}>Total Assets</div><div style={S.statVal("#2E86C1")}>{items.length}</div></div>
+        <div style={S.statCard("#5c8a00")}><div style={S.statLabel}>Total Assets</div><div style={S.statVal("#5c8a00")}>{items.length}</div></div>
         <div style={S.statCard("#1E8449")}><div style={S.statLabel}>Active</div><div style={S.statVal("#1E8449")}>{items.filter(i=>i.status==="Active").length}</div></div>
         <div style={S.statCard("#922B21")}><div style={S.statLabel}>Critical Risk</div><div style={S.statVal("#922B21")}>{items.filter(i=>i.riskLevel==="Critical").length}</div></div>
       </div>
@@ -373,10 +373,10 @@ function NcView({ token }) {
           <thead><tr><th style={S.th}>Reference</th><th style={S.th}>Title</th><th style={S.th}>Severity</th><th style={S.th}>Status</th><th style={S.th}>Source</th><th style={S.th}>Raised</th></tr></thead>
           <tbody>{items.map(i => (
             <tr key={i.id}>
-              <td style={{...S.td,fontWeight:600,color:"#2E86C1"}}>{i.referenceNumber}</td>
+              <td style={{...S.td,fontWeight:600,color:"#5c8a00"}}>{i.referenceNumber}</td>
               <td style={S.td}>{i.title}</td>
               <td style={S.td}><span style={S.badge((sevColor[i.severity]||"#888")+"22",sevColor[i.severity]||"#888")}>{i.severity}</span></td>
-              <td style={S.td}><span style={S.badge("#EBF5FB","#1A5276")}>{i.status}</span></td>
+              <td style={S.td}><span style={S.badge("#F3F8E4","#3f6300")}>{i.status}</span></td>
               <td style={S.td}>{i.source}</td>
               <td style={S.td}>{i.raisedAt ? new Date(i.raisedAt).toLocaleDateString("en-AU") : "—"}</td>
             </tr>
@@ -399,7 +399,7 @@ function SoaView({ token }) {
   return (
     <div>
       <div style={S.statsGrid}>
-        <div style={S.statCard("#2E86C1")}><div style={S.statLabel}>Total Controls</div><div style={S.statVal("#2E86C1")}>{items.length}</div></div>
+        <div style={S.statCard("#5c8a00")}><div style={S.statLabel}>Total Controls</div><div style={S.statVal("#5c8a00")}>{items.length}</div></div>
         <div style={S.statCard("#1E8449")}><div style={S.statLabel}>Implemented</div><div style={S.statVal("#1E8449")}>{implemented}</div></div>
         <div style={S.statCard("#935116")}><div style={S.statLabel}>In Progress</div><div style={S.statVal("#935116")}>{inProgress}</div></div>
         <div style={S.statCard("#717D7E")}><div style={S.statLabel}>Not Started</div><div style={S.statVal("#717D7E")}>{items.length-implemented-inProgress}</div></div>
@@ -411,7 +411,7 @@ function SoaView({ token }) {
             <thead><tr><th style={S.th}>Control</th><th style={S.th}>Name</th><th style={S.th}>Domain</th><th style={S.th}>Applicability</th><th style={S.th}>Status</th></tr></thead>
             <tbody>{items.map(i => (
               <tr key={i.id}>
-                <td style={{...S.td,fontWeight:700,color:"#2E86C1",width:70}}>{i.controlId}</td>
+                <td style={{...S.td,fontWeight:700,color:"#5c8a00",width:70}}>{i.controlId}</td>
                 <td style={S.td}>{i.controlName||i.name}</td>
                 <td style={S.td}>{i.domain}</td>
                 <td style={S.td}><span style={S.badge("#1E844922","#1E8449")}>{i.applicability}</span></td>
@@ -479,7 +479,7 @@ function SettingsView({ token, accountId }) {
         </div>
         {mfaStatus !== null && (
           <div style={{ marginTop:20,paddingTop:20,borderTop:"1px solid #E8EBF0" }}>
-            {!mfaStatus.enabled && step === "idle" && <button style={{ padding:"10px 24px",background:"#2E86C1",border:"none",borderRadius:8,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer" }} onClick={handleSetup} disabled={loading}>{loading ? "Setting up..." : "🔐 Enable 2FA"}</button>}
+            {!mfaStatus.enabled && step === "idle" && <button style={{ padding:"10px 24px",background:"#5c8a00",border:"none",borderRadius:8,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer" }} onClick={handleSetup} disabled={loading}>{loading ? "Setting up..." : "🔐 Enable 2FA"}</button>}
             {mfaStatus.enabled && step !== "setup" && <button style={{ padding:"10px 24px",background:"transparent",border:"1px solid #E74C3C",borderRadius:8,color:"#E74C3C",fontSize:13,fontWeight:700,cursor:"pointer" }} onClick={handleDisable} disabled={loading}>{loading ? "Disabling..." : "🚫 Disable 2FA"}</button>}
           </div>
         )}
@@ -490,11 +490,11 @@ function SettingsView({ token, accountId }) {
           <div style={{ fontSize:13,color:"#717D7E",marginBottom:24 }}>Follow these steps to enable 2FA on your account.</div>
           <div style={{ display:"flex",flexDirection:"column",gap:24 }}>
             <div style={{ display:"flex",gap:16,alignItems:"flex-start" }}>
-              <div style={{ width:28,height:28,borderRadius:"50%",background:"#2E86C1",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0 }}>1</div>
+              <div style={{ width:28,height:28,borderRadius:"50%",background:"#5c8a00",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0 }}>1</div>
               <div><div style={{ fontSize:13,fontWeight:700,color:"#1a1a1a",marginBottom:4 }}>Install an Authenticator App</div><div style={{ fontSize:12,color:"#717D7E",lineHeight:1.6 }}>Download <strong>Google Authenticator</strong> or <strong>Microsoft Authenticator</strong> on your phone.</div></div>
             </div>
             <div style={{ display:"flex",gap:16,alignItems:"flex-start" }}>
-              <div style={{ width:28,height:28,borderRadius:"50%",background:"#2E86C1",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0 }}>2</div>
+              <div style={{ width:28,height:28,borderRadius:"50%",background:"#5c8a00",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0 }}>2</div>
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:13,fontWeight:700,color:"#1a1a1a",marginBottom:8 }}>Scan the QR Code</div>
                 <div style={{ fontSize:12,color:"#717D7E",marginBottom:12 }}>Open your authenticator app and scan this QR code.</div>
@@ -507,7 +507,7 @@ function SettingsView({ token, accountId }) {
               </div>
             </div>
             <div style={{ display:"flex",gap:16,alignItems:"flex-start" }}>
-              <div style={{ width:28,height:28,borderRadius:"50%",background:"#2E86C1",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0 }}>3</div>
+              <div style={{ width:28,height:28,borderRadius:"50%",background:"#5c8a00",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,flexShrink:0 }}>3</div>
               <div>
                 <div style={{ fontSize:13,fontWeight:700,color:"#1a1a1a",marginBottom:8 }}>Enter Verification Code</div>
                 <div style={{ fontSize:12,color:"#717D7E",marginBottom:12 }}>Enter the 6-digit code shown in your authenticator app.</div>
@@ -521,9 +521,9 @@ function SettingsView({ token, accountId }) {
           <div style={{ marginTop:20,paddingTop:16,borderTop:"1px solid #E8EBF0" }}><button style={{ background:"transparent",border:"none",color:"#A9C4E0",fontSize:13,cursor:"pointer" }} onClick={()=>setStep("idle")}>Cancel</button></div>
         </div>
       )}
-      <div style={{ ...card,background:"#EBF5FB",border:"1px solid #AED6F1" }}>
-        <div style={{ fontSize:13,fontWeight:700,color:"#1A5276",marginBottom:8 }}>ℹ️ About Two-Factor Authentication</div>
-        <div style={{ fontSize:12,color:"#2E86C1",lineHeight:1.7 }}>2FA adds a second layer of security. Even if someone has your password, they cannot sign in without your authenticator app. Exelcom recommends enabling 2FA on all accounts (ISO/IEC 27001:2022 Annex A 8.5).</div>
+      <div style={{ ...card,background:"#F3F8E4",border:"1px solid #AED6F1" }}>
+        <div style={{ fontSize:13,fontWeight:700,color:"#3f6300",marginBottom:8 }}>ℹ️ About Two-Factor Authentication</div>
+        <div style={{ fontSize:12,color:"#5c8a00",lineHeight:1.7 }}>2FA adds a second layer of security. Even if someone has your password, they cannot sign in without your authenticator app. Exelcom recommends enabling 2FA on all accounts (ISO/IEC 27001:2022 Annex A 8.5).</div>
       </div>
     </div>
   );
@@ -584,7 +584,7 @@ function LoginPage({ onLogin }) {
               type="text" inputMode="numeric" maxLength={6} placeholder="000000"
               value={mfaCode} onChange={e => setMfaCode(e.target.value.replace(/\D/g, ""))}
               autoFocus autoComplete="one-time-code" required />
-            <button type="submit" style={{ ...S.loginBtn, background: mfaCode.length===6 ? "#1E8449" : "#2E86C1" }}
+            <button type="submit" style={{ ...S.loginBtn, background: mfaCode.length===6 ? "#1E8449" : "#5c8a00" }}
               disabled={loading || mfaCode.length !== 6}>
               {loading ? "Verifying..." : "✓ Verify"}
             </button>
@@ -615,7 +615,7 @@ function LoginPage({ onLogin }) {
           <button type="submit" style={S.loginBtn} disabled={loading}>{loading?"Signing in...":"Sign In →"}</button>
         </form>
         <div style={{textAlign:"center",marginTop:24,fontSize:12,color:"#4A6380"}}>
-          Need access? Contact <a href="mailto:grc@exelcom.au" style={{color:"#2E86C1"}}>grc@exelcom.au</a>
+          Need access? Contact <a href="mailto:grc@exelcom.au" style={{color:"#5c8a00"}}>grc@exelcom.au</a>
         </div>
       </div>
     </div>

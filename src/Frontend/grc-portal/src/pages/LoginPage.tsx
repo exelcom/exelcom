@@ -16,7 +16,7 @@ export function LoginPage() {
         position: 'absolute',
         width: 600, height: 600,
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(14,165,233,0.06) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(92,138,0,0.07) 0%, transparent 70%)',
         top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
         pointerEvents: 'none',

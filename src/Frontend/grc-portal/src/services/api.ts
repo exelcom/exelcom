@@ -28,7 +28,7 @@ export const complianceApi = {
 };
 
 export const policyApi = {
-  getAll: () => apiClient.get('/policy/api/policies').then(r => r.data),
+  getAll: () => apiClient.get('/policy/api/policies').then(r => Array.isArray(r.data) ? r.data : r.data?.items ?? r.data),
   getById: (id: string) => apiClient.get('/policy/api/policies/' + id).then(r => r.data),
   create: (data: unknown) => apiClient.post('/policy/api/policies', data).then(r => r.data),
   update: (id: string, data: unknown) => apiClient.put('/policy/api/policies/' + id, data).then(r => r.data),
@@ -36,7 +36,7 @@ export const policyApi = {
 };
 
 export const auditApi = {
-  getAll: () => apiClient.get('/audit/api/audits').then(r => r.data),
+  getAll: () => apiClient.get('/audit/api/audits').then(r => Array.isArray(r.data) ? r.data : r.data?.items ?? r.data),
   getById: (id: string) => apiClient.get('/audit/api/audits/' + id).then(r => r.data),
   create: (data: unknown) => apiClient.post('/audit/api/audits', data).then(r => r.data),
   update: (id: string, data: unknown) => apiClient.put('/audit/api/audits/' + id, data).then(r => r.data),
@@ -44,7 +44,7 @@ export const auditApi = {
 };
 
 export const soaApi = {
-  getAll: () => apiClient.get('/soa/api/soa').then(r => r.data),
+  getAll: () => apiClient.get('/soa/api/soa').then(r => Array.isArray(r.data) ? r.data : r.data?.items ?? r.data),
   getById: (id: string) => apiClient.get('/soa/api/soa/' + id).then(r => r.data),
   getStats: () => apiClient.get('/soa/api/soa/stats').then(r => r.data),
   updateApplicability: (id: string, data: unknown) => apiClient.put('/soa/api/soa/' + id + '/applicability', data).then(r => r.data),
@@ -53,7 +53,7 @@ export const soaApi = {
 
 export const ncApi = {
   getAll: (params?: { status?: string; severity?: string }) =>
-    apiClient.get('/nonconformity/api/nonconformities', { params }).then(r => r.data),
+    apiClient.get('/nonconformity/api/nonconformities', { params }).then(r => Array.isArray(r.data) ? r.data : r.data?.items ?? r.data),
   getById: (id: string) =>
     apiClient.get('/nonconformity/api/nonconformities/' + id).then(r => r.data),
   raise: (data: unknown) =>
@@ -76,7 +76,7 @@ export const ncApi = {
 
 export const assetApi = {
   getAll: (params?: { type?: string; status?: string; riskRating?: string; customerId?: string }) =>
-    apiClient.get('/asset/api/assets', { params }).then(r => r.data),
+    apiClient.get('/asset/api/assets', { params }).then(r => Array.isArray(r.data) ? r.data : r.data?.items ?? r.data),
   getById: (id: string) =>
     apiClient.get('/asset/api/assets/' + id).then(r => r.data),
   getStats: (customerId?: string) =>
@@ -93,13 +93,17 @@ export const assetApi = {
 
 export const incidentApi = {
   getAll: (params?: { type?: string; status?: string; severity?: string; customerId?: string }) =>
-    apiClient.get('/incident/api/incidents', { params }).then(r => r.data),
+    apiClient.get('/incident/api/incidents', { params }).then(r => Array.isArray(r.data) ? r.data : r.data?.items ?? r.data),
   getById: (id: string) =>
     apiClient.get('/incident/api/incidents/' + id).then(r => r.data),
   getStats: (customerId?: string) =>
     apiClient.get('/incident/api/incidents/stats', { params: customerId ? { customerId } : undefined }).then(r => r.data),
   getCustomers: () =>
     apiClient.get('/incident/api/incidents/customers').then(r => r.data),
+  updateKillChain: (id: string, data: unknown) =>
+    apiClient.patch('/incident/api/incidents/' + id + '/killchain', data).then(r => r.data),
+  getD365Customers: () =>
+    apiClient.get('/incident/api/incidents/d365/customers').then(r => r.data),
   report: (data: unknown) =>
     apiClient.post('/incident/api/incidents', data).then(r => r.data),
   update: (id: string, data: unknown) =>

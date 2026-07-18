@@ -54,8 +54,8 @@ function ScaleSelector({ value, labels, onChange }: { value: number; labels: str
       {[1,2,3,4,5].map(n => (
         <button key={n} type="button" title={labels[n]} onClick={() => onChange(n)} style={{
           width:44, height:44, borderRadius:8, border:'none', cursor:'pointer', fontWeight:700, fontSize:15,
-          background: value === n ? (n <= 2 ? '#10b981' : n === 3 ? '#f59e0b' : '#ef4444') : '#2a2a3a',
-          color: value === n ? '#fff' : '#888', transition:'all 0.15s',
+          background: value === n ? (n <= 2 ? '#10b981' : n === 3 ? '#f59e0b' : '#ef4444') : '#e6e7de',
+          color: value === n ? '#fff' : '#6b7060', transition:'all 0.15s',
           display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:1,
         }}>
           {n}
@@ -72,10 +72,10 @@ const INITIAL: RiskFormData = {
   residualLikelihood:1, residualImpact:1,
 };
 
-const inp: CSSProperties = { width:'100%', padding:'10px 14px', borderRadius:8, border:'1px solid #333', background:'#1a1a2e', color:'#e2e8f0', fontSize:14, outline:'none', boxSizing:'border-box', fontFamily:'inherit' };
-const lbl: CSSProperties = { fontSize:11, fontWeight:600, color:'#94a3b8', letterSpacing:'0.07em', textTransform:'uppercase', marginBottom:6, display:'block' };
+const inp: CSSProperties = { width:'100%', padding:'10px 14px', borderRadius:8, border:'1px solid #e6e7de', background:'#f4f5ee', color:'#14170d', fontSize:14, outline:'none', boxSizing:'border-box', fontFamily:'inherit' };
+const lbl: CSSProperties = { fontSize:11, fontWeight:600, color:'#6b7060', letterSpacing:'0.07em', textTransform:'uppercase', marginBottom:6, display:'block' };
 const row2 = { display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 };
-const card = { padding:16, background:'#1a1a2e', borderRadius:10, border:'1px solid #333' };
+const card = { padding:16, background:'#f4f5ee', borderRadius:10, border:'1px solid #e6e7de' };
 
 export function NewRiskModal({ onClose, onSave }: NewRiskModalProps) {
   const [form, setForm] = useState<RiskFormData>(INITIAL);
@@ -87,19 +87,19 @@ export function NewRiskModal({ onClose, onSave }: NewRiskModalProps) {
 
   return (
     <div style={{ position:'fixed', inset:0, zIndex:1000, background:'rgba(0,0,0,0.7)', backdropFilter:'blur(4px)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-      <div style={{ background:'#12121e', borderRadius:16, width:'100%', maxWidth:680, maxHeight:'90vh', overflow:'hidden', display:'flex', flexDirection:'column', border:'1px solid #2a2a3a', boxShadow:'0 24px 80px rgba(0,0,0,0.6)' }}>
+      <div style={{ background:'#ffffff', borderRadius:16, width:'100%', maxWidth:680, maxHeight:'90vh', overflow:'hidden', display:'flex', flexDirection:'column', border:'1px solid #e6e7de', boxShadow:'0 24px 80px rgba(20,23,13,0.14)' }}>
 
-        <div style={{ padding:'24px 28px 16px', borderBottom:'1px solid #2a2a3a', display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+        <div style={{ padding:'24px 28px 16px', borderBottom:'1px solid #e6e7de', display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
           <div>
-            <h2 style={{ fontSize:20, fontWeight:800, color:'#f1f5f9', marginBottom:4 }}>New Risk</h2>
-            <p style={{ fontSize:12, color:'#64748b' }}>ISO 27001:2022 — Clause 6.1.2 Risk Assessment</p>
+            <h2 style={{ fontSize:20, fontWeight:800, color:'#14170d', marginBottom:4 }}>New Risk</h2>
+            <p style={{ fontSize:12, color:'#6b7060' }}>ISO 27001:2022 — Clause 6.1.2 Risk Assessment</p>
           </div>
-          <button onClick={onClose} style={{ background:'none', border:'none', color:'#64748b', fontSize:22, cursor:'pointer', lineHeight:1 }}>✕</button>
+          <button onClick={onClose} style={{ background:'none', border:'none', color:'#6b7060', fontSize:22, cursor:'pointer', lineHeight:1 }}>✕</button>
         </div>
 
-        <div style={{ display:'flex', padding:'0 28px', borderBottom:'1px solid #2a2a3a' }}>
+        <div style={{ display:'flex', padding:'0 28px', borderBottom:'1px solid #e6e7de' }}>
           {[{n:1,label:'Identification'},{n:2,label:'Assessment'},{n:3,label:'Treatment'}].map(s => (
-            <button key={s.n} onClick={() => setStep(s.n)} type="button" style={{ padding:'12px 16px', background:'none', border:'none', cursor:'pointer', fontSize:13, fontWeight: step===s.n ? 700 : 500, color: step===s.n ? '#818cf8' : '#64748b', borderBottom: step===s.n ? '2px solid #818cf8' : '2px solid transparent', marginBottom:-1 }}>
+            <button key={s.n} onClick={() => setStep(s.n)} type="button" style={{ padding:'12px 16px', background:'none', border:'none', cursor:'pointer', fontSize:13, fontWeight: step===s.n ? 700 : 500, color: step===s.n ? '#5c8a00' : '#6b7060', borderBottom: step===s.n ? '2px solid #5c8a00' : '2px solid transparent', marginBottom:-1 }}>
               {s.n}. {s.label}
             </button>
           ))}
@@ -117,7 +117,7 @@ export function NewRiskModal({ onClose, onSave }: NewRiskModalProps) {
                 <label style={lbl}>Category *</label>
                 <select style={inp} value={form.category} onChange={e => set('category', Number(e.target.value))}>
                   <option value={0}>Select category...</option>
-                  {CATEGORIES.map(c => <option key={c.value} value={c.value} style={{ background:'#1a1a2e' }}>{c.label}</option>)}
+                  {CATEGORIES.map(c => <option key={c.value} value={c.value} style={{ background:'#f4f5ee' }}>{c.label}</option>)}
                 </select>
               </div>
               <div>
@@ -143,37 +143,37 @@ export function NewRiskModal({ onClose, onSave }: NewRiskModalProps) {
 
           {step === 2 && <>
             <div style={card}>
-              <div style={{ fontSize:11, color:'#64748b', marginBottom:14, letterSpacing:'0.07em', textTransform:'uppercase', fontWeight:600 }}>Inherent Risk Score</div>
+              <div style={{ fontSize:11, color:'#6b7060', marginBottom:14, letterSpacing:'0.07em', textTransform:'uppercase', fontWeight:600 }}>Inherent Risk Score</div>
               <div style={{ marginBottom:16 }}>
                 <label style={lbl}>Likelihood</label>
                 <ScaleSelector value={form.likelihood} labels={LIKELIHOOD_LABELS} onChange={v => set('likelihood', v)} />
-                <div style={{ fontSize:12, color:'#64748b', marginTop:6 }}>{LIKELIHOOD_LABELS[form.likelihood]}</div>
+                <div style={{ fontSize:12, color:'#6b7060', marginTop:6 }}>{LIKELIHOOD_LABELS[form.likelihood]}</div>
               </div>
               <div>
                 <label style={lbl}>Impact</label>
                 <ScaleSelector value={form.impact} labels={IMPACT_LABELS} onChange={v => set('impact', v)} />
-                <div style={{ fontSize:12, color:'#64748b', marginTop:6 }}>{IMPACT_LABELS[form.impact]}</div>
+                <div style={{ fontSize:12, color:'#6b7060', marginTop:6 }}>{IMPACT_LABELS[form.impact]}</div>
               </div>
               <div style={{ marginTop:16, display:'flex', alignItems:'center', gap:12 }}>
-                <span style={{ fontSize:13, color:'#64748b' }}>Risk Score = {form.likelihood} × {form.impact} =</span>
+                <span style={{ fontSize:13, color:'#6b7060' }}>Risk Score = {form.likelihood} × {form.impact} =</span>
                 <ScoreChip score={riskScore} />
               </div>
             </div>
 
             <div style={card}>
-              <div style={{ fontSize:11, color:'#64748b', marginBottom:14, letterSpacing:'0.07em', textTransform:'uppercase', fontWeight:600 }}>Residual Risk (after treatment)</div>
+              <div style={{ fontSize:11, color:'#6b7060', marginBottom:14, letterSpacing:'0.07em', textTransform:'uppercase', fontWeight:600 }}>Residual Risk (after treatment)</div>
               <div style={{ marginBottom:16 }}>
                 <label style={lbl}>Residual Likelihood</label>
                 <ScaleSelector value={form.residualLikelihood} labels={LIKELIHOOD_LABELS} onChange={v => set('residualLikelihood', v)} />
-                <div style={{ fontSize:12, color:'#64748b', marginTop:6 }}>{LIKELIHOOD_LABELS[form.residualLikelihood]}</div>
+                <div style={{ fontSize:12, color:'#6b7060', marginTop:6 }}>{LIKELIHOOD_LABELS[form.residualLikelihood]}</div>
               </div>
               <div>
                 <label style={lbl}>Residual Impact</label>
                 <ScaleSelector value={form.residualImpact} labels={IMPACT_LABELS} onChange={v => set('residualImpact', v)} />
-                <div style={{ fontSize:12, color:'#64748b', marginTop:6 }}>{IMPACT_LABELS[form.residualImpact]}</div>
+                <div style={{ fontSize:12, color:'#6b7060', marginTop:6 }}>{IMPACT_LABELS[form.residualImpact]}</div>
               </div>
               <div style={{ marginTop:16, display:'flex', alignItems:'center', gap:12 }}>
-                <span style={{ fontSize:13, color:'#64748b' }}>Residual Score =</span>
+                <span style={{ fontSize:13, color:'#6b7060' }}>Residual Score =</span>
                 <ScoreChip score={residualScore} />
                 {residualScore < riskScore && <span style={{ fontSize:12, color:'#10b981' }}>↓ {riskScore - residualScore} reduction</span>}
               </div>
@@ -192,7 +192,7 @@ export function NewRiskModal({ onClose, onSave }: NewRiskModalProps) {
               <label style={lbl}>Treatment Option *</label>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
                 {TREATMENT_OPTIONS.map(opt => (
-                  <button key={opt.value} type="button" onClick={() => set('treatmentOption', opt.value)} style={{ padding:'14px 16px', borderRadius:10, cursor:'pointer', textAlign:'left', border:`1px solid ${form.treatmentOption===opt.value ? '#818cf8' : '#2a2a3a'}`, background: form.treatmentOption===opt.value ? '#818cf820' : '#1a1a2e', color: form.treatmentOption===opt.value ? '#818cf8' : '#94a3b8', fontWeight: form.treatmentOption===opt.value ? 700 : 400, fontSize:13 }}>
+                  <button key={opt.value} type="button" onClick={() => set('treatmentOption', opt.value)} style={{ padding:'14px 16px', borderRadius:10, cursor:'pointer', textAlign:'left', border:`1px solid ${form.treatmentOption===opt.value ? '#5c8a00' : '#e6e7de'}`, background: form.treatmentOption===opt.value ? '#5c8a0020' : '#f4f5ee', color: form.treatmentOption===opt.value ? '#5c8a00' : '#6b7060', fontWeight: form.treatmentOption===opt.value ? 700 : 400, fontSize:13 }}>
                     {opt.label}
                   </button>
                 ))}
@@ -206,23 +206,23 @@ export function NewRiskModal({ onClose, onSave }: NewRiskModalProps) {
               <label style={lbl}>Annex A Control Mapping</label>
               <select style={inp} value={form.annexAControl} onChange={e => set('annexAControl', e.target.value)}>
                 <option value="">Select applicable control...</option>
-                {ANNEX_A_CONTROLS.map(c => <option key={c} style={{ background:'#1a1a2e' }}>{c}</option>)}
+                {ANNEX_A_CONTROLS.map(c => <option key={c} style={{ background:'#f4f5ee' }}>{c}</option>)}
               </select>
             </div>
             <div style={{ ...card, display:'flex', gap:24, alignItems:'center' }}>
-              <div><div style={{ fontSize:11, color:'#64748b', marginBottom:6 }}>Inherent Risk</div><ScoreChip score={riskScore} /></div>
-              <div style={{ fontSize:20, color:'#334155' }}>→</div>
-              <div><div style={{ fontSize:11, color:'#64748b', marginBottom:6 }}>Residual Risk</div><ScoreChip score={residualScore} /></div>
+              <div><div style={{ fontSize:11, color:'#6b7060', marginBottom:6 }}>Inherent Risk</div><ScoreChip score={riskScore} /></div>
+              <div style={{ fontSize:20, color:'#6b7060' }}>→</div>
+              <div><div style={{ fontSize:11, color:'#6b7060', marginBottom:6 }}>Residual Risk</div><ScoreChip score={residualScore} /></div>
             </div>
           </>}
         </div>
 
-        <div style={{ padding:'16px 28px', borderTop:'1px solid #2a2a3a', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <div style={{ padding:'16px 28px', borderTop:'1px solid #e6e7de', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
           <div style={{ display:'flex', gap:6 }}>
-            {[1,2,3].map(n => <div key={n} style={{ width:8, height:8, borderRadius:'50%', background: step===n ? '#818cf8' : '#2a2a3a' }} />)}
+            {[1,2,3].map(n => <div key={n} style={{ width:8, height:8, borderRadius:'50%', background: step===n ? '#5c8a00' : '#e6e7de' }} />)}
           </div>
           <div style={{ display:'flex', gap:10 }}>
-            {step > 1 && <button onClick={() => setStep(s => s-1)} style={{ padding:'10px 20px', borderRadius:8, border:'1px solid #2a2a3a', background:'none', color:'#94a3b8', cursor:'pointer', fontSize:14 }}>Back</button>}
+            {step > 1 && <button onClick={() => setStep(s => s-1)} style={{ padding:'10px 20px', borderRadius:8, border:'1px solid #e6e7de', background:'none', color:'#6b7060', cursor:'pointer', fontSize:14 }}>Back</button>}
             {step < 3
               ? <button onClick={() => setStep(s => s+1)} className="btn-primary" style={{ padding:'10px 24px', opacity: step===1 && !step1Valid ? 0.4 : 1 }} disabled={step===1 && !step1Valid}>Next →</button>
               : <button onClick={() => onSave(form)} className="btn-primary" style={{ padding:'10px 24px', opacity: !form.treatmentOption ? 0.4 : 1 }} disabled={!form.treatmentOption}>Save Risk</button>

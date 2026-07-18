@@ -4,9 +4,36 @@ import { incidentApi } from "../../services/api";
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const INCIDENT_TYPES = ["Security","IT","Physical","PrivacyBreach"];
+const KILL_CHAIN_STAGES = [
+  { value: "Reconnaissance", label: "1. Reconnaissance", color: "#6366f1" },
+  { value: "Weaponization", label: "2. Weaponization", color: "#8b5cf6" },
+  { value: "Delivery", label: "3. Delivery", color: "#f59e0b" },
+  { value: "Exploitation", label: "4. Exploitation", color: "#ef4444" },
+  { value: "Installation", label: "5. Installation", color: "#dc2626" },
+  { value: "CommandAndControl", label: "6. Command & Control", color: "#b91c1c" },
+  { value: "ActionsOnObjectives", label: "7. Actions on Objectives", color: "#7f1d1d" },
+];
+
+const MITRE_TACTICS = [
+  { value: "Reconnaissance", label: "TA0043 - Reconnaissance" },
+  { value: "ResourceDevelopment", label: "TA0042 - Resource Development" },
+  { value: "InitialAccess", label: "TA0001 - Initial Access" },
+  { value: "Execution", label: "TA0002 - Execution" },
+  { value: "Persistence", label: "TA0003 - Persistence" },
+  { value: "PrivilegeEscalation", label: "TA0004 - Privilege Escalation" },
+  { value: "DefenseEvasion", label: "TA0005 - Defense Evasion" },
+  { value: "CredentialAccess", label: "TA0006 - Credential Access" },
+  { value: "Discovery", label: "TA0007 - Discovery" },
+  { value: "LateralMovement", label: "TA0008 - Lateral Movement" },
+  { value: "Collection", label: "TA0009 - Collection" },
+  { value: "CommandAndControl", label: "TA0011 - Command & Control" },
+  { value: "Exfiltration", label: "TA0010 - Exfiltration" },
+  { value: "Impact", label: "TA0040 - Impact" },
+];
+
 const TYPE_META = {
   Security:     { label: "Security",      icon: "🔒", color: "#7B241C", bg: "#FADBD8" },
-  IT:           { label: "IT",            icon: "🖥️", color: "#1A5276", bg: "#D6EAF8" },
+  IT:           { label: "IT",            icon: "🖥️", color: "#3f6300", bg: "#E9F3C9" },
   Physical:     { label: "Physical",      icon: "🏢", color: "#784212", bg: "#FAD7A0" },
   PrivacyBreach:{ label: "Privacy Breach",icon: "🔏", color: "#6C3483", bg: "#E8DAEF" },
 };
@@ -19,7 +46,7 @@ const SEV_META = {
 };
 
 const STATUS_META = {
-  New:          { label: "New",          color: "#1A5276", bg: "#D6EAF8" },
+  New:          { label: "New",          color: "#3f6300", bg: "#E9F3C9" },
   Investigating:{ label: "Investigating",color: "#935116", bg: "#FDEBD0" },
   Contained:    { label: "Contained",    color: "#6C3483", bg: "#E8DAEF" },
   Resolved:     { label: "Resolved",     color: "#1E8449", bg: "#D5F5E3" },
@@ -29,7 +56,7 @@ const STATUS_META = {
 const ACTION_TYPES = ["Containment","Remediation","Communication","Evidence","Other"];
 const ACTION_STATUS_META = {
   Pending:    { label: "Pending",     color: "#935116", bg: "#FDEBD0" },
-  InProgress: { label: "In Progress", color: "#1A5276", bg: "#D6EAF8" },
+  InProgress: { label: "In Progress", color: "#3f6300", bg: "#E9F3C9" },
   Completed:  { label: "Completed",   color: "#1E8449", bg: "#D5F5E3" },
 };
 
@@ -71,9 +98,9 @@ function CustomerSidebar({ customers, selected, onSelect }) {
       <div style={{padding:"12px 14px",borderBottom:"1px solid #EAECEE"}}>
         <div style={{fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.07em",color:"#717D7E",marginBottom:8}}>Customers</div>
         <div style={{display:"flex",gap:8}}>
-          <div style={{flex:1,background:"#EBF5FB",borderRadius:6,padding:"6px 8px"}}>
-            <div style={{fontSize:10,color:"#2E86C1",fontWeight:600}}>TOTAL</div>
-            <div style={{fontSize:18,fontWeight:700,color:"#2E86C1"}}>{total}</div>
+          <div style={{flex:1,background:"#F3F8E4",borderRadius:6,padding:"6px 8px"}}>
+            <div style={{fontSize:10,color:"#5c8a00",fontWeight:600}}>TOTAL</div>
+            <div style={{fontSize:18,fontWeight:700,color:"#5c8a00"}}>{total}</div>
           </div>
           <div style={{flex:1,background:"#FDEBD0",borderRadius:6,padding:"6px 8px"}}>
             <div style={{fontSize:10,color:"#935116",fontWeight:600}}>OPEN</div>
@@ -84,9 +111,9 @@ function CustomerSidebar({ customers, selected, onSelect }) {
       <div style={{flex:1,overflowY:"auto",padding:"6px 0"}}>
         <button onClick={()=>onSelect(null)} style={{display:"flex",alignItems:"center",
           justifyContent:"space-between",width:"100%",padding:"8px 14px",border:"none",
-          cursor:"pointer",fontSize:12,background:selected===null?"#EBF5FB":"transparent",
-          color:selected===null?"#2E86C1":"#1a1a1a",
-          borderLeft:selected===null?"3px solid #2E86C1":"3px solid transparent",
+          cursor:"pointer",fontSize:12,background:selected===null?"#F3F8E4":"transparent",
+          color:selected===null?"#5c8a00":"#1a1a1a",
+          borderLeft:selected===null?"3px solid #5c8a00":"3px solid transparent",
           fontWeight:selected===null?600:400,textAlign:"left"}}>
           <span>🌐 All</span><span style={{fontSize:11,color:"#717D7E"}}>{total}</span>
         </button>
@@ -94,9 +121,9 @@ function CustomerSidebar({ customers, selected, onSelect }) {
           <button key={c.customerId} onClick={()=>onSelect(c.customerId)} style={{
             display:"flex",alignItems:"center",justifyContent:"space-between",
             width:"100%",padding:"8px 14px",border:"none",cursor:"pointer",fontSize:12,
-            background:selected===c.customerId?"#EBF5FB":"transparent",
-            color:selected===c.customerId?"#2E86C1":"#1a1a1a",
-            borderLeft:selected===c.customerId?"3px solid #2E86C1":"3px solid transparent",
+            background:selected===c.customerId?"#F3F8E4":"transparent",
+            color:selected===c.customerId?"#5c8a00":"#1a1a1a",
+            borderLeft:selected===c.customerId?"3px solid #5c8a00":"3px solid transparent",
             fontWeight:selected===c.customerId?600:400,textAlign:"left"}}>
             <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:1}}>
               <span>{c.customerId==="__exelcom__"?"🏢":"👤"} {c.customerName}</span>
@@ -118,8 +145,8 @@ function CustomerSidebar({ customers, selected, onSelect }) {
 function Dashboard({ stats }) {
   if (!stats) return null;
   const cards = [
-    {label:"Total",      value:stats.total,        color:"#1A5276",bg:"#D6EAF8"},
-    {label:"New",        value:stats.new,           color:"#1A5276",bg:"#D6EAF8"},
+    {label:"Total",      value:stats.total,        color:"#3f6300",bg:"#E9F3C9"},
+    {label:"New",        value:stats.new,           color:"#3f6300",bg:"#E9F3C9"},
     {label:"Investigating",value:stats.investigating,color:"#935116",bg:"#FDEBD0"},
     {label:"Critical",   value:stats.critical,      color:"#922B21",bg:"#FDEDEC"},
     {label:"High",       value:stats.high,          color:"#C0392B",bg:"#FDEDEC"},
@@ -170,8 +197,8 @@ function IncidentRow({ incident, selected, onClick, onContextMenu }) {
   return (
     <div onClick={onClick} onContextMenu={e=>{e.preventDefault();onContextMenu(e,incident);}}
       style={{padding:"10px 14px",borderBottom:"1px solid #EAECEE",cursor:"pointer",
-        background:selected?"#EBF5FB":"transparent",
-        borderLeft:selected?"3px solid #2E86C1":"3px solid transparent",transition:"background 0.1s"}}>
+        background:selected?"#F3F8E4":"transparent",
+        borderLeft:selected?"3px solid #5c8a00":"3px solid transparent",transition:"background 0.1s"}}>
       <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3,flexWrap:"wrap"}}>
         <span style={{fontSize:11,fontWeight:700,color:"#717D7E"}}>{incident.referenceNumber}</span>
         <SevBadge s={incident.severity}/>
@@ -181,7 +208,7 @@ function IncidentRow({ incident, selected, onClick, onContextMenu }) {
         overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{incident.title}</div>
       <div style={{display:"flex",gap:10,fontSize:11,color:"#717D7E"}}>
         <span>{TYPE_META[incident.type]?.icon} {TYPE_META[incident.type]?.label??incident.type}</span>
-        {incident.customerName&&<span style={{color:"#2E86C1"}}>· {incident.customerName}</span>}
+        {incident.customerName&&<span style={{color:"#5c8a00"}}>· {incident.customerName}</span>}
         <span>· {fmtDate(incident.occurredAt)}</span>
       </div>
     </div>
@@ -226,8 +253,21 @@ function IncidentDetail({ incident, onEdit, onDelete, onTransition, onRefresh })
           </div>
           <h2 style={{fontSize:17,fontWeight:700,margin:0,color:"#1a1a1a"}}>{incident.title}</h2>
           {incident.customerName&&(
-            <div style={{fontSize:12,color:"#2E86C1",marginTop:3,fontWeight:600}}>
+            <div style={{fontSize:12,color:"#5c8a00",marginTop:3,fontWeight:600}}>
               👤 {incident.customerName}
+            </div>
+          )}
+          {incident.killChainStage&&(
+            <div style={{display:"flex",gap:6,marginTop:8,flexWrap:"wrap"}}>
+              <span style={{fontSize:11,fontWeight:700,padding:"3px 8px",borderRadius:4,background:"#1e1b4b",color:"#fff"}}>
+                ⛓ {KILL_CHAIN_STAGES.find(s=>s.value===incident.killChainStage)?.label??incident.killChainStage}
+              </span>
+              {incident.mitreTactic&&<span style={{fontSize:11,fontWeight:700,padding:"3px 8px",borderRadius:4,background:"#991b1b",color:"#fff"}}>
+                🎯 {MITRE_TACTICS.find(t=>t.value===incident.mitreTactic)?.label??incident.mitreTactic}
+              </span>}
+              {incident.mitreTechnique&&<span style={{fontSize:11,fontWeight:700,padding:"3px 8px",borderRadius:4,background:"#374151",color:"#fff"}}>
+                🔍 {incident.mitreTechnique}
+              </span>}
             </div>
           )}
         </div>
@@ -239,7 +279,7 @@ function IncidentDetail({ incident, onEdit, onDelete, onTransition, onRefresh })
             </button>
           )}
           <button onClick={()=>onEdit(incident)} style={{padding:"6px 12px",borderRadius:6,
-            border:"1px solid #D5D8DC",background:"#fff",cursor:"pointer",fontSize:12,fontWeight:600,color:"#2E86C1"}}>✏️ Edit</button>
+            border:"1px solid #D5D8DC",background:"#fff",cursor:"pointer",fontSize:12,fontWeight:600,color:"#5c8a00"}}>✏️ Edit</button>
           <button onClick={()=>onDelete(incident)} style={{padding:"6px 12px",borderRadius:6,
             border:"1px solid #F1948A",background:"#fff",cursor:"pointer",fontSize:12,fontWeight:600,color:"#C0392B"}}>🗑️ Delete</button>
         </div>
@@ -277,7 +317,7 @@ function IncidentDetail({ incident, onEdit, onDelete, onTransition, onRefresh })
       <SectionHeader title="Actions"/>
       <div style={{display:"flex",gap:8,marginBottom:10,flexWrap:"wrap"}}>
         <button onClick={()=>setModal({type:"addAction"})} style={{padding:"6px 12px",borderRadius:6,
-          border:"1px solid #2E86C1",background:"#EBF5FB",cursor:"pointer",fontSize:12,fontWeight:600,color:"#2E86C1"}}>
+          border:"1px solid #5c8a00",background:"#F3F8E4",cursor:"pointer",fontSize:12,fontWeight:600,color:"#5c8a00"}}>
           + Add action
         </button>
       </div>
@@ -398,7 +438,7 @@ function ActionModal({ incidentId, onClose, onSaved }) {
           <button onClick={onClose} disabled={saving} style={{padding:"9px 18px",borderRadius:6,
             border:"1px solid #D5D8DC",background:"#fff",cursor:"pointer",fontSize:13,fontWeight:600,color:"#717D7E"}}>Cancel</button>
           <button onClick={submit} disabled={saving} style={{padding:"9px 22px",borderRadius:6,
-            border:"none",background:saving?"#aaa":"#2E86C1",color:"#fff",
+            border:"none",background:saving?"#aaa":"#5c8a00",color:"#fff",
             cursor:saving?"not-allowed":"pointer",fontSize:13,fontWeight:700}}>
             {saving?"Saving...":"Add action"}
           </button>
@@ -496,6 +536,23 @@ function PostIncidentReviewModal({ incidentId, onClose, onSaved }) {
 
 // ── Report / Edit incident modal ──────────────────────────────────────────────
 
+function D365CustomerSelect({ value, onChange }) {
+  const [customers, setCustomers] = useState([]);
+  useEffect(() => {
+    incidentApi.getD365Customers().then(setCustomers).catch(()=>{});
+  }, []);
+  return (
+    <select style={{width:"100%",padding:"8px 10px",border:"1px solid #D5D8DC",borderRadius:6,fontSize:13,background:"#fff"}}
+      value={value} onChange={e=>{
+        const c = customers.find(x=>x.id===e.target.value);
+        onChange(e.target.value, c?.name??"");
+      }}>
+      <option value="">-- Select customer --</option>
+      {customers.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+    </select>
+  );
+}
+
 function IncidentFormModal({ existing, defaultCustomerId, defaultCustomerName, onClose, onSaved }) {
   const isEdit = !!existing;
   const now = new Date().toISOString().slice(0,16);
@@ -514,6 +571,9 @@ function IncidentFormModal({ existing, defaultCustomerId, defaultCustomerName, o
     customerName: existing?.customerName??defaultCustomerName??"",
     linkedControlId: existing?.linkedControlId??"",
     affectedAssetIds: existing?.affectedAssetIds??"",
+      killChainStage: existing?.killChainStage??"",
+      mitreTactic: existing?.mitreTactic??"",
+      mitreTechnique: existing?.mitreTechnique??"",
     contactEmail: existing?.contactEmail??"",
   });
   const [saving,setSaving] = useState(false);
@@ -521,7 +581,7 @@ function IncidentFormModal({ existing, defaultCustomerId, defaultCustomerName, o
   const set = (k,v) => setForm(f=>({...f,[k]:v}));
 
   const submit = async () => {
-    if (!form.title||!form.description||!form.occurredAt||(!isEdit&&!form.reportedByUserId)) return;
+    if (!form.title||!form.description||!form.occurredAt||(!isEdit&&!form.reportedByUserId)) { alert("Validation failed: title=" + form.title + " desc=" + form.description + " occurred=" + form.occurredAt); return; }
     setSaving(true); setError(null);
     try {
       const payload = {
@@ -529,17 +589,34 @@ function IncidentFormModal({ existing, defaultCustomerId, defaultCustomerName, o
         customerId: form.customerId||null,
         customerName: form.customerName||null,
         contactEmail: form.contactEmail||null,
+        killChain: form.killChainStage||null,
+        tactic: form.mitreTactic||null,
+        mitreTechnique: form.mitreTechnique||null,
         occurredAt: new Date(form.occurredAt).toISOString(),
         detectedAt: form.detectedAt?new Date(form.detectedAt).toISOString():null,
         impactDescription: form.impactDescription||null,
         linkedControlId: form.linkedControlId||null,
         affectedAssetIds: form.affectedAssetIds||null,
       };
+      
       const result = isEdit
         ? await incidentApi.update(existing.id, payload)
         : await incidentApi.report(payload);
-      onSaved(result); onClose();
-    } catch { setError("Failed to save incident."); setSaving(false); }
+      
+      // Save kill chain separately via dedicated endpoint
+      if (isEdit && (form.killChainStage || form.mitreTactic || form.mitreTechnique)) {
+        await incidentApi.updateKillChain(existing.id, {
+          killChainStage: form.killChainStage||null,
+          mitreTactic: form.mitreTactic||null,
+          mitreTechnique: form.mitreTechnique||null
+        });
+        // Re-fetch to get updated kill chain data
+        const updated = await incidentApi.getById(existing.id);
+        onSaved(updated); onClose();
+      } else {
+        onSaved(result); onClose();
+      }
+    } catch (err) { const msg = err?.response?.data?.errors ? JSON.stringify(err.response.data.errors) : (err?.message || "Unknown error"); setError("Failed: " + msg); setSaving(false); }
   };
 
   return (
@@ -560,12 +637,8 @@ function IncidentFormModal({ existing, defaultCustomerId, defaultCustomerName, o
           <div style={{fontSize:11,fontWeight:700,color:"#717D7E",marginBottom:10,
             textTransform:"uppercase",letterSpacing:"0.05em"}}>Customer (leave blank for Exelcom internal)</div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
-            <div><label style={lbl}>Customer name</label>
-              <input style={inp} placeholder="e.g. Acme Corp" value={form.customerName}
-                onChange={e=>{set("customerName",e.target.value);if(!form.customerId)set("customerId",e.target.value);}}/></div>
-            <div><label style={lbl}>Customer ID</label>
-              <input style={inp} placeholder="e.g. ACME-001" value={form.customerId}
-                onChange={e=>set("customerId",e.target.value)}/></div>
+            <div style={{gridColumn:"1/-1"}}><label style={lbl}>Customer (from CRM)</label>
+              <D365CustomerSelect value={form.customerId} onChange={(id,name)=>{set("customerId",id);set("customerName",name);}}/></div>
           </div>
         </div>
 
@@ -621,12 +694,26 @@ function IncidentFormModal({ existing, defaultCustomerId, defaultCustomerName, o
             <input style={inp} placeholder="asset-id-1, asset-id-2" value={form.affectedAssetIds}
               onChange={e=>set("affectedAssetIds",e.target.value)}/></div>
         </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,marginBottom:14}}>
+          <div style={{gridColumn:"1/-1"}}><label style={lbl}>⛓ Kill Chain Stage</label>
+            <select style={{...inp,background:"#fff"}} value={form.killChainStage??""} onChange={e=>set("killChainStage",e.target.value)}>
+              <option value="">-- Select stage --</option>
+              {KILL_CHAIN_STAGES.map(s=><option key={s.value} value={s.value}>{s.label}</option>)}
+            </select></div>
+          <div><label style={lbl}>MITRE ATT&amp;CK Tactic</label>
+            <select style={{...inp,background:"#fff"}} value={form.mitreTactic??""} onChange={e=>set("mitreTactic",e.target.value)}>
+              <option value="">-- Select tactic --</option>
+              {MITRE_TACTICS.map(t=><option key={t.value} value={t.value}>{t.label}</option>)}
+            </select></div>
+          <div><label style={lbl}>MITRE Technique (e.g. T1566)</label>
+            <input style={inp} placeholder="e.g. T1566.001" value={form.mitreTechnique??""} onChange={e=>set("mitreTechnique",e.target.value)}/></div>
+        </div>
 
         <div style={{display:"flex",gap:10,justifyContent:"flex-end"}}>
           <button onClick={onClose} disabled={saving} style={{padding:"9px 18px",borderRadius:6,
             border:"1px solid #D5D8DC",background:"#fff",cursor:"pointer",fontSize:13,fontWeight:600,color:"#717D7E"}}>Cancel</button>
           <button onClick={submit} disabled={saving} style={{padding:"9px 22px",borderRadius:6,
-            border:"none",background:saving?"#aaa":"#2E86C1",color:"#fff",
+            border:"none",background:saving?"#aaa":"#5c8a00",color:"#fff",
             cursor:saving?"not-allowed":"pointer",fontSize:13,fontWeight:700}}>
             {saving?"Saving...":isEdit?"Save changes":"Report incident"}
           </button>

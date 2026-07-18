@@ -1,4 +1,4 @@
-﻿import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { riskApi, apiClient } from '../services/api';
 import { DataTable } from '../components/DataTable';
 import { PageHeader } from '../components/PageHeader';
@@ -126,15 +126,16 @@ export function RisksPage() {
       {showModal && (
         <NewRiskModal onClose={() => setShowModal(false)} onSave={(formData) => {
           createRisk.mutate({
-            title: formData.title, category: formData.category, description: formData.description,
-            likelihood: formData.likelihood, impact: formData.impact,
-            riskScore: formData.likelihood * formData.impact, owner: formData.owner,
-            treatmentOption: formData.treatmentOption, treatmentPlan: formData.treatmentPlan,
-            annexAControl: formData.annexAControl, residualLikelihood: formData.residualLikelihood,
-            residualImpact: formData.residualImpact,
-            residualScore: (formData.residualLikelihood ?? 1) * (formData.residualImpact ?? 1),
-            reviewDueDate: formData.reviewDueDate,
-          });
+              title: formData.title,
+              description: formData.description ?? '',
+              category: ['Strategic','Operational','Financial','Compliance','Technology','Reputational','Legal'][Number(formData.category) - 1] ?? formData.category,
+              likelihood: ['Rare','Unlikely','Possible','Likely','AlmostCertain'][(formData.likelihood ?? 1) - 1],
+              impact: ['Insignificant','Minor','Moderate','Major','Catastrophic'][(formData.impact ?? 1) - 1],
+              owner: formData.owner ?? '',
+              department: null,
+              reviewDueDate: formData.reviewDueDate ? new Date(formData.reviewDueDate).toISOString() : null,
+              regulatoryReference: null,
+            });
         }} />
       )}
     </div>

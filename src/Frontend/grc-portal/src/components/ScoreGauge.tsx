@@ -118,13 +118,10 @@ export function OverallGauge({ score, size = 180 }: OverallGaugeProps) {
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
-            style={{
-              transition: 'stroke-dashoffset 1.2s ease, stroke 0.3s ease',
-              filter: `drop-shadow(0 0 8px ${scoreColor}80)`,
-            }}
+            style={{ transition: 'stroke-dashoffset 1.2s ease, stroke 0.3s ease' }}
           />
           {/* Inner ring */}
-          <circle cx={center} cy={center} r={radius - 18} fill="none" stroke={`${scoreColor}15`} strokeWidth={1} />
+          <circle cx={center} cy={center} r={radius - 18} fill="none" stroke={`${scoreColor}20`} strokeWidth={1} />
         </svg>
         <div style={{
           position: 'absolute', inset: 0,
@@ -140,7 +137,6 @@ export function OverallGauge({ score, size = 180 }: OverallGaugeProps) {
             fontFamily: 'Syne, sans-serif',
             color: scoreColor,
             lineHeight: 1,
-            filter: `drop-shadow(0 0 12px ${scoreColor}60)`,
           }}>{score}</div>
           <div style={{
             fontSize: 11, fontWeight: 700,

@@ -67,7 +67,7 @@ export function Sidebar() {
               fontSize: 14,
               fontWeight: 500,
               color: isActive ? 'var(--accent)' : 'var(--text-muted)',
-              background: isActive ? 'rgba(14,165,233,0.08)' : 'transparent',
+              background: isActive ? 'rgba(92,138,0,0.08)' : 'transparent',
               transition: 'all 0.15s',
             })}
           >

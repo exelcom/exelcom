@@ -17,8 +17,8 @@ interface EditPolicyModalProps {
   saving?: boolean;
 }
 
-const inp = { width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #2a2a3a', background: '#1a1a2e', color: '#e2e8f0', fontSize: 14, boxSizing: 'border-box' } as React.CSSProperties;
-const lbl = { fontSize: 11, fontWeight: 600, color: '#64748b', letterSpacing: '0.07em', textTransform: 'uppercase' as const, marginBottom: 6, display: 'block' };
+const inp = { width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #e6e7de', background: '#f4f5ee', color: '#14170d', fontSize: 14, boxSizing: 'border-box' } as React.CSSProperties;
+const lbl = { fontSize: 11, fontWeight: 600, color: '#6b7060', letterSpacing: '0.07em', textTransform: 'uppercase' as const, marginBottom: 6, display: 'block' };
 
 export function EditPolicyModal({ policy, onClose, onSave, saving }: EditPolicyModalProps) {
   const [title, setTitle] = useState(String(policy.title ?? ''));
@@ -31,13 +31,13 @@ export function EditPolicyModal({ policy, onClose, onSave, saving }: EditPolicyM
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1100, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
-      <div style={{ background: '#12121e', borderRadius: 16, width: '100%', maxWidth: 560, border: '1px solid #2a2a3a', boxShadow: '0 24px 80px rgba(0,0,0,0.6)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ padding: '24px 28px 16px', borderBottom: '1px solid #2a2a3a', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+      <div style={{ background: '#ffffff', borderRadius: 16, width: '100%', maxWidth: 560, border: '1px solid #e6e7de', boxShadow: '0 24px 80px rgba(20,23,13,0.14)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: '24px 28px 16px', borderBottom: '1px solid #e6e7de', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
           <div>
-            <h2 style={{ fontSize: 17, fontWeight: 800, color: '#f1f5f9' }}>Edit Policy</h2>
-            <p style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>{String(policy.title)}</p>
+            <h2 style={{ fontSize: 17, fontWeight: 800, color: '#14170d' }}>Edit Policy</h2>
+            <p style={{ fontSize: 12, color: '#6b7060', marginTop: 2 }}>{String(policy.title)}</p>
           </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: 22, cursor: 'pointer' }}>✕</button>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#6b7060', fontSize: 22, cursor: 'pointer' }}>✕</button>
         </div>
         <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto', flex: 1 }}>
           <div><label style={lbl}>Title</label><input style={inp} value={title} onChange={e => setTitle(e.target.value)} /></div>
@@ -58,8 +58,8 @@ export function EditPolicyModal({ policy, onClose, onSave, saving }: EditPolicyM
             <label htmlFor="reqAtt" style={{ ...lbl, marginBottom: 0, cursor: 'pointer' }}>Requires Attestation</label>
           </div>
         </div>
-        <div style={{ padding: '16px 28px', borderTop: '1px solid #2a2a3a', display: 'flex', justifyContent: 'flex-end', gap: 10, flexShrink: 0 }}>
-          <button onClick={onClose} style={{ padding: '9px 20px', borderRadius: 8, border: '1px solid #2a2a3a', background: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: 14 }}>Cancel</button>
+        <div style={{ padding: '16px 28px', borderTop: '1px solid #e6e7de', display: 'flex', justifyContent: 'flex-end', gap: 10, flexShrink: 0 }}>
+          <button onClick={onClose} style={{ padding: '9px 20px', borderRadius: 8, border: '1px solid #e6e7de', background: 'none', color: '#6b7060', cursor: 'pointer', fontSize: 14 }}>Cancel</button>
           <button disabled={saving} onClick={() => onSave({ title, description, category, owner, department, requiresAttestation, reviewDueDate })} className="btn-primary" style={{ padding: '9px 24px', opacity: saving ? 0.6 : 1 }}>
             {saving ? 'Saving...' : 'Save Changes'}
           </button>

@@ -7,13 +7,13 @@ import { ncApi } from "../../services/api";
 const STATUS_META = {
   Open:                       { label: "Open",                color: "#C0392B", bg: "#FDEDEC" },
   UnderAnalysis:              { label: "Under Analysis",      color: "#935116", bg: "#FDEBD0" },
-  CorrectiveActionInProgress: { label: "CA In Progress",      color: "#1A5276", bg: "#D6EAF8" },
+  CorrectiveActionInProgress: { label: "CA In Progress",      color: "#3f6300", bg: "#E9F3C9" },
   AwaitingEffectivenessReview:{ label: "Awaiting Review",     color: "#1E8449", bg: "#D5F5E3" },
   Closed:                     { label: "Closed",              color: "#616A6B", bg: "#F2F3F4" },
 };
 
 const SEVERITY_META = {
-  Minor:    { label: "Minor",    color: "#1A5276", bg: "#D6EAF8" },
+  Minor:    { label: "Minor",    color: "#3f6300", bg: "#E9F3C9" },
   Major:    { label: "Major",    color: "#935116", bg: "#FDEBD0" },
   Critical: { label: "Critical", color: "#922B21", bg: "#FDEDEC" },
 };
@@ -130,8 +130,8 @@ function NcRow({ nc, onClick, selected, onContextMenu }) {
   return (
     <div onClick={onClick} onContextMenu={e => { e.preventDefault(); onContextMenu(e, nc); }}
       style={{ padding: "12px 16px", borderBottom: "1px solid #EAECEE", cursor: "pointer",
-        transition: "background 0.1s", background: selected ? "#EBF5FB" : "transparent",
-        borderLeft: selected ? "3px solid #2E86C1" : "3px solid transparent" }}>
+        transition: "background 0.1s", background: selected ? "#F3F8E4" : "transparent",
+        borderLeft: selected ? "3px solid #5c8a00" : "3px solid transparent" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5, flexWrap: "wrap" }}>
         <span style={{ fontSize: 11, fontFamily: "monospace", color: "#717D7E", fontWeight: 600 }}>{nc.referenceNumber}</span>
         <SeverityBadge severity={nc.severity} />
@@ -218,9 +218,9 @@ function RcaForm({ ncId, existing, onSave }) {
           <div style={{ fontSize: 11, color: "#717D7E", marginBottom: 6, fontWeight: 600 }}>5-Whys trace</div>
           {existing.fiveWhys.map((why, i) => (
             <div key={i} style={{ display: "flex", gap: 10, marginBottom: 6, alignItems: "flex-start" }}>
-              <div style={{ minWidth: 22, height: 22, borderRadius: "50%", background: "#EBF5FB",
-                border: "1px solid #2E86C130", display: "flex", alignItems: "center",
-                justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#2E86C1", flexShrink: 0 }}>{i+1}</div>
+              <div style={{ minWidth: 22, height: 22, borderRadius: "50%", background: "#F3F8E4",
+                border: "1px solid #5c8a0030", display: "flex", alignItems: "center",
+                justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#5c8a00", flexShrink: 0 }}>{i+1}</div>
               <span style={{ fontSize: 13, color: "#1a1a1a", paddingTop: 2 }}>{why}</span>
             </div>
           ))}
@@ -228,7 +228,7 @@ function RcaForm({ ncId, existing, onSave }) {
       )}
       <button onClick={() => setEditing(true)} style={{ marginTop: 12, padding: "6px 14px",
         borderRadius: 6, border: "1px solid #D5D8DC", background: "#fff",
-        cursor: "pointer", fontSize: 12, color: "#2E86C1", fontWeight: 600 }}>✏️ Edit RCA</button>
+        cursor: "pointer", fontSize: 12, color: "#5c8a00", fontWeight: 600 }}>✏️ Edit RCA</button>
     </div>
   );
 
@@ -238,7 +238,7 @@ function RcaForm({ ncId, existing, onSave }) {
         No RCA recorded yet. Record the root cause to advance this NC to "Under Analysis".
       </div>
       <button onClick={() => setEditing(true)} style={{ padding: "8px 16px", borderRadius: 6,
-        border: "none", background: "#2E86C1", color: "#fff", cursor: "pointer",
+        border: "none", background: "#5c8a00", color: "#fff", cursor: "pointer",
         fontSize: 13, fontWeight: 600 }}>+ Record RCA</button>
     </div>
   );
@@ -279,9 +279,9 @@ function RcaForm({ ncId, existing, onSave }) {
           <label style={lbl}>5-Whys trace</label>
           {form.fiveWhys.map((why, i) => (
             <div key={i} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
-              <div style={{ minWidth: 22, height: 22, borderRadius: "50%", background: "#EBF5FB",
-                border: "1px solid #2E86C130", display: "flex", alignItems: "center",
-                justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#2E86C1", flexShrink: 0 }}>{i+1}</div>
+              <div style={{ minWidth: 22, height: 22, borderRadius: "50%", background: "#F3F8E4",
+                border: "1px solid #5c8a0030", display: "flex", alignItems: "center",
+                justifyContent: "center", fontSize: 10, fontWeight: 700, color: "#5c8a00", flexShrink: 0 }}>{i+1}</div>
               <input style={inp} placeholder={`Why ${i+1}...`} value={why} onChange={e => setWhy(i, e.target.value)} />
             </div>
           ))}
@@ -293,7 +293,7 @@ function RcaForm({ ncId, existing, onSave }) {
           background: "#fff", cursor: "pointer", fontSize: 13, color: "#717D7E" }}>Cancel</button>
         <button onClick={submit} disabled={saving} style={{
           padding: "7px 18px", borderRadius: 6, border: "none",
-          background: saving ? "#aaa" : "#2E86C1", color: "#fff",
+          background: saving ? "#aaa" : "#5c8a00", color: "#fff",
           cursor: saving ? "not-allowed" : "pointer", fontSize: 13, fontWeight: 600 }}>
           {saving ? "Saving..." : "Save RCA"}
         </button>
@@ -327,7 +327,7 @@ function CaList({ nc, onRefresh }) {
         No corrective actions yet. Add one to advance this NC to "CA In Progress".
       </div>
       <button onClick={() => setShowAdd(true)} style={{ padding: "8px 16px", borderRadius: 6,
-        border: "none", background: "#2E86C1", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+        border: "none", background: "#5c8a00", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
         + Add corrective action
       </button>
     </div>
@@ -345,7 +345,7 @@ function CaList({ nc, onRefresh }) {
               {ca.status !== "Implemented" && (
                 <>
                   <button onClick={() => setEditingCa(ca)} style={{ padding: "2px 8px", borderRadius: 4,
-                    border: "1px solid #D5D8DC", background: "#fff", cursor: "pointer", fontSize: 11, color: "#2E86C1" }}>Edit</button>
+                    border: "1px solid #D5D8DC", background: "#fff", cursor: "pointer", fontSize: 11, color: "#5c8a00" }}>Edit</button>
                   <button onClick={() => { setImplementing(ca); setImplUserId(""); }} style={{ padding: "2px 8px", borderRadius: 4,
                     border: "1px solid #1E8449", background: "#D5F5E3", cursor: "pointer", fontSize: 11, color: "#1E8449", fontWeight: 600 }}>✓ Implement</button>
                 </>
@@ -381,7 +381,7 @@ function CaList({ nc, onRefresh }) {
         </div>
       ))}
       <button onClick={() => setShowAdd(true)} style={{ padding: "7px 14px", borderRadius: 6,
-        border: "1px solid #2E86C1", background: "#EBF5FB", color: "#2E86C1",
+        border: "1px solid #5c8a00", background: "#F3F8E4", color: "#5c8a00",
         fontSize: 12, fontWeight: 600, cursor: "pointer", marginTop: 4 }}>+ Add CA</button>
 
       {(showAdd || editingCa) && (
@@ -548,7 +548,7 @@ function CaModal({ ncId, existing, onClose, onSave }) {
           <button onClick={onClose} disabled={saving} style={{ padding: "8px 16px", borderRadius: 6,
             border: "1px solid #D5D8DC", background: "#fff", cursor: "pointer", fontSize: 13, color: "#717D7E" }}>Cancel</button>
           <button onClick={submit} disabled={saving} style={{ padding: "8px 20px", borderRadius: 6,
-            border: "none", background: saving ? "#aaa" : "#2E86C1", color: "#fff",
+            border: "none", background: saving ? "#aaa" : "#5c8a00", color: "#fff",
             cursor: saving ? "not-allowed" : "pointer", fontSize: 13, fontWeight: 600 }}>
             {saving ? "Saving..." : isEdit ? "Update" : "Add"}
           </button>
@@ -584,7 +584,7 @@ function NcDetail({ nc, onEdit, onDelete, onRefresh }) {
         <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
           <button onClick={() => onEdit(nc)} style={{ padding: "6px 14px", borderRadius: 6,
             border: "1px solid #D5D8DC", background: "#fff", cursor: "pointer",
-            fontSize: 12, fontWeight: 600, color: "#2E86C1" }}>✏️ Edit</button>
+            fontSize: 12, fontWeight: 600, color: "#5c8a00" }}>✏️ Edit</button>
           <button onClick={() => onDelete(nc)} style={{ padding: "6px 14px", borderRadius: 6,
             border: "1px solid #F1948A", background: "#fff", cursor: "pointer",
             fontSize: 12, fontWeight: 600, color: "#C0392B" }}>🗑️ Delete</button>
@@ -595,8 +595,8 @@ function NcDetail({ nc, onEdit, onDelete, onRefresh }) {
         {tabs.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} style={{
             padding: "8px 16px", fontSize: 12, fontWeight: 600, background: "none", border: "none",
-            cursor: "pointer", color: tab === t.id ? "#2E86C1" : "#717D7E",
-            borderBottom: tab === t.id ? "2px solid #2E86C1" : "2px solid transparent",
+            cursor: "pointer", color: tab === t.id ? "#5c8a00" : "#717D7E",
+            borderBottom: tab === t.id ? "2px solid #5c8a00" : "2px solid transparent",
             marginBottom: -1, transition: "color 0.1s" }}>{t.label}</button>
         ))}
       </div>
@@ -608,7 +608,7 @@ function NcDetail({ nc, onEdit, onDelete, onRefresh }) {
             nc.clauseReference
               ? <span
                   onClick={() => navigate(`/soa?control=${nc.clauseReference}`)}
-                  style={{ color: "#2E86C1", cursor: "pointer", fontWeight: 600,
+                  style={{ color: "#5c8a00", cursor: "pointer", fontWeight: 600,
                     textDecoration: "underline", textDecorationStyle: "dotted" }}>
                   {nc.clauseReference} ↗
                 </span>
@@ -718,7 +718,7 @@ function NcFormModal({ existing, clauseReference: prefillClause, onClose, onSave
           <button onClick={onClose} disabled={saving} style={{ padding: "9px 18px", borderRadius: 6,
             border: "1px solid #D5D8DC", background: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600, color: "#717D7E" }}>Cancel</button>
           <button onClick={submit} disabled={saving} style={{ padding: "9px 22px", borderRadius: 6,
-            border: "none", background: saving ? "#aaa" : "#2E86C1", color: "#fff",
+            border: "none", background: saving ? "#aaa" : "#5c8a00", color: "#fff",
             cursor: saving ? "not-allowed" : "pointer", fontSize: 13, fontWeight: 700 }}>
             {saving ? "Saving..." : isEdit ? "Save changes" : "Raise NC"}
           </button>
@@ -852,7 +852,7 @@ export default function NcCaModule() {
           <div style={{ fontSize: 12, color: "#717D7E" }}>ISO/IEC 27001:2022 · Clause 10.2</div>
         </div>
         <button onClick={() => setModal({ type: "raise" })} style={{ padding: "9px 18px", borderRadius: 7,
-          border: "none", background: "#2E86C1", color: "#fff", cursor: "pointer",
+          border: "none", background: "#5c8a00", color: "#fff", cursor: "pointer",
           fontSize: 13, fontWeight: 700, boxShadow: "0 2px 8px rgba(46,134,193,0.3)" }}>+ Raise NC</button>
       </div>
 

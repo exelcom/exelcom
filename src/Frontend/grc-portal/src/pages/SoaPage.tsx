@@ -494,8 +494,8 @@ export function SoaPage() {
                 <button
                   onClick={() => navigate(`/nonconformities?clause=${selectedControl.controlId}`)}
                   style={{ fontSize: 11, padding: '3px 10px', borderRadius: 6,
-                    border: '1px solid #2E86C1', background: '#EBF5FB',
-                    color: '#2E86C1', cursor: 'pointer', fontWeight: 600 }}>
+                    border: '1px solid #5c8a00', background: '#F3F8E4',
+                    color: '#5c8a00', cursor: 'pointer', fontWeight: 600 }}>
                   + Raise NC
                 </button>
               </div>
@@ -503,9 +503,9 @@ export function SoaPage() {
               {linkedNcs.length === 0 ? (
                 <div
                   onClick={() => navigate(`/nonconformities?clause=${selectedControl.controlId}`)}
-                  style={{ fontSize: 12, color: '#2E86C1', cursor: 'pointer',
-                    padding: '10px 12px', borderRadius: 6, border: '1px dashed #2E86C130',
-                    background: '#EBF5FB', textAlign: 'center', fontWeight: 500 }}>
+                  style={{ fontSize: 12, color: '#5c8a00', cursor: 'pointer',
+                    padding: '10px 12px', borderRadius: 6, border: '1px dashed #5c8a0030',
+                    background: '#F3F8E4', textAlign: 'center', fontWeight: 500 }}>
                   + Raise a nonconformity against this control
                 </div>
               ) : (

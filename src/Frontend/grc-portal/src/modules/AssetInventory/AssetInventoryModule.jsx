@@ -4,11 +4,11 @@ import { assetApi } from "../../services/api";
 const ASSET_TYPES = ["Hardware","Software","CloudService","DataAsset","MobileDevice","VideoConference","CollaborationLicense"];
 
 const TYPE_META = {
-  Hardware:             { label: "Hardware",              icon: "🖥️", color: "#1A5276", bg: "#D6EAF8" },
+  Hardware:             { label: "Hardware",              icon: "🖥️", color: "#3f6300", bg: "#E9F3C9" },
   Software:             { label: "Software",              icon: "💿", color: "#6C3483", bg: "#E8DAEF" },
   CloudService:         { label: "Cloud Service",         icon: "☁️", color: "#0E6655", bg: "#D1F2EB" },
   DataAsset:            { label: "Data Asset",            icon: "🗄️", color: "#784212", bg: "#FAD7A0" },
-  MobileDevice:         { label: "Mobile Device",         icon: "📱", color: "#1A5276", bg: "#D6EAF8" },
+  MobileDevice:         { label: "Mobile Device",         icon: "📱", color: "#3f6300", bg: "#E9F3C9" },
   VideoConference:      { label: "Video Conference",      icon: "📹", color: "#117A65", bg: "#D1F2EB" },
   CollaborationLicense: { label: "Collaboration License", icon: "🤝", color: "#6C3483", bg: "#E8DAEF" },
 };
@@ -65,9 +65,9 @@ function CustomerSidebar({ customers, selectedCustomer, onSelect }) {
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase",
           letterSpacing: "0.07em", color: "#717D7E", marginBottom: 8 }}>Customers</div>
         <div style={{ display: "flex", gap: 8 }}>
-          <div style={{ flex: 1, background: "#EBF5FB", borderRadius: 6, padding: "6px 8px" }}>
-            <div style={{ fontSize: 10, color: "#2E86C1", fontWeight: 600 }}>TOTAL</div>
-            <div style={{ fontSize: 18, fontWeight: 700, color: "#2E86C1" }}>{total}</div>
+          <div style={{ flex: 1, background: "#F3F8E4", borderRadius: 6, padding: "6px 8px" }}>
+            <div style={{ fontSize: 10, color: "#5c8a00", fontWeight: 600 }}>TOTAL</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: "#5c8a00" }}>{total}</div>
           </div>
           <div style={{ flex: 1, background: "#FDEDEC", borderRadius: 6, padding: "6px 8px" }}>
             <div style={{ fontSize: 10, color: "#C0392B", fontWeight: 600 }}>CRITICAL</div>
@@ -81,9 +81,9 @@ function CustomerSidebar({ customers, selectedCustomer, onSelect }) {
         <button onClick={() => onSelect(null)} style={{
           display: "flex", alignItems: "center", justifyContent: "space-between",
           width: "100%", padding: "8px 16px", border: "none", cursor: "pointer", fontSize: 13,
-          background: selectedCustomer === null ? "#EBF5FB" : "transparent",
-          color: selectedCustomer === null ? "#2E86C1" : "#1a1a1a",
-          borderLeft: selectedCustomer === null ? "3px solid #2E86C1" : "3px solid transparent",
+          background: selectedCustomer === null ? "#F3F8E4" : "transparent",
+          color: selectedCustomer === null ? "#5c8a00" : "#1a1a1a",
+          borderLeft: selectedCustomer === null ? "3px solid #5c8a00" : "3px solid transparent",
           fontWeight: selectedCustomer === null ? 600 : 400, textAlign: "left" }}>
           <span>🌐 All assets</span>
           <span style={{ fontSize: 11, color: "#717D7E" }}>{total}</span>
@@ -93,9 +93,9 @@ function CustomerSidebar({ customers, selectedCustomer, onSelect }) {
           <button key={c.customerId} onClick={() => onSelect(c.customerId)} style={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
             width: "100%", padding: "8px 16px", border: "none", cursor: "pointer", fontSize: 13,
-            background: selectedCustomer === c.customerId ? "#EBF5FB" : "transparent",
-            color: selectedCustomer === c.customerId ? "#2E86C1" : "#1a1a1a",
-            borderLeft: selectedCustomer === c.customerId ? "3px solid #2E86C1" : "3px solid transparent",
+            background: selectedCustomer === c.customerId ? "#F3F8E4" : "transparent",
+            color: selectedCustomer === c.customerId ? "#5c8a00" : "#1a1a1a",
+            borderLeft: selectedCustomer === c.customerId ? "3px solid #5c8a00" : "3px solid transparent",
             fontWeight: selectedCustomer === c.customerId ? 600 : 400, textAlign: "left" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1 }}>
               <span style={{ fontSize: 12 }}>
@@ -125,7 +125,7 @@ function CustomerSidebar({ customers, selectedCustomer, onSelect }) {
 function Dashboard({ stats, customerName }) {
   if (!stats) return null;
   const cards = [
-    { label: "Total",          value: stats.total,                color: "#1A5276", bg: "#D6EAF8" },
+    { label: "Total",          value: stats.total,                color: "#3f6300", bg: "#E9F3C9" },
     { label: "Active",         value: stats.active,               color: "#1E8449", bg: "#D5F5E3" },
     { label: "Critical Risk",  value: stats.critical,             color: "#922B21", bg: "#FDEDEC" },
     { label: "High Risk",      value: stats.high,                 color: "#C0392B", bg: "#FDEDEC" },
@@ -135,7 +135,7 @@ function Dashboard({ stats, customerName }) {
   return (
     <div style={{ marginBottom: 16 }}>
       {customerName && (
-        <div style={{ fontSize: 12, color: "#2E86C1", fontWeight: 600, marginBottom: 8 }}>
+        <div style={{ fontSize: 12, color: "#5c8a00", fontWeight: 600, marginBottom: 8 }}>
           Showing: {customerName}
         </div>
       )}
@@ -192,8 +192,8 @@ function AssetRow({ asset, selected, onClick, onContextMenu }) {
   return (
     <div onClick={onClick} onContextMenu={e => { e.preventDefault(); onContextMenu(e, asset); }}
       style={{ padding: "10px 14px", borderBottom: "1px solid #EAECEE", cursor: "pointer",
-        background: selected ? "#EBF5FB" : "transparent",
-        borderLeft: selected ? "3px solid #2E86C1" : "3px solid transparent",
+        background: selected ? "#F3F8E4" : "transparent",
+        borderLeft: selected ? "3px solid #5c8a00" : "3px solid transparent",
         transition: "background 0.1s" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3, flexWrap: "wrap" }}>
         <span style={{ fontSize: 12 }}>{TYPE_META[asset.type]?.icon ?? "📦"}</span>
@@ -206,7 +206,7 @@ function AssetRow({ asset, selected, onClick, onContextMenu }) {
       <div style={{ display: "flex", gap: 10, fontSize: 11, color: "#717D7E" }}>
         <span>{TYPE_META[asset.type]?.label ?? asset.type}</span>
         {asset.manufacturer && <span>· {asset.manufacturer}</span>}
-        {asset.customerName && <span style={{ color: "#2E86C1" }}>· {asset.customerName}</span>}
+        {asset.customerName && <span style={{ color: "#5c8a00" }}>· {asset.customerName}</span>}
       </div>
     </div>
   );
@@ -240,7 +240,7 @@ function AssetDetail({ asset, onEdit, onDelete }) {
         <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
           <button onClick={() => onEdit(asset)} style={{ padding: "6px 12px", borderRadius: 6,
             border: "1px solid #D5D8DC", background: "#fff", cursor: "pointer",
-            fontSize: 12, fontWeight: 600, color: "#2E86C1" }}>✏️ Edit</button>
+            fontSize: 12, fontWeight: 600, color: "#5c8a00" }}>✏️ Edit</button>
           <button onClick={() => onDelete(asset)} style={{ padding: "6px 12px", borderRadius: 6,
             border: "1px solid #F1948A", background: "#fff", cursor: "pointer",
             fontSize: 12, fontWeight: 600, color: "#C0392B" }}>🗑️ Delete</button>
@@ -248,10 +248,10 @@ function AssetDetail({ asset, onEdit, onDelete }) {
       </div>
 
       {asset.customerName && (
-        <div style={{ marginBottom: 14, padding: "8px 12px", background: "#EBF5FB",
-          borderRadius: 6, border: "1px solid #2E86C130", fontSize: 13 }}>
+        <div style={{ marginBottom: 14, padding: "8px 12px", background: "#F3F8E4",
+          borderRadius: 6, border: "1px solid #5c8a0030", fontSize: 13 }}>
           <span style={{ color: "#717D7E", marginRight: 6 }}>👤 Customer:</span>
-          <span style={{ fontWeight: 700, color: "#2E86C1" }}>{asset.customerName}</span>
+          <span style={{ fontWeight: 700, color: "#5c8a00" }}>{asset.customerName}</span>
           {asset.customerId && asset.customerId !== asset.customerName &&
             <span style={{ color: "#717D7E", fontSize: 11, marginLeft: 6 }}>({asset.customerId})</span>}
         </div>
@@ -282,10 +282,10 @@ function AssetDetail({ asset, onEdit, onDelete }) {
       </div>
 
       {asset.linkedControlId && (
-        <div style={{ marginTop: 14, padding: "8px 12px", background: "#EBF5FB",
-          borderRadius: 6, border: "1px solid #2E86C130", fontSize: 13 }}>
+        <div style={{ marginTop: 14, padding: "8px 12px", background: "#F3F8E4",
+          borderRadius: 6, border: "1px solid #5c8a0030", fontSize: 13 }}>
           <span style={{ color: "#717D7E", marginRight: 6 }}>Linked SoA control:</span>
-          <span style={{ fontWeight: 700, color: "#2E86C1" }}>{asset.linkedControlId}</span>
+          <span style={{ fontWeight: 700, color: "#5c8a00" }}>{asset.linkedControlId}</span>
         </div>
       )}
     </div>
@@ -432,7 +432,7 @@ function AssetFormModal({ existing, defaultCustomerId, defaultCustomerName, onCl
             border: "1px solid #D5D8DC", background: "#fff", cursor: "pointer",
             fontSize: 13, fontWeight: 600, color: "#717D7E" }}>Cancel</button>
           <button onClick={submit} disabled={saving} style={{ padding: "9px 22px", borderRadius: 6,
-            border: "none", background: saving ? "#aaa" : "#2E86C1", color: "#fff",
+            border: "none", background: saving ? "#aaa" : "#5c8a00", color: "#fff",
             cursor: saving ? "not-allowed" : "pointer", fontSize: 13, fontWeight: 700 }}>
             {saving ? "Saving..." : isEdit ? "Save changes" : "Add asset"}
           </button>
@@ -573,7 +573,7 @@ export default function AssetInventoryModule() {
           customerName: selectedCustomerInfo?.customerName && selectedCustomerInfo.customerId !== "__exelcom__"
             ? selectedCustomerInfo.customerName : "",
         })} style={{ padding: "9px 18px", borderRadius: 7, border: "none",
-          background: "#2E86C1", color: "#fff", cursor: "pointer",
+          background: "#5c8a00", color: "#fff", cursor: "pointer",
           fontSize: 13, fontWeight: 700, boxShadow: "0 2px 8px rgba(46,134,193,0.3)" }}>+ Add asset</button>
       </div>
 
