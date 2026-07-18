@@ -1,20 +1,55 @@
-name: GRC Platform CI/CD
+name: Backend Deploy
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'src/Services/**'
+      - 'fix-apim-operations.ps1'
+      - '.github/workflows/backend-deploy.yml'
   pull_request:
     branches: [main]
+    paths:
+      - 'src/Services/**'
+      - 'fix-apim-operations.ps1'
+      - '.github/workflows/backend-deploy.yml'
+
+permissions:
+  id-token: write
+  contents: read
 
 env:
-  AZURE_RESOURCE_GROUP: rg-grc-exelcom-dev
   DOTNET_VERSION: '8.0.x'
-  NODE_VERSION: '20.x'
 
 jobs:
-  # ── Build & Test ─────────────────────────────────────────────────────────────
+  # ── Detect which services actually changed ─────────────────────────────────
+  detect-changes:
+    name: Detect changed services
+    runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.filter.outputs.changes }}
+      any: ${{ steps.filter.outputs.changes != '[]' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            RiskManagement: 'src/Services/RiskManagement/**'
+            ComplianceTracking: 'src/Services/ComplianceTracking/**'
+            PolicyManagement: 'src/Services/PolicyManagement/**'
+            AuditManagement: 'src/Services/AuditManagement/**'
+            StatementOfApplicability: 'src/Services/StatementOfApplicability/**'
+            NonconformityAndCorrectiveActions: 'src/Services/NonconformityAndCorrectiveActions/**'
+            AssetInventory: 'src/Services/AssetInventory/**'
+            IncidentManagement: 'src/Services/IncidentManagement/**'
+            CustomerPortal: 'src/Services/CustomerPortal/**'
+
+  # ── Build & Test (only changed services) ────────────────────────────────────
   build-backend:
     name: Build Backend (${{ matrix.service.name }})
+    needs: detect-changes
+    if: contains(fromJson(needs.detect-changes.outputs.services), matrix.service.name)
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -62,9 +97,16 @@ jobs:
             --runtime linux-x64 \
             --self-contained false
 
+      # NOTE: zip runs FROM INSIDE the publish output folder so the DLLs land
+      # at the zip root. The previous version zipped "publish/${name}" from the
+      # repo root, which nested everything under publish/${name}/... inside the
+      # zip — Kudu then extracted to /home/site/wwwroot/publish/${name}/*.dll
+      # instead of /home/site/wwwroot/*.dll, so the App Service had no entry
+      # point to run. This was the primary cause of the old pipeline's failures.
       - name: Zip artifact
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: zip -r publish/${{ matrix.service.name }}.zip publish/${{ matrix.service.name }}
+        working-directory: publish/${{ matrix.service.name }}
+        run: zip -r ../${{ matrix.service.name }}.zip .
 
       - name: Upload artifact
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -74,44 +116,21 @@ jobs:
           path: publish/${{ matrix.service.name }}.zip
           retention-days: 1
 
-  build-frontend:
-    name: Build Frontend
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: src/Frontend/grc-portal/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-        working-directory: src/Frontend/grc-portal
-
-      - name: Build
-        run: npm run build
-        working-directory: src/Frontend/grc-portal
-
-      - name: Upload artifact
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend
-          path: src/Frontend/grc-portal/dist
-          retention-days: 1
-
-  # ── Deploy (main branch only) ─────────────────────────────────────────────────
+  # ── Deploy (main branch only, only changed services) ────────────────────────
   deploy-backend:
     name: Deploy ${{ matrix.service.name }}
-    needs: [build-backend, build-frontend]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [detect-changes, build-backend]
+    if: >-
+      github.ref == 'refs/heads/main' && github.event_name == 'push' &&
+      contains(fromJson(needs.detect-changes.outputs.services), matrix.service.name)
     runs-on: ubuntu-latest
     environment: production
     strategy:
       fail-fast: false
+      # Deploys run concurrently by default, but all 9 services share a single
+      # B1 App Service Plan — throttling Kudu deploys here to reduce
+      # concurrent load was one of the suspected causes of prior flakiness.
+      max-parallel: 3
       matrix:
         service:
           - name: RiskManagement
@@ -140,10 +159,12 @@ jobs:
           name: ${{ matrix.service.name }}
           path: publish/
 
-      - name: Azure Login
+      - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy to App Service
         uses: azure/webapps-deploy@v3
@@ -164,29 +185,26 @@ jobs:
           package: publish/${{ matrix.service.name }}.zip
         timeout-minutes: 10
 
-  deploy-frontend:
-    name: Deploy Frontend
-    needs: [build-backend, build-frontend]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  # ── Post-deploy: restore APIM operation bindings ────────────────────────────
+  # APIM loses HTTP method bindings on the affected APIs after every backend
+  # deploy (known project issue). This used to be a manual step; now it always
+  # runs once after any successful backend deploy.
+  fix-apim:
+    name: Fix APIM operation bindings
+    needs: [detect-changes, deploy-backend]
+    if: always() && needs.deploy-backend.result == 'success'
     runs-on: ubuntu-latest
     environment: production
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
         with:
-          name: frontend
-          path: dist
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Deploy to Azure Static Web Apps
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: upload
-          app_location: dist
-          skip_app_build: true
-
-
-
+      - name: Fix APIM operations
+        shell: pwsh
+        run: ./fix-apim-operations.ps1
