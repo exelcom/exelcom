@@ -152,7 +152,6 @@ jobs:
     needs: [detect-changes, build-backend]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push' && needs.detect-changes.outputs.any == 'true'
     runs-on: ubuntu-latest
-    environment: production
     strategy:
       fail-fast: false
       # All 9 services share a single B1 App Service Plan — throttling
@@ -204,7 +203,6 @@ jobs:
     needs: [detect-changes, deploy-backend]
     if: always() && needs.deploy-backend.result == 'success'
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v4
 
