@@ -33,6 +33,9 @@ export const policyApi = {
   create: (data: unknown) => apiClient.post('/policy/api/policies', data).then(r => r.data),
   update: (id: string, data: unknown) => apiClient.put('/policy/api/policies/' + id, data).then(r => r.data),
   delete: (id: string) => apiClient.delete('/policy/api/policies/' + id).then(r => r.data),
+  approve: (id: string) => apiClient.post('/policy/api/policies/' + id + '/approve').then(r => r.data),
+  publish: (id: string) => apiClient.post('/policy/api/policies/' + id + '/publish').then(r => r.data),
+  retire: (id: string) => apiClient.post('/policy/api/policies/' + id + '/retire').then(r => r.data),
 };
 
 export const auditApi = {

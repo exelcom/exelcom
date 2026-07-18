@@ -54,6 +54,26 @@ export function PoliciesPage() {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['policies'] }); setSelected(null); },
   });
 
+  const refreshSelected = async () => {
+    await queryClient.invalidateQueries({ queryKey: ['policies'] });
+    if (selected?.id) setSelected(await policyApi.getById(selected.id as string));
+  };
+
+  const approvePolicy = useMutation({
+    mutationFn: (id: string) => policyApi.approve(id),
+    onSuccess: refreshSelected,
+  });
+
+  const publishPolicy = useMutation({
+    mutationFn: (id: string) => policyApi.publish(id),
+    onSuccess: refreshSelected,
+  });
+
+  const retirePolicy = useMutation({
+    mutationFn: (id: string) => policyApi.retire(id),
+    onSuccess: refreshSelected,
+  });
+
   const policies = Array.isArray(data) ? data : (data as any)?.items ?? (data as any)?.data ?? [];
 
   const columns = [
@@ -107,6 +127,27 @@ export function PoliciesPage() {
           onClose={() => setSelected(null)}
           onEdit={() => setEditing(true)}
           onDelete={() => { if (window.confirm(`Delete "${selected.title}"?`)) deletePolicy.mutate(selected.id as string); }}
+          extraActions={canEdit ? (() => {
+            const status = String(selected.status ?? selected.statusName ?? '');
+            const id = selected.id as string;
+            const busy = approvePolicy.isPending || publishPolicy.isPending || retirePolicy.isPending;
+            if (status === 'Draft' || status === 'UnderReview') {
+              return <button disabled={busy} onClick={() => approvePolicy.mutate(id)}
+                style={{ padding: '9px 20px', borderRadius: 8, border: '1px solid #0ea5e940', background: '#0ea5e915', color: '#0ea5e9', cursor: busy ? 'default' : 'pointer', fontSize: 14, fontWeight: 600 }}>
+                {approvePolicy.isPending ? 'Approving…' : 'Approve'}</button>;
+            }
+            if (status === 'Approved') {
+              return <button disabled={busy} onClick={() => publishPolicy.mutate(id)}
+                style={{ padding: '9px 20px', borderRadius: 8, border: '1px solid #10b98140', background: '#10b98115', color: '#10b981', cursor: busy ? 'default' : 'pointer', fontSize: 14, fontWeight: 600 }}>
+                {publishPolicy.isPending ? 'Publishing…' : 'Publish'}</button>;
+            }
+            if (status === 'Published') {
+              return <button disabled={busy} onClick={() => { if (window.confirm(`Retire "${selected.title}"? It will no longer be treated as an active policy.`)) retirePolicy.mutate(id); }}
+                style={{ padding: '9px 20px', borderRadius: 8, border: '1px solid #f59e0b40', background: '#f59e0b15', color: '#f59e0b', cursor: busy ? 'default' : 'pointer', fontSize: 14, fontWeight: 600 }}>
+                {retirePolicy.isPending ? 'Retiring…' : 'Retire'}</button>;
+            }
+            return null;
+          })() : null}
           fields={[
             { label: 'Category', value: String(selected.categoryName ?? selected.category ?? '') },
             { label: 'Status', value: String(selected.statusName ?? selected.status ?? '') },

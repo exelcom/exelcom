@@ -1,4 +1,4 @@
-﻿import type { CSSProperties } from 'react';
+﻿import type { CSSProperties, ReactNode } from 'react';
 
 interface Field {
   label: string;
@@ -18,12 +18,13 @@ interface DetailModalProps {
   onDelete?: () => void;
   deleteLabel?: string;
   canEdit?: boolean;
+  extraActions?: ReactNode;
 }
 
 const lbl: CSSProperties = { fontSize: 11, fontWeight: 600, color: '#6b7060', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 4 };
 const val: CSSProperties = { fontSize: 14, color: '#14170d', fontWeight: 500, wordBreak: 'break-word' };
 
-export function DetailModal({ title, subtitle, icon, color, fields, onClose, onEdit, onDelete, deleteLabel = 'Delete', canEdit = true }: DetailModalProps) {
+export function DetailModal({ title, subtitle, icon, color, fields, onClose, onEdit, onDelete, deleteLabel = 'Delete', canEdit = true, extraActions }: DetailModalProps) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ background: '#ffffff', borderRadius: 16, width: '100%', maxWidth: 640, border: '1px solid #e6e7de', boxShadow: '0 24px 80px rgba(20,23,13,0.14)', display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}>
@@ -64,6 +65,7 @@ export function DetailModal({ title, subtitle, icon, color, fields, onClose, onE
             )}
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
+            {extraActions}
             <button onClick={onClose} style={{ padding: '9px 20px', borderRadius: 8, border: '1px solid #e6e7de', background: 'none', color: '#6b7060', cursor: 'pointer', fontSize: 14 }}>Close</button>
             {onEdit && (
               canEdit
