@@ -3,6 +3,7 @@ using GrcPlatform.PolicyManagement.Application.Policies.Queries;
 using GrcPlatform.PolicyManagement.Domain.Enums;
 using GrcPlatform.Shared;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GrcPlatform.PolicyManagement.Api.Controllers;
@@ -10,6 +11,7 @@ namespace GrcPlatform.PolicyManagement.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
+[Authorize]
 public class PoliciesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
@@ -83,6 +85,7 @@ public class PoliciesController(IMediator mediator) : ControllerBase
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
+[Authorize]
 public class AttestationsController(IMediator mediator) : ControllerBase
 {
     [HttpPost("{id:guid}/submit")]
