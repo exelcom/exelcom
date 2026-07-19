@@ -72,7 +72,7 @@ export function AuditsPage() {
     }},
     { key: 'actions', label: '', render: (row: Record<string, unknown>) => (
       <div style={{ display: 'flex', gap: 4 }}>
-        <button onClick={(e) => { e.stopPropagation(); setSelected(row); }}
+        <button onClick={async (e) => { e.stopPropagation(); const full = await auditApi.getById(row.id as string); setSelected(full); }}
           style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 16, padding: '2px 6px' }}
           title="View">👁</button>
         {canEdit && <button onClick={(e) => { e.stopPropagation(); if (window.confirm(`Delete "${row.title}"?`)) deleteAudit.mutate(row.id as string); }}
