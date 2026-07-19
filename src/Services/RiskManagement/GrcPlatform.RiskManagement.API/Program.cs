@@ -3,6 +3,7 @@ using GrcPlatform.RiskManagement.Application.Interfaces;
 using GrcPlatform.RiskManagement.Domain.Interfaces;
 using GrcPlatform.RiskManagement.Infrastructure.Persistence;
 using GrcPlatform.RiskManagement.Infrastructure.Repositories;
+using GrcPlatform.RiskManagement.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -33,7 +34,7 @@ builder.Services.AddDbContext<RiskDbContext>(o => o.UseSqlServer(connStr, s => s
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Load("GrcPlatform.RiskManagement.Application")));
 builder.Services.AddScoped<IRiskRepository, RiskRepository>();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<ICurrentUserService, HttpContextCurrentUserService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
@@ -53,10 +54,3 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health");
 app.Run();
-
-public class CurrentUserService(IHttpContextAccessor h) : ICurrentUserService
-{
-    public string UserId => h.HttpContext?.User.FindFirst("oid")?.Value ?? h.HttpContext?.User.FindFirst("sub")?.Value ?? "anonymous";
-    public string UserEmail => h.HttpContext?.User.FindFirst("preferred_username")?.Value ?? string.Empty;
-    public bool IsAuthenticated => h.HttpContext?.User.Identity?.IsAuthenticated ?? false;
-}

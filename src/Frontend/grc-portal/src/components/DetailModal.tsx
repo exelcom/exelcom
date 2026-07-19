@@ -19,12 +19,13 @@ interface DetailModalProps {
   deleteLabel?: string;
   canEdit?: boolean;
   extraActions?: ReactNode;
+  children?: ReactNode;
 }
 
 const lbl: CSSProperties = { fontSize: 11, fontWeight: 600, color: '#6b7060', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 4 };
 const val: CSSProperties = { fontSize: 14, color: '#14170d', fontWeight: 500, wordBreak: 'break-word' };
 
-export function DetailModal({ title, subtitle, icon, color, fields, onClose, onEdit, onDelete, deleteLabel = 'Delete', canEdit = true, extraActions }: DetailModalProps) {
+export function DetailModal({ title, subtitle, icon, color, fields, onClose, onEdit, onDelete, deleteLabel = 'Delete', canEdit = true, extraActions, children }: DetailModalProps) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ background: '#ffffff', borderRadius: 16, width: '100%', maxWidth: 640, border: '1px solid #e6e7de', boxShadow: '0 24px 80px rgba(20,23,13,0.14)', display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}>
@@ -55,6 +56,7 @@ export function DetailModal({ title, subtitle, icon, color, fields, onClose, onE
               </div>
             ))}
           </div>
+          {children}
         </div>
         <div style={{ padding: '16px 28px', borderTop: '1px solid #e6e7de', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
           <div>

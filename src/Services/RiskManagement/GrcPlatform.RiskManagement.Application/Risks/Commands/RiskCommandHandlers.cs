@@ -8,7 +8,7 @@ public class CreateRiskCommandHandler(IRiskRepository repository, ICurrentUserSe
 {
     public async Task<RiskDto> Handle(CreateRiskCommand request, CancellationToken cancellationToken)
     {
-        var risk = Risk.Create(request.Title, request.Description, request.Category, request.Likelihood, request.Impact, currentUser.UserId, request.Owner, request.Department, request.ReviewDueDate, request.RegulatoryReference);
+        var risk = Risk.Create(request.Title, request.Description, request.Category, request.Likelihood, request.Impact, currentUser.UserEmail, request.Owner, request.Department, request.ReviewDueDate, request.RegulatoryReference);
         await repository.AddAsync(risk, cancellationToken);
         await repository.SaveChangesAsync(cancellationToken);
         return risk.ToDto();
@@ -19,7 +19,7 @@ public class UpdateRiskAssessmentCommandHandler(IRiskRepository repository, ICur
     public async Task<RiskDto> Handle(UpdateRiskAssessmentCommand request, CancellationToken cancellationToken)
     {
         var risk = await repository.GetByIdAsync(request.RiskId, cancellationToken) ?? throw new KeyNotFoundException($"Risk {request.RiskId} not found");
-        risk.UpdateAssessment(request.Likelihood, request.Impact, request.ResidualLikelihood, request.ResidualImpact, currentUser.UserId);
+        risk.UpdateAssessment(request.Likelihood, request.Impact, request.ResidualLikelihood, request.ResidualImpact, currentUser.UserEmail);
         await repository.UpdateAsync(risk, cancellationToken);
         await repository.SaveChangesAsync(cancellationToken);
         return risk.ToDto();
@@ -30,7 +30,7 @@ public class AddRiskTreatmentCommandHandler(IRiskRepository repository, ICurrent
     public async Task<RiskTreatmentDto> Handle(AddRiskTreatmentCommand request, CancellationToken cancellationToken)
     {
         var risk = await repository.GetByIdWithDetailsAsync(request.RiskId, cancellationToken) ?? throw new KeyNotFoundException($"Risk {request.RiskId} not found");
-        var treatment = risk.AddTreatment(request.Description, request.Type, request.Owner, request.DueDate, currentUser.UserId);
+        var treatment = risk.AddTreatment(request.Description, request.Type, request.Owner, request.DueDate, currentUser.UserEmail);
         await repository.AddTreatmentAsync(treatment, cancellationToken);
         await repository.SaveChangesAsync(cancellationToken);
         return treatment.ToDto();
@@ -39,19 +39,19 @@ public class AddRiskTreatmentCommandHandler(IRiskRepository repository, ICurrent
 public class CloseRiskCommandHandler(IRiskRepository repository, ICurrentUserService currentUser) : IRequestHandler<CloseRiskCommand, RiskDto>
 {
     public async Task<RiskDto> Handle(CloseRiskCommand request, CancellationToken cancellationToken)
-    { var risk = await repository.GetByIdAsync(request.RiskId, cancellationToken) ?? throw new KeyNotFoundException($"Risk {request.RiskId} not found"); risk.Close(request.Reason, currentUser.UserId); await repository.SaveChangesAsync(cancellationToken); return risk.ToDto(); }
+    { var risk = await repository.GetByIdAsync(request.RiskId, cancellationToken) ?? throw new KeyNotFoundException($"Risk {request.RiskId} not found"); risk.Close(request.Reason, currentUser.UserEmail); await repository.SaveChangesAsync(cancellationToken); return risk.ToDto(); }
 }
 public class AcceptRiskCommandHandler(IRiskRepository repository, ICurrentUserService currentUser) : IRequestHandler<AcceptRiskCommand, RiskDto>
 {
     public async Task<RiskDto> Handle(AcceptRiskCommand request, CancellationToken cancellationToken)
-    { var risk = await repository.GetByIdAsync(request.RiskId, cancellationToken) ?? throw new KeyNotFoundException($"Risk {request.RiskId} not found"); risk.Accept(request.Reason, currentUser.UserId); await repository.SaveChangesAsync(cancellationToken); return risk.ToDto(); }
+    { var risk = await repository.GetByIdAsync(request.RiskId, cancellationToken) ?? throw new KeyNotFoundException($"Risk {request.RiskId} not found"); risk.Accept(request.Reason, currentUser.UserEmail); await repository.SaveChangesAsync(cancellationToken); return risk.ToDto(); }
 }
 public record DeleteRiskCommand(Guid RiskId) : IRequest;
 public class DeleteRiskCommandHandler(IRiskRepository repository, ICurrentUserService currentUser) : IRequestHandler<DeleteRiskCommand>
 {
     public async Task Handle(DeleteRiskCommand request, CancellationToken cancellationToken)
     {
-        await repository.DeleteAsync(request.RiskId, currentUser.UserId, cancellationToken);
+        await repository.DeleteAsync(request.RiskId, currentUser.UserEmail, cancellationToken);
     }
 }
 public static class RiskMappingExtensions
@@ -68,7 +68,7 @@ public class UpdateRiskCommandHandler(IRiskRepository repository, ICurrentUserSe
     public async Task<RiskDto> Handle(UpdateRiskCommand request, CancellationToken ct)
     {
         var risk = await repository.GetByIdAsync(request.RiskId, ct) ?? throw new KeyNotFoundException();
-        risk.UpdateDetails(request.Title, request.Description, request.Category, request.Owner, request.Department, request.RegulatoryReference, request.ReviewDueDate, currentUser.UserId);
+        risk.UpdateDetails(request.Title, request.Description, request.Category, request.Owner, request.Department, request.RegulatoryReference, request.ReviewDueDate, currentUser.UserEmail);
         await repository.SaveChangesAsync(ct);
         return await repository.GetByIdAsync(request.RiskId, ct) is { } updated ? updated.ToDto() : throw new KeyNotFoundException();
     }

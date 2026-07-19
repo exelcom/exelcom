@@ -157,7 +157,35 @@ export function RisksPage() {
             { label: 'Description', value: selected.description as string, wide: true },
             { label: 'Created By', value: selected.createdBy as string },
             { label: 'Created At', value: selected.createdAt ? new Date(selected.createdAt as string).toLocaleDateString('en-AU') : null },
-          ]} />
+          ]}>
+          {(() => {
+            const treatments = (selected.treatments as Record<string, unknown>[] | undefined) ?? [];
+            if (treatments.length === 0) return null;
+            return (
+              <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid #e6e7de' }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: '#6b7060', letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 12 }}>
+                  Treatments ({treatments.length})
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {treatments.map((t, i) => (
+                    <div key={String(t.id ?? i)} style={{ border: '1px solid #e6e7de', borderRadius: 10, padding: '12px 14px', background: '#f4f5ee' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                        <span style={{ fontSize: 12, fontWeight: 700, color: '#5c8a00' }}>{String(t.type ?? '')}</span>
+                        <span style={{ fontSize: 12, color: t.isCompleted ? '#10b981' : '#6b7060', fontWeight: 600 }}>
+                          {t.isCompleted ? 'Completed' : 'In Progress'}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 13, color: '#14170d', marginBottom: 6 }}>{String(t.description ?? '')}</div>
+                      <div style={{ fontSize: 12, color: '#6b7060' }}>
+                        Owner: {String(t.owner ?? '—')} · Due: {t.dueDate ? new Date(t.dueDate as string).toLocaleDateString('en-AU') : '—'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+        </DetailModal>
       )}
       {selected && editing && (
         <EditRiskModal risk={selected} saving={updateAssessment.isPending} onClose={() => setEditing(false)}
