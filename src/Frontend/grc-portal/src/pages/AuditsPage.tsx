@@ -55,7 +55,7 @@ export function AuditsPage() {
 
   const columns = [
     { key: 'title', label: 'Audit Title' },
-    { key: 'typeName', label: 'Type' },
+    { key: 'type', label: 'Type' },
     { key: 'statusName', label: 'Status', render: (row: Record<string, unknown>) => {
       const status = String(row.statusName ?? row.status ?? '-');
       const color = statusColors[status] ?? '#64748b';

@@ -78,7 +78,7 @@ export function PoliciesPage() {
 
   const columns = [
     { key: 'title', label: 'Policy Title' },
-    { key: 'categoryName', label: 'Category' },
+    { key: 'category', label: 'Category' },
     { key: 'statusName', label: 'Status', render: (row: Record<string, unknown>) => {
       const status = String(row.statusName ?? row.status ?? '-');
       const color = statusColors[status] ?? '#64748b';
