@@ -53,7 +53,7 @@ export function CompliancePage() {
 
   const columns = [
     { key: 'name', label: 'Framework' },
-    { key: 'typeName', label: 'Type' },
+    { key: 'type', label: 'Type' },
     { key: 'version', label: 'Version' },
     { key: 'compliancePercentage', label: 'Compliance', render: (row: Record<string, unknown>) => {
       const pct = Number(row.compliancePercentage ?? 0);
