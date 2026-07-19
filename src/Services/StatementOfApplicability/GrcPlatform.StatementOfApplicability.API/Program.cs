@@ -37,7 +37,7 @@ app.MapHealthChecks("/health");
 app.Run();
 public class CurrentUserService(IHttpContextAccessor h) : ICurrentUserService
 {
-    public string UserId => h.HttpContext?.User.FindFirst("oid")?.Value ?? h.HttpContext?.User.FindFirst("sub")?.Value ?? "anonymous";
-    public string UserEmail => h.HttpContext?.User.FindFirst("preferred_username")?.Value ?? string.Empty;
+    public string UserId => h.HttpContext?.User.FindFirst("oid")?.Value ?? h.HttpContext?.User.FindFirst("sub")?.Value ?? h.HttpContext?.User.Identity?.Name ?? "system";
+    public string UserEmail => h.HttpContext?.User.FindFirst("email")?.Value ?? h.HttpContext?.User.FindFirst("preferred_username")?.Value ?? "system@grc.local";
     public bool IsAuthenticated => h.HttpContext?.User.Identity?.IsAuthenticated ?? false;
 }

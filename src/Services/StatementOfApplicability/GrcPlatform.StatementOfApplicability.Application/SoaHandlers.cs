@@ -87,7 +87,7 @@ public class UpdateApplicabilityHandler(ISoaRepository repo, ICurrentUserService
     public async Task<ControlDto> Handle(UpdateApplicabilityCommand request, CancellationToken ct)
     {
         var c = await repo.GetByIdAsync(request.Id, ct) ?? throw new KeyNotFoundException();
-        c.UpdateApplicability(Enum.Parse<ControlApplicability>(request.Applicability), request.Justification, user.UserId);
+        c.UpdateApplicability(Enum.Parse<ControlApplicability>(request.Applicability), request.Justification, user.UserEmail);
         await repo.UpdateAsync(c, ct);
         await repo.SaveChangesAsync(ct);
         return c.ToDto();
@@ -99,7 +99,7 @@ public class UpdateImplementationHandler(ISoaRepository repo, ICurrentUserServic
     public async Task<ControlDto> Handle(UpdateImplementationCommand request, CancellationToken ct)
     {
         var c = await repo.GetByIdAsync(request.Id, ct) ?? throw new KeyNotFoundException();
-        c.UpdateImplementation(Enum.Parse<ImplementationStatus>(request.Status), request.Notes, request.Owner, request.TargetDate, request.EvidenceRef, user.UserId);
+        c.UpdateImplementation(Enum.Parse<ImplementationStatus>(request.Status), request.Notes, request.Owner, request.TargetDate, request.EvidenceRef, user.UserEmail);
         await repo.UpdateAsync(c, ct);
         await repo.SaveChangesAsync(ct);
         return c.ToDto();
